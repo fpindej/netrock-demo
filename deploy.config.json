@@ -1,5 +1,5 @@
 {
-  "registry": "myusername",
+  "registry": "fpindej",
   "backendImage": "netrock-api",
   "frontendImage": "netrock-frontend",
   "backendVersion": "0.1.0",

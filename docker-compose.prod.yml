@@ -1,0 +1,105 @@
+name: netrock-prod
+
+x-api-environment: &api-environment
+  ASPNETCORE_ENVIRONMENT: Production
+  ConnectionStrings__Database: Host=db;Port=5432;Database=${POSTGRES_DB:-netrock};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+  Caching__Redis__Enabled: "true"
+  Caching__Redis__ConnectionString: redis:6379
+  Caching__Redis__Password: ${REDIS_PASSWORD}
+  Caching__Redis__UseSsl: "false"
+  Authentication__Jwt__Key: ${JWT_SECRET_KEY}
+  Authentication__Jwt__Issuer: ${JWT_ISSUER:-NetrockIssuer}
+  Authentication__Jwt__Audience: ${JWT_AUDIENCE:-NetrockAudience}
+  Cors__AllowAllOrigins: "false"
+  Cors__AllowedOrigins__0: https://app.leadleak.online
+  Email__Resend__ApiKey: ${RESEND_API_KEY}
+  Email__FromAddress: ${EMAIL_FROM_ADDRESS:-noreply@leadleak.online}
+  Email__FromName: ${EMAIL_FROM_NAME:-LeadLeak}
+  Email__FrontendBaseUrl: https://app.leadleak.online
+  Hosting__ReverseProxy__TrustedNetworks__0: 172.16.0.0/12
+
+x-frontend-environment: &frontend-environment
+  API_URL: http://api:8080
+  ORIGIN: https://app.leadleak.online
+  PROTOCOL_HEADER: x-forwarded-proto
+  HOST_HEADER: x-forwarded-host
+
+x-common-settings: &common-settings
+  restart: unless-stopped
+  networks:
+    - application_network
+
+services:
+  api:
+    image: fpindej/netrock-api:latest
+    container_name: netrock-prod-api
+    environment: *api-environment
+    <<: *common-settings
+    ports:
+      - "127.0.0.1:11002:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/live"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    image: fpindej/netrock-frontend:latest
+    container_name: netrock-prod-frontend
+    environment: *frontend-environment
+    <<: *common-settings
+    ports:
+      - "127.0.0.1:11000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+
+  db:
+    image: postgres:15-alpine
+    container_name: netrock-prod-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-netrock}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    <<: *common-settings
+    ports:
+      - "127.0.0.1:11006:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-netrock}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  redis:
+    image: redis:7-alpine
+    container_name: netrock-prod-redis
+    <<: *common-settings
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+volumes:
+  db_data:
+    name: netrock-prod-db-data
+  redis_data:
+    name: netrock-prod-redis-data
+
+networks:
+  application_network:
+    name: netrock-prod-network
+    driver: bridge

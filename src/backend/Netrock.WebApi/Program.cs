@@ -3,6 +3,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Netrock.Infrastructure.Features.Admin.Extensions;
+using Netrock.Infrastructure.Features.Captcha.Extensions;
 using Netrock.Infrastructure.Features.Email.Extensions;
 using Netrock.Infrastructure.Features.Jobs.Extensions;
 using Netrock.Infrastructure.Persistence.Extensions;
@@ -57,6 +58,9 @@ try
 
         Log.Debug("Adding email services");
         builder.Services.AddEmailServices(builder.Configuration);
+
+        Log.Debug("Adding captcha services");
+        builder.Services.AddCaptchaServices();
 
         Log.Debug("Adding job scheduling");
         builder.Services.AddJobScheduling(builder.Configuration);

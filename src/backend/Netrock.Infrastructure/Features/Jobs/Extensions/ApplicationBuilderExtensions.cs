@@ -77,9 +77,11 @@ public static class ApplicationBuilderExtensions
             return;
         }
 
+        var manager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+
         foreach (var job in jobDefinitions)
         {
-            RecurringJob.AddOrUpdate(
+            manager.AddOrUpdate(
                 job.JobId,
                 () => ExecuteJobAsync(job.JobId),
                 job.CronExpression);
@@ -107,11 +109,13 @@ public static class ApplicationBuilderExtensions
             return;
         }
 
+        var manager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+
         foreach (var pausedJob in pausedJobs)
         {
             JobManagementService.PausedJobCrons[pausedJob.JobId] = pausedJob.OriginalCron;
 
-            RecurringJob.AddOrUpdate(
+            manager.AddOrUpdate(
                 pausedJob.JobId,
                 () => ExecuteJobAsync(pausedJob.JobId),
                 JobManagementService.NeverCron);

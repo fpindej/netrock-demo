@@ -1,6 +1,7 @@
 using Netrock.Application.Features.Admin.Dtos;
 using Netrock.WebApi.Features.Admin.Dtos;
 using Netrock.WebApi.Features.Admin.Dtos.AssignRole;
+using Netrock.WebApi.Features.Admin.Dtos.CreateUser;
 using Netrock.WebApi.Features.Admin.Dtos.CreateRole;
 using Netrock.WebApi.Features.Admin.Dtos.ListUsers;
 using Netrock.WebApi.Features.Admin.Dtos.SetPermissions;
@@ -72,6 +73,11 @@ internal static class AdminMapper
     /// Maps an <see cref="UpdateRoleRequest"/> to an <see cref="UpdateRoleInput"/>.
     /// </summary>
     public static UpdateRoleInput ToInput(this UpdateRoleRequest request) => new(request.Name, request.Description);
+
+    /// <summary>
+    /// Maps a <see cref="CreateUserRequest"/> to a <see cref="CreateUserInput"/>.
+    /// </summary>
+    public static CreateUserInput ToInput(this CreateUserRequest request) => new(request.Email, request.FirstName, request.LastName);
 
     /// <summary>
     /// Maps a <see cref="SetPermissionsRequest"/> to a <see cref="SetRolePermissionsInput"/>.

@@ -16,6 +16,7 @@ x-api-environment: &api-environment
   Email__FromAddress: ${EMAIL_FROM_ADDRESS:-noreply@leadleak.online}
   Email__FromName: ${EMAIL_FROM_NAME:-LeadLeak}
   Email__FrontendBaseUrl: https://app.leadleak.online
+  Captcha__SecretKey: ${CAPTCHA_SECRET_KEY}
   Hosting__ReverseProxy__TrustedNetworks__0: 172.16.0.0/12
 
 x-frontend-environment: &frontend-environment

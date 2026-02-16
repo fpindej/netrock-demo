@@ -7,7 +7,7 @@ namespace Netrock.Infrastructure.Features.Email.Options;
 /// Configuration options for the email service.
 /// Maps to the "Email" section in appsettings.json.
 /// </summary>
-public sealed class EmailOptions
+public sealed class EmailOptions : IValidatableObject
 {
     public const string SectionName = "Email";
 
@@ -32,38 +32,42 @@ public sealed class EmailOptions
     public string FrontendBaseUrl { get; init; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the SMTP connection configuration. Only required when a real SMTP email service is registered.
+    /// Gets or sets the Resend API configuration. When <see cref="ResendOptions.ApiKey"/> is non-empty,
+    /// the application uses Resend for email delivery; otherwise it falls back to the no-op logger.
     /// </summary>
-    public SmtpOptions Smtp { get; init; } = new();
+    public ResendOptions Resend { get; init; } = new();
+
+    /// <inheritdoc />
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (string.IsNullOrWhiteSpace(Resend.ApiKey))
+        {
+            yield break;
+        }
+
+        if (!Resend.ApiKey.StartsWith("re_", StringComparison.Ordinal))
+        {
+            yield return new ValidationResult(
+                "Resend API key must start with 're_'.",
+                [$"{nameof(Resend)}.{nameof(ResendOptions.ApiKey)}"]);
+        }
+
+        if (string.IsNullOrWhiteSpace(FrontendBaseUrl))
+        {
+            yield return new ValidationResult(
+                "FrontendBaseUrl is required when Resend is enabled.",
+                [nameof(FrontendBaseUrl)]);
+        }
+    }
 
     /// <summary>
-    /// Configuration options for SMTP email delivery.
+    /// Configuration options for the Resend email API (<see href="https://resend.com/docs/api-reference/emails/send-email"/>).
     /// </summary>
-    public sealed class SmtpOptions
+    public sealed class ResendOptions
     {
         /// <summary>
-        /// Gets or sets the SMTP server hostname.
+        /// Gets or sets the Resend API key (starts with <c>re_</c>).
         /// </summary>
-        public string Host { get; [UsedImplicitly] init; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the SMTP server port.
-        /// </summary>
-        public int Port { get; [UsedImplicitly] init; } = 587;
-
-        /// <summary>
-        /// Gets or sets the SMTP authentication username.
-        /// </summary>
-        public string Username { get; [UsedImplicitly] init; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the SMTP authentication password.
-        /// </summary>
-        public string Password { get; [UsedImplicitly] init; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets whether the SMTP connection should use SSL/TLS.
-        /// </summary>
-        public bool UseSsl { get; [UsedImplicitly] init; } = true;
+        public string ApiKey { get; [UsedImplicitly] init; } = string.Empty;
     }
 }

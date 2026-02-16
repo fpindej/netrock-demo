@@ -85,6 +85,14 @@ public static class ErrorMessages
     }
 
     /// <summary>
+    /// Email delivery error messages.
+    /// </summary>
+    public static class Email
+    {
+        public const string SendFailed = "Failed to send email. Please try again later.";
+    }
+
+    /// <summary>
     /// Server-level error messages.
     /// </summary>
     public static class Server

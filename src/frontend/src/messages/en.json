@@ -9,6 +9,34 @@
 	"meta_login_description": "Sign in to your account.",
 	"meta_dashboard_title": "Dashboard",
 	"meta_dashboard_description": "Overview of your application.",
+
+	"dashboard_welcome": "Welcome back, {name}",
+	"dashboard_welcomeFallback": "Welcome back",
+	"dashboard_subtitle": "Here's what Netrock has to offer.",
+
+	"dashboard_feature_auth_title": "Authentication",
+	"dashboard_feature_auth_description": "Secure login with JWT tokens, refresh token rotation, email verification, and password reset flows — all built in.",
+
+	"dashboard_feature_profile_title": "User Profiles",
+	"dashboard_feature_profile_description": "Manage your personal info, avatar, phone number, and bio. Everything updates in real time.",
+
+	"dashboard_feature_admin_title": "Admin Panel",
+	"dashboard_feature_admin_description": "Full user and role management with granular permissions. Lock accounts, assign roles, and audit access.",
+
+	"dashboard_feature_jobs_title": "Background Jobs",
+	"dashboard_feature_jobs_description": "Scheduled tasks powered by Hangfire. Trigger, pause, resume, and monitor execution history from the dashboard.",
+
+	"dashboard_feature_i18n_title": "Internationalization",
+	"dashboard_feature_i18n_description": "Type-safe translations with Paraglide. Switch languages on the fly — currently English and Czech.",
+
+	"dashboard_feature_theme_title": "Theming",
+	"dashboard_feature_theme_description": "Light, dark, and system themes with smooth transitions. Your preference is saved automatically.",
+
+	"dashboard_admin_title": "Admin Zone",
+	"dashboard_admin_description": "You have elevated access. Use your power wisely... or don't. We won't judge.",
+	"dashboard_admin_users": "Manage Users",
+	"dashboard_admin_roles": "Manage Roles",
+	"dashboard_admin_jobs": "Manage Jobs",
 	"meta_profile_title": "Profile",
 	"meta_profile_description": "Manage your user profile.",
 	"meta_settings_title": "Settings",

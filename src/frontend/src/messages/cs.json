@@ -9,6 +9,34 @@
 	"meta_login_description": "Přihlaste se ke svému účtu.",
 	"meta_dashboard_title": "Nástěnka",
 	"meta_dashboard_description": "Přehled aplikace.",
+
+	"dashboard_welcome": "Vítejte zpět, {name}",
+	"dashboard_welcomeFallback": "Vítejte zpět",
+	"dashboard_subtitle": "Tady je přehled toho, co Netrock nabízí.",
+
+	"dashboard_feature_auth_title": "Autentizace",
+	"dashboard_feature_auth_description": "Bezpečné přihlášení s JWT tokeny, rotací refresh tokenů, ověřením e-mailu a obnovením hesla — vše vestavěné.",
+
+	"dashboard_feature_profile_title": "Uživatelské profily",
+	"dashboard_feature_profile_description": "Spravujte své osobní údaje, avatar, telefonní číslo a bio. Vše se aktualizuje v reálném čase.",
+
+	"dashboard_feature_admin_title": "Administrace",
+	"dashboard_feature_admin_description": "Kompletní správa uživatelů a rolí s detailními oprávněními. Zamykání účtů, přiřazování rolí a audit přístupu.",
+
+	"dashboard_feature_jobs_title": "Úlohy na pozadí",
+	"dashboard_feature_jobs_description": "Naplánované úlohy poháněné Hangfire. Spouštějte, pozastavujte a sledujte historii spuštění z dashboardu.",
+
+	"dashboard_feature_i18n_title": "Internacionalizace",
+	"dashboard_feature_i18n_description": "Typově bezpečné překlady s Paraglide. Přepínejte jazyky za běhu — aktuálně angličtina a čeština.",
+
+	"dashboard_feature_theme_title": "Vzhled",
+	"dashboard_feature_theme_description": "Světlý, tmavý a systémový motiv s plynulými přechody. Vaše preference se ukládá automaticky.",
+
+	"dashboard_admin_title": "Administrátorská zóna",
+	"dashboard_admin_description": "Máte zvýšený přístup. Používejte svou moc moudře... nebo ne. Nebudeme soudit.",
+	"dashboard_admin_users": "Správa uživatelů",
+	"dashboard_admin_roles": "Správa rolí",
+	"dashboard_admin_jobs": "Správa úloh",
 	"meta_profile_title": "Profil",
 	"meta_profile_description": "Správa uživatelského profilu.",
 	"meta_settings_title": "Nastavení",

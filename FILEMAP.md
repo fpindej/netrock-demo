@@ -1,0 +1,208 @@
+# File Map — Change Impact Reference
+
+Quick-reference for "when you change X, also update Y" and "where does X live?"
+
+> **Rule:** Before modifying any existing file listed here, trace its impact row. If a change affects downstream files, update them in the same commit (or same PR at minimum).
+
+---
+
+## Change Impact Tables
+
+### Backend Changes
+
+| When you change... | Also update... |
+|---|---|
+| **Domain entity** (add/rename property) | EF configuration, migration, Application DTOs, WebApi DTOs, mapper, frontend types (`npm run api:generate`) |
+| **Domain entity** (add enum property) | EF config (`.HasComment()`), `EnumSchemaTransformer` handles the rest automatically |
+| **`ErrorMessages.cs`** (Shared — add/rename constant) | Service that uses it; frontend may display message directly |
+| **`Result.cs`** (Shared — change pattern) | Every service + every controller that matches on `Result` |
+| **Application interface** (change signature) | Infrastructure service implementation, controller calling the service |
+| **Application DTO** (add/rename/remove field) | Infrastructure service, WebApi mapper, WebApi request/response DTO, frontend types |
+| **Infrastructure EF config** (change mapping) | Run new migration |
+| **`MyProjectDbContext`** (add DbSet) | Run new migration |
+| **Infrastructure service** (change behavior) | Verify controller still maps correctly, verify error messages still apply |
+| **Infrastructure Options class** | `appsettings.json`, `appsettings.Development.json` (excluded from production publish — see `StripDevConfig`), `.env.example`, DI registration |
+| **DI extension** (new service registration) | `Program.cs` must call the extension |
+| **WebApi controller** (change route/method) | Frontend API calls, `v1.d.ts` regeneration |
+| **WebApi request DTO** (add/rename/remove property) | Validator, mapper, frontend types, frontend form |
+| **WebApi response DTO** (add/rename/remove property) | Mapper, frontend types, frontend component displaying data, `Api.Tests/Contracts/ResponseContracts.cs` |
+| **WebApi validator** (change rules) | Consider matching frontend validation UX |
+| **`Program.cs`** (change middleware order) | Test full request pipeline — order matters for auth, CORS, rate limiting; update `CustomWebApplicationFactory` if new services need mocking |
+| **`Directory.Packages.props`** (change version) | `dotnet build` to verify compatibility |
+| **`Directory.Build.props`** (change TFM/settings) | All projects in solution |
+| **`BaseEntity.cs`** | `BaseEntityConfiguration`, `AuditingInterceptor`, all entities |
+| **`BaseEntityConfiguration.cs`** | All entity configurations that extend it |
+| **`CustomWebApplicationFactory.cs`** (change mock setup) | All API integration tests that depend on factory mocks |
+| **`appsettings.Testing.json`** (change test config) | `CustomWebApplicationFactory` behavior; all API integration tests |
+| **Test fixture** (change shared helper) | All tests using that fixture |
+| **`AppRoles.cs`** (add role) | Role seeding picks up automatically; consider what permissions to seed for the new role; `RoleManagementService` checks `AppRoles.All` for system role collisions |
+| **`AppPermissions.cs`** (add permission) | Seed in `ApplicationBuilderExtensions.SeedRolePermissionsAsync()`, add `[RequirePermission]` to endpoints, update frontend `$lib/utils/permissions.ts` |
+| **`RequirePermission` attribute** (add to endpoint) | Remove any class-level `[Authorize(Roles)]`; ensure permission is defined in `AppPermissions.cs` |
+| **`RoleManagementService`** (change role behavior) | Verify system role protection rules, check security stamp rotation, verify frontend role detail page |
+| **`IRecurringJobDefinition`** (add new job) | Register in `ServiceCollectionExtensions.AddJobScheduling()`, job auto-discovered at startup |
+| **Job scheduling config** (`ServiceCollectionExtensions.AddJobScheduling`) | `Program.cs` must call `AddJobScheduling()` and `UseJobScheduling()` |
+| **`RateLimitPolicies.cs`** (add/rename constant) | `RateLimiterExtensions.cs` policy registration, `RateLimitingOptions.cs` config class, `appsettings.json` section, `[EnableRateLimiting]` attribute on controllers |
+| **`RateLimitingOptions.cs`** (add/rename option class) | `RateLimiterExtensions.cs`, `appsettings.json`, `appsettings.Development.json` |
+| **`RateLimiterExtensions.cs`** (add policy) | Requires matching constant in `RateLimitPolicies.cs` and config in `RateLimitingOptions.cs` |
+| **`HostingOptions.cs`** (change hosting config shape) | `HostingExtensions.cs`, `appsettings.json`, `appsettings.Development.json`, `.env.example`, `docker-compose.local.yml` |
+| **`HostingExtensions.cs`** (change middleware behavior) | `Program.cs`, `AGENTS.md` Hosting Configuration section |
+| **`Dockerfile`** (change build/publish steps) | `.dockerignore`, verify published files don't include dev/test config |
+| **`MyProject.WebApi.csproj`** (add appsettings file) | If non-production: add `CopyToPublishDirectory="Never"` and matching `rm -f` in `Dockerfile` |
+| **Route constraint** (add/modify in `Routing/`) | `Program.cs` constraint registration, route templates using that constraint |
+| **`HealthCheckExtensions.cs`** (change endpoints/checks) | `docker-compose.local.yml` healthcheck URLs, frontend health proxy `+server.ts` |
+| **`ProblemDetailsAuthorizationHandler`** | `ProblemDetails` shape, `ErrorMessages.Auth` constants, `Program.cs` registration |
+| **OpenAPI transformers** | Regenerate frontend types to verify; check Scalar UI |
+
+### Frontend Changes
+
+| When you change... | Also update... |
+|---|---|
+| **`$lib/utils/permissions.ts`** (add permission) | Backend `AppPermissions.cs` must have matching constant; update components checking that permission |
+| **`v1.d.ts`** (regenerated) | Type aliases in `$lib/types/index.ts`, any component using changed schemas |
+| **`$lib/types/index.ts`** (add/rename alias) | All imports of the changed type |
+| **`$lib/api/client.ts`** | Every component using `browserClient` or `createApiClient` |
+| **`$lib/api/error-handling.ts`** | Components that call `getErrorMessage`, `mapFieldErrors`, `isValidationProblemDetails`, `isRateLimited`, `getRetryAfterSeconds`; `mutation.ts` (wraps these utilities) |
+| **`$lib/api/mutation.ts`** | All form components using `handleMutationError()` for rate-limit, validation, and generic error handling |
+| **`$lib/state/cooldown.svelte.ts`** | Components that call `createCooldown` for rate limit button disable |
+| **`$lib/config/server.ts`** | Server load functions that import `SERVER_CONFIG` |
+| **`$lib/config/i18n.ts`** | `LanguageSelector`, root layout |
+| **`hooks.server.ts`** | All server responses (security headers, locale) |
+| **`svelte.config.js`** (CSP) | Test that scripts/styles/images still load |
+| **`app.html`** | FOUC prevention, nonce attribute, theme init |
+| **Component barrel `index.ts`** | All imports from that feature folder |
+| **i18n keys** (rename/remove in `en.json`) | Same key in `cs.json`, all `m.{key}()` usages |
+| **i18n keys** (add) | Add to both `en.json` and `cs.json` |
+| **Layout components** (Sidebar, Header) | All pages that use the app shell |
+| **`SidebarNav.svelte`** | Navigation links for all pages; admin items are per-permission gated |
+| **Admin `+page.server.ts`** (add permission guard) | Must check specific permission and redirect if missing |
+| **Route `+layout.server.ts`** | All child routes that depend on parent data |
+| **Route `+page.server.ts`** | The corresponding `+page.svelte` |
+| **Styles (`themes.css`)** | `tailwind.css` mappings, components using the variables |
+| **Styles (`tailwind.css`)** | Components using custom Tailwind tokens |
+| **`components.json`** (shadcn config) | Future `npx shadcn-svelte@latest add` commands |
+| **`package.json`** (scripts) | CI/CD references, CLAUDE.md pre-commit checks |
+
+### Cross-Stack Changes
+
+| When you change... | Also update... |
+|---|---|
+| **Backend endpoint route** | Frontend API calls + regenerate types |
+| **Backend response shape** | Regenerate types → update frontend components |
+| **Backend auth/cookie behavior** | Frontend `$lib/api/client.ts` (refresh logic), `$lib/auth/auth.ts` |
+| **`.env.example`** | `docker-compose.local.yml` if variable needs Docker wiring |
+| **`docker-compose.local.yml`** | `.env.example` if new variable introduced |
+| **CORS config** (`CorsExtensions.cs`) | Frontend dev server origin, `ALLOWED_ORIGINS` env var |
+| **Rate limiting config** | Frontend may need retry/backoff logic |
+| **`appsettings.json`** structure | Options class, `.env.example`, `docker-compose.local.yml` |
+| **Security headers** (backend or frontend) | Verify both sides are consistent |
+| **CI workflows** (`.github/workflows/`) | Verify `dorny/paths-filter` patterns match project structure |
+
+---
+
+## Key Files Quick Reference
+
+Files that are frequently referenced in impact tables above. For anything not listed here, use Glob/Grep — the codebase follows predictable naming patterns documented in the AGENTS.md files.
+
+### Backend Naming Patterns
+
+```
+src/backend/MyProject.{Layer}/
+  Shared:          Result.cs, ErrorType.cs, ErrorMessages.cs, PhoneNumberHelper.cs
+  Domain:          Entities/{Entity}.cs
+  Application:     Features/{Feature}/I{Feature}Service.cs
+                   Features/{Feature}/Dtos/{Operation}Input.cs, {Entity}Output.cs
+                   Features/{Feature}/Persistence/I{Feature}Repository.cs
+                   Identity/Constants/AppRoles.cs, AppPermissions.cs
+  Infrastructure:  Features/{Feature}/Services/{Feature}Service.cs
+                   Features/{Feature}/Configurations/{Entity}Configuration.cs
+                   Features/{Feature}/Extensions/ServiceCollectionExtensions.cs
+                   Persistence/MyProjectDbContext.cs
+  WebApi:          Features/{Feature}/{Feature}Controller.cs
+                   Features/{Feature}/{Feature}Mapper.cs
+                   Features/{Feature}/Dtos/{Operation}/{Operation}Request.cs
+                   Features/{Feature}/Dtos/{Operation}/{Operation}RequestValidator.cs
+                   Authorization/RequirePermissionAttribute.cs (+ handler, provider, requirement)
+                   Authorization/ProblemDetailsAuthorizationHandler.cs
+                   Routing/{Name}RouteConstraint.cs
+                   Shared/RateLimitPolicies.cs
+                   Program.cs
+```
+
+### Frontend Naming Patterns
+
+```
+src/frontend/src/
+  lib/api/          client.ts, error-handling.ts, mutation.ts, v1.d.ts (generated)
+  lib/components/   {feature}/{Name}.svelte + index.ts (barrel)
+  lib/components/ui/{component}/  (shadcn — generated)
+  lib/state/        {feature}.svelte.ts
+  lib/types/        index.ts (type aliases)
+  lib/utils/        permissions.ts (permission constants + helpers)
+  messages/         en.json, cs.json
+  routes/(app)/     {feature}/+page.svelte, +page.server.ts
+  routes/(public)/  login/+page.svelte
+  styles/           themes.css, tailwind.css, animations.css
+```
+
+### Job Scheduling Patterns
+
+```
+src/backend/MyProject.Infrastructure/Features/Jobs/
+  IRecurringJobDefinition.cs                          Interface for recurring jobs
+  RecurringJobs/{JobName}Job.cs                       Recurring job implementations
+  Examples/ExampleFireAndForgetJob.cs                 Example one-time job (removable)
+  Models/PausedJob.cs                                 Persisted pause state entity
+  Configurations/PausedJobConfiguration.cs            EF config → hangfire.pausedjobs
+  Services/JobManagementService.cs                    Admin API service (DB-backed pause)
+  Options/JobSchedulingOptions.cs                     Configuration (Enabled, WorkerCount)
+  Extensions/ServiceCollectionExtensions.cs           DI registration
+  Extensions/ApplicationBuilderExtensions.cs          Middleware + job registration + pause restore
+src/backend/MyProject.Application/Features/Jobs/
+  IJobManagementService.cs                            Admin API interface
+  Dtos/RecurringJobOutput.cs, ...                     Job DTOs
+src/backend/MyProject.WebApi/Features/Admin/
+  JobsController.cs                                   Admin job endpoints
+  JobsMapper.cs                                       DTO mapping
+  Dtos/Jobs/                                          Response DTOs
+```
+
+### Test Naming Patterns
+
+```
+src/backend/tests/
+  MyProject.Unit.Tests/
+    {Layer}/{ClassUnderTest}Tests.cs             Unit tests (pure logic)
+  MyProject.Component.Tests/
+    Fixtures/TestDbContextFactory.cs             InMemory DbContext factory
+    Fixtures/IdentityMockHelpers.cs              UserManager/RoleManager mock setup
+    Services/{Service}Tests.cs                   Service tests (mocked deps)
+  MyProject.Api.Tests/
+    Fixtures/CustomWebApplicationFactory.cs      WebApplicationFactory config
+    Fixtures/TestAuthHandler.cs                  Fake auth handler
+    Contracts/ResponseContracts.cs               Frozen response shapes for contract testing
+    Controllers/{Controller}Tests.cs             HTTP integration tests
+    Validators/{Validator}Tests.cs               FluentValidation tests
+  MyProject.Architecture.Tests/
+    DependencyTests.cs                           Layer dependency rules
+    NamingConventionTests.cs                     Class naming enforcement
+    AccessModifierTests.cs                       Visibility rules
+```
+
+### Singleton Files (no pattern — memorize these)
+
+| File | Why it matters |
+|---|---|
+| `src/backend/MyProject.WebApi/Program.cs` | DI wiring, middleware pipeline |
+| `src/backend/MyProject.Infrastructure/Persistence/MyProjectDbContext.cs` | DbSets, migrations |
+| `src/backend/MyProject.Shared/ErrorMessages.cs` | All static error strings |
+| `src/backend/MyProject.Application/Identity/Constants/AppRoles.cs` | Role definitions |
+| `src/backend/MyProject.Application/Identity/Constants/AppPermissions.cs` | Permission definitions (reflection-discovered) |
+| `src/frontend/src/lib/utils/permissions.ts` | Frontend permission constants + helpers |
+| `src/backend/MyProject.WebApi/Shared/RateLimitPolicies.cs` | Rate limit policy name constants |
+| `src/backend/Directory.Packages.props` | NuGet versions (never in .csproj) |
+| `src/frontend/src/lib/components/layout/SidebarNav.svelte` | Navigation entries |
+| `src/frontend/src/lib/api/v1.d.ts` | Generated types (never hand-edit) |
+| `.env.example` | Environment variable defaults |
+| `docker-compose.local.yml` | Local dev service wiring |
+| `src/backend/MyProject.WebApi/appsettings.Testing.json` | Test environment config (disables Redis, Hangfire, CORS) |
+| `src/backend/tests/MyProject.Api.Tests/Fixtures/CustomWebApplicationFactory.cs` | Test host configuration for API tests |

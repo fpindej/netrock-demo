@@ -326,10 +326,10 @@ cp .env.example .env
 docker compose -f docker-compose.local.yml up -d
 
 # API docs (development only)
-open http://localhost:{INIT_API_PORT}/scalar/v1
+open http://localhost:13002/scalar/v1
 
 # Seq logs
-open http://localhost:{INIT_SEQ_PORT}
+open http://localhost:13008
 ```
 
 ### Environment Configuration

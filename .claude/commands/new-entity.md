@@ -14,7 +14,7 @@ Scope: Domain entity → error messages → EF config → DbSet → migration.
 
 Read `src/backend/AGENTS.md` for conventions on entity design, EF configuration, and the Options pattern if needed.
 
-After the migration, verify with `dotnet build src/backend/MyProject.slnx`.
+After the migration, verify with `dotnet build src/backend/Netrock.slnx`.
 
 Commit: `feat({feature}): add {Entity} entity and EF configuration`
 

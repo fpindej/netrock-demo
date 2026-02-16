@@ -60,7 +60,7 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: src/backend
-          file: src/backend/MyProject.WebApi/Dockerfile
+          file: src/backend/Netrock.WebApi/Dockerfile
           push: false
           cache-from: type=gha,scope=backend-docker
           cache-to: type=gha,scope=backend-docker,mode=max

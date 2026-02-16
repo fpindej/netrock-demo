@@ -5,22 +5,22 @@
 
 ## Summary
 
-Extracted cross-cutting plumbing (`Result`, `ErrorType`, `ErrorMessages`, `PhoneNumberHelper`) from Domain into a new `MyProject.Shared` project. Made `Result<T>` inherit from `Result` to eliminate property duplication, added `IsFailure`, and made `Value` throw on failure access — removing all `null!` usage from controllers. Centralized error-to-ProblemDetails mapping in `ProblemFactory.Create()`.
+Extracted cross-cutting plumbing (`Result`, `ErrorType`, `ErrorMessages`, `PhoneNumberHelper`) from Domain into a new `Netrock.Shared` project. Made `Result<T>` inherit from `Result` to eliminate property duplication, added `IsFailure`, and made `Value` throw on failure access — removing all `null!` usage from controllers. Centralized error-to-ProblemDetails mapping in `ProblemFactory.Create()`.
 
 ## Changes Made
 
 | File | Change | Reason |
 |------|--------|--------|
-| `src/backend/MyProject.Shared/` | New project with `Result.cs`, `ErrorType.cs`, `ErrorMessages.cs`, `PhoneNumberHelper.cs` | Separate cross-cutting plumbing from business domain |
-| `src/backend/MyProject.Shared/Result.cs` | `Result<T> : Result` inheritance, `IsFailure`, throwing `Value` | Eliminate duplication, enforce safe access |
-| `src/backend/MyProject.Domain/Result.cs` | Deleted | Moved to Shared |
-| `src/backend/MyProject.Domain/ErrorMessages.cs` | Deleted | Moved to Shared |
-| `src/backend/MyProject.Domain/PhoneNumberHelper.cs` | Deleted | Moved to Shared |
-| `src/backend/MyProject.WebApi/Shared/ProblemFactory.cs` | New static factory | Centralize Result → ProblemDetails mapping |
-| `src/backend/MyProject.WebApi/Features/Admin/AdminController.cs` | `result.Value!` → `result.Value`, use ProblemFactory | Remove null!, use centralized error mapping |
-| `src/backend/MyProject.WebApi/Features/Admin/JobsController.cs` | Same as above | Same |
-| `src/backend/MyProject.WebApi/Features/Authentication/AuthController.cs` | Same as above | Same |
-| `src/backend/MyProject.WebApi/Features/Users/UsersController.cs` | Same as above | Same |
+| `src/backend/Netrock.Shared/` | New project with `Result.cs`, `ErrorType.cs`, `ErrorMessages.cs`, `PhoneNumberHelper.cs` | Separate cross-cutting plumbing from business domain |
+| `src/backend/Netrock.Shared/Result.cs` | `Result<T> : Result` inheritance, `IsFailure`, throwing `Value` | Eliminate duplication, enforce safe access |
+| `src/backend/Netrock.Domain/Result.cs` | Deleted | Moved to Shared |
+| `src/backend/Netrock.Domain/ErrorMessages.cs` | Deleted | Moved to Shared |
+| `src/backend/Netrock.Domain/PhoneNumberHelper.cs` | Deleted | Moved to Shared |
+| `src/backend/Netrock.WebApi/Shared/ProblemFactory.cs` | New static factory | Centralize Result → ProblemDetails mapping |
+| `src/backend/Netrock.WebApi/Features/Admin/AdminController.cs` | `result.Value!` → `result.Value`, use ProblemFactory | Remove null!, use centralized error mapping |
+| `src/backend/Netrock.WebApi/Features/Admin/JobsController.cs` | Same as above | Same |
+| `src/backend/Netrock.WebApi/Features/Authentication/AuthController.cs` | Same as above | Same |
+| `src/backend/Netrock.WebApi/Features/Users/UsersController.cs` | Same as above | Same |
 | `src/backend/AGENTS.md` | Updated Result Pattern section | Document inheritance, IsFailure, throwing Value |
 | `AGENTS.md`, `CLAUDE.md`, `FILEMAP.md`, `SKILLS.md` | Updated references to Shared layer | Reflect new project structure |
 
@@ -40,7 +40,7 @@ Extracted cross-cutting plumbing (`Result`, `ErrorType`, `ErrorMessages`, `Phone
 
 ### Shared project instead of Domain
 
-- **Choice**: New `MyProject.Shared` project for `Result`, `ErrorType`, `ErrorMessages`, `PhoneNumberHelper`
+- **Choice**: New `Netrock.Shared` project for `Result`, `ErrorType`, `ErrorMessages`, `PhoneNumberHelper`
 - **Alternatives considered**: Keep in Domain
 - **Reasoning**: These are infrastructure plumbing, not business domain concepts; Domain should contain only entities and value objects
 

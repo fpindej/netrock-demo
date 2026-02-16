@@ -28,7 +28,7 @@ services:
   api:
     build:
       context: ./src/backend
-      dockerfile: MyProject.WebApi/Dockerfile
+      dockerfile: Netrock.WebApi/Dockerfile
       args:
         STRIP_DEV_CONFIG: "false"
     container_name: netrock-local-api

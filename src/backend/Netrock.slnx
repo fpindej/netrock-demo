@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/solution items/">
+    <File Path="../../docker-compose.local.yml" />
+    <File Path="../../.config/dotnet-tools.json" />
+    <File Path="../../global.json" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="Netrock.WebApi/Dockerfile" />
+    <File Path="nuget.config" />
+  </Folder>
+  <Project Path="Netrock.Application/Netrock.Application.csproj" />
+  <Project Path="Netrock.Domain/Netrock.Domain.csproj" />
+  <Project Path="Netrock.Infrastructure/Netrock.Infrastructure.csproj" />
+  <Project Path="Netrock.Shared/Netrock.Shared.csproj" />
+  <Project Path="Netrock.WebApi/Netrock.WebApi.csproj" />
+  <Folder Name="/tests/">
+    <Project Path="tests/Netrock.Unit.Tests/Netrock.Unit.Tests.csproj" />
+    <Project Path="tests/Netrock.Component.Tests/Netrock.Component.Tests.csproj" />
+    <Project Path="tests/Netrock.Api.Tests/Netrock.Api.Tests.csproj" />
+    <Project Path="tests/Netrock.Architecture.Tests/Netrock.Architecture.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,189 @@
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Netrock.Application.Caching;
+using Netrock.Application.Caching.Constants;
+using Netrock.Application.Cookies.Constants;
+using Netrock.Infrastructure.Cryptography;
+using Netrock.Infrastructure.Features.Authentication.Models;
+using Netrock.Infrastructure.Features.Authentication.Options;
+using Netrock.Infrastructure.Features.Authentication.Services;
+using Netrock.Application.Features.Authentication;
+
+namespace Netrock.Infrastructure.Features.Authentication.Extensions;
+
+/// <summary>
+/// Extension methods for registering ASP.NET Identity, JWT authentication, and token services.
+/// </summary>
+public static class ServiceCollectionExtensions
+{
+    extension(IServiceCollection services)
+    {
+        /// <summary>
+        /// Configures ASP.NET Identity with the given DbContext, registers JWT bearer authentication,
+        /// and adds token provider and authentication service implementations.
+        /// </summary>
+        /// <typeparam name="TContext">The <see cref="DbContext"/> type used by Identity stores.</typeparam>
+        /// <param name="configuration">The application configuration for reading authentication options.</param>
+        /// <returns>The service collection for chaining.</returns>
+        public IServiceCollection AddIdentity<TContext>(IConfiguration configuration) where TContext : DbContext
+        {
+            services.ConfigureIdentity<TContext>(configuration);
+            services.ConfigureJwtAuthentication(configuration);
+
+            services.AddScoped<ITokenProvider, JwtTokenProvider>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+            return services;
+        }
+
+        private IServiceCollection ConfigureIdentity<TContext>(IConfiguration configuration) where TContext : DbContext
+        {
+            services.AddIdentity<ApplicationUser, ApplicationRole>(opt =>
+                {
+                    opt.Password.RequireDigit = true;
+                    opt.Password.RequireLowercase = true;
+                    opt.Password.RequireUppercase = true;
+                    opt.Password.RequireNonAlphanumeric = false;
+                    opt.Password.RequiredLength = 6;
+
+                    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                    opt.Lockout.MaxFailedAccessAttempts = 5;
+                    opt.Lockout.AllowedForNewUsers = true;
+
+                    opt.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
+                    opt.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+
+                    opt.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+
+                opt.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<TContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                opt.TokenLifespan = TimeSpan.FromHours(24));
+
+            return services;
+        }
+
+        private IServiceCollection ConfigureJwtAuthentication(IConfiguration configuration)
+        {
+            services.AddOptions<AuthenticationOptions>()
+                .BindConfiguration(AuthenticationOptions.SectionName)
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            var authOptions = configuration.GetSection(AuthenticationOptions.SectionName).Get<AuthenticationOptions>()!;
+            var jwtOptions = authOptions.Jwt;
+            var key = Encoding.UTF8.GetBytes(jwtOptions.Key);
+            var securityStampClaimType = jwtOptions.SecurityStampClaimType;
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(opt =>
+                {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtOptions.Issuer,
+                        ValidAudience = jwtOptions.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(key)
+                    };
+
+                    // Configure dual authentication: Bearer header (mobile/API) + cookie fallback (web)
+                    opt.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            // Priority 1: Authorization header (standard Bearer token for mobile/API clients)
+                            // The JWT middleware handles this automatically if we don't set context.Token,
+                            // so we only need to handle the cookie fallback case.
+
+                            // Priority 2: Cookie fallback (web clients using HttpOnly cookies)
+                            var authHeader = context.Request.Headers.Authorization.ToString();
+                            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (context.Request.Cookies.TryGetValue(CookieNames.AccessToken, out var accessToken))
+                                {
+                                    context.Token = accessToken;
+                                }
+                            }
+
+                            return Task.CompletedTask;
+                        },
+
+                        OnTokenValidated = async context =>
+                        {
+                            await ValidateSecurityStampAsync(context, securityStampClaimType);
+                        },
+                    };
+
+                    opt.SaveToken = true;
+                });
+
+            return services;
+        }
+    }
+
+    /// <summary>
+    /// Validates the security stamp claim in the JWT token against the current stamp in the database.
+    /// Uses Redis caching (5 minute TTL) to avoid a database hit on every request.
+    /// If the stamp has changed (password change, role update, session revocation), the token is rejected.
+    /// </summary>
+    private static async Task ValidateSecurityStampAsync(TokenValidatedContext context, string securityStampClaimType)
+    {
+        var stampClaim = context.Principal?.FindFirstValue(securityStampClaimType);
+        if (string.IsNullOrEmpty(stampClaim))
+        {
+            // Tokens issued before this feature was added won't have the claim — allow them
+            // to pass through. They'll get a stamped token on next refresh.
+            return;
+        }
+
+        var userIdClaim = context.Principal?.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            context.Fail("Invalid user identifier.");
+            return;
+        }
+
+        var cacheService = context.HttpContext.RequestServices.GetRequiredService<ICacheService>();
+        var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
+
+        var cacheOptions = CacheEntryOptions.AbsoluteExpireIn(TimeSpan.FromMinutes(5));
+
+        var currentStampHash = await cacheService.GetOrSetAsync(
+            CacheKeys.SecurityStamp(userId),
+            async ct =>
+            {
+                var user = await userManager.FindByIdAsync(userId.ToString());
+                return user?.SecurityStamp is not null ? HashHelper.Sha256(user.SecurityStamp) : string.Empty;
+            },
+            cacheOptions);
+
+        if (string.IsNullOrEmpty(currentStampHash))
+        {
+            // User not found or has no stamp — reject
+            context.Fail("User not found.");
+            return;
+        }
+
+        if (!string.Equals(stampClaim, currentStampHash, StringComparison.Ordinal))
+        {
+            context.Fail("Security stamp has changed.");
+        }
+    }
+}

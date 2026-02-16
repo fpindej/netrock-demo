@@ -41,8 +41,8 @@ Backend: `WebApi → Application ← Infrastructure → Domain` + `Shared` (Clea
 ## Pre-Commit Checks
 
 ```bash
-dotnet build src/backend/MyProject.slnx
-dotnet test src/backend/MyProject.slnx -c Release
+dotnet build src/backend/Netrock.slnx
+dotnet test src/backend/Netrock.slnx -c Release
 cd src/frontend && npm run format && npm run lint && npm run check
 ```
 

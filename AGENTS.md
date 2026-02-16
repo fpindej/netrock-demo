@@ -153,8 +153,8 @@ One commit = one logical change that could be reverted independently.
 
 Before **every** commit, verify the code compiles and passes checks:
 
-- **Backend**: `dotnet build src/backend/MyProject.slnx`
-- **Backend tests**: `dotnet test src/backend/MyProject.slnx -c Release`
+- **Backend**: `dotnet build src/backend/Netrock.slnx`
+- **Backend tests**: `dotnet test src/backend/Netrock.slnx -c Release`
 - **Frontend**: `cd src/frontend && npm run format && npm run lint && npm run check`
 
 Never commit code that doesn't compile, has lint errors, fails type checks, or breaks tests.
@@ -435,7 +435,7 @@ Pre-commit checks (build, format, lint, type check) remain manual steps document
 
 | File | Purpose |
 |---|---|
-| `src/backend/MyProject.WebApi/Dockerfile` | Multi-stage production build (restore → build → publish → runtime) |
+| `src/backend/Netrock.WebApi/Dockerfile` | Multi-stage production build (restore → build → publish → runtime) |
 | `src/frontend/Dockerfile` | Production build (build → runtime with Node adapter) |
 | `src/frontend/Dockerfile.local` | Development — mounts source, runs `npm run dev` for hot-reload |
 | `docker-compose.local.yml` | 5-service local stack (api, frontend, db, redis, seq) |

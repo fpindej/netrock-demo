@@ -1,0 +1,122 @@
+namespace Netrock.Shared;
+
+/// <summary>
+/// User-facing error messages organized by domain area.
+/// Constants are used in <c>Result.Failure()</c> calls so that messages remain consistent,
+/// greppable, and easy to extract into translation keys later.
+/// <para>
+/// For dynamic messages (containing runtime values like role names), use inline string
+/// interpolation in the service — only truly static messages belong here.
+/// </para>
+/// </summary>
+public static class ErrorMessages
+{
+    /// <summary>
+    /// Authentication error messages.
+    /// </summary>
+    public static class Auth
+    {
+        public const string LoginInvalidCredentials = "Invalid username or password.";
+        public const string LoginAccountLocked = "Account is temporarily locked due to multiple failed login attempts. Please try again later.";
+        public const string RegisterRoleAssignFailed = "Account was created but role assignment failed. Please contact an administrator.";
+        public const string TokenMissing = "Refresh token is missing.";
+        public const string TokenNotFound = "Refresh token not found.";
+        public const string TokenInvalidated = "Refresh token has been invalidated.";
+        public const string TokenReused = "Invalid refresh token.";
+        public const string TokenExpired = "Refresh token has expired.";
+        public const string TokenUserNotFound = "Token owner not found.";
+        public const string NotAuthenticated = "User is not authenticated.";
+        public const string InsufficientPermissions = "You do not have the required permissions for this action.";
+        public const string UserNotFound = "User not found.";
+        public const string PasswordIncorrect = "Current password is incorrect.";
+        public const string ResetPasswordFailed = "Password reset failed. The link may have expired or already been used.";
+        public const string ResetPasswordTokenInvalid = "Invalid or expired password reset token.";
+        public const string EmailVerificationFailed = "Email verification failed. The link may have expired or already been used.";
+        public const string EmailAlreadyVerified = "Email address is already verified.";
+    }
+
+    /// <summary>
+    /// User self-service error messages.
+    /// </summary>
+    public static class User
+    {
+        public const string NotAuthenticated = "User is not authenticated.";
+        public const string NotFound = "User not found.";
+        public const string DeleteInvalidPassword = "Invalid password.";
+        public const string PhoneNumberTaken = "This phone number is already in use.";
+    }
+
+    /// <summary>
+    /// Administrative operation error messages.
+    /// </summary>
+    public static class Admin
+    {
+        public const string UserNotFound = "User not found.";
+        public const string HierarchyInsufficient = "You do not have sufficient privileges to manage this user.";
+        public const string RoleAssignAboveRank = "Cannot assign a role at or above your own rank.";
+        public const string RoleRemoveAboveRank = "Cannot remove a role at or above your own rank.";
+        public const string RoleSelfRemove = "Cannot remove a role from your own account.";
+        public const string LockSelfAction = "Cannot lock your own account.";
+        public const string DeleteSelfAction = "Cannot delete your own account.";
+    }
+
+    /// <summary>
+    /// Role management error messages.
+    /// </summary>
+    public static class Roles
+    {
+        public const string SystemRoleCannotBeDeleted = "System roles cannot be deleted.";
+        public const string SystemRoleCannotBeRenamed = "System roles cannot be renamed.";
+        public const string RoleNotFound = "Role not found.";
+        public const string RoleNameTaken = "A role with this name already exists.";
+        public const string RoleHasUsers = "Cannot delete a role that has users assigned to it.";
+        public const string InvalidPermission = "One or more permission values are invalid.";
+        public const string SystemRoleNameReserved = "This name is reserved for a system role.";
+        public const string SuperAdminPermissionsFixed = "SuperAdmin permissions cannot be modified.";
+    }
+
+    /// <summary>
+    /// Pagination error messages.
+    /// </summary>
+    public static class Pagination
+    {
+        public const string InvalidPage = "Page number must be positive.";
+        public const string InvalidPageSize = "Page size must be positive.";
+    }
+
+    /// <summary>
+    /// Server-level error messages.
+    /// </summary>
+    public static class Server
+    {
+        public const string InternalError = "An internal error occurred.";
+    }
+
+    /// <summary>
+    /// Job scheduling error messages.
+    /// </summary>
+    public static class Jobs
+    {
+        public const string NotFound = "Job not found.";
+        public const string TriggerFailed = "Failed to trigger job.";
+        public const string RestoreFailed = "Failed to restore jobs.";
+    }
+
+    /// <summary>
+    /// Security infrastructure error messages (CSRF, origin validation).
+    /// </summary>
+    public static class Security
+    {
+        public const string CrossOriginRequestBlocked = "Cross-origin requests are not allowed.";
+    }
+
+    /// <summary>
+    /// Generic entity operation error messages (repository layer).
+    /// </summary>
+    public static class Entity
+    {
+        public const string AddFailed = "Failed to add entity.";
+        public const string NotFound = "Entity not found.";
+        public const string NotDeleted = "Entity could not be deleted.";
+    }
+}

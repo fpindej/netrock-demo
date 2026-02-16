@@ -4,17 +4,17 @@
 
 ```
 src/backend/
-├── MyProject.Shared/              # Cross-cutting plumbing (no business logic)
+├── Netrock.Shared/              # Cross-cutting plumbing (no business logic)
 │   ├── Result.cs                  # Result/Result<T> pattern
 │   ├── ErrorType.cs               # Error categorization enum
 │   ├── ErrorMessages.cs           # Static error string constants
 │   └── PhoneNumberHelper.cs       # Phone normalization (source-generated regex)
 │
-├── MyProject.Domain/              # Business domain entities (zero dependencies)
+├── Netrock.Domain/              # Business domain entities (zero dependencies)
 │   └── Entities/
 │       └── BaseEntity.cs
 │
-├── MyProject.Application/         # Interfaces and DTOs (contracts only)
+├── Netrock.Application/         # Interfaces and DTOs (contracts only)
 │   ├── Features/
 │   │   └── {Feature}/
 │   │       ├── I{Feature}Service.cs
@@ -34,7 +34,7 @@ src/backend/
 │       ├── IUserContext.cs
 │       └── IUserService.cs
 │
-├── MyProject.Infrastructure/      # Implementations
+├── Netrock.Infrastructure/      # Implementations
 │   ├── Features/
 │   │   └── {Feature}/
 │   │       ├── Services/          # Service implementations
@@ -45,7 +45,7 @@ src/backend/
 │   │       ├── Options/           # Configuration binding classes
 │   │       └── Constants/         # Feature-specific constants
 │   ├── Persistence/
-│   │   ├── MyProjectDbContext.cs
+│   │   ├── NetrockDbContext.cs
 │   │   ├── BaseEntityRepository.cs
 │   │   ├── Configurations/        # Shared EF configs (BaseEntityConfiguration)
 │   │   ├── Extensions/            # Query helpers, migrations, pagination
@@ -55,7 +55,7 @@ src/backend/
 │   ├── Identity/
 │   └── Logging/
 │
-└── MyProject.WebApi/              # API entry point
+└── Netrock.WebApi/              # API entry point
     ├── Program.cs
     ├── Features/
     │   └── {Feature}/
@@ -276,7 +276,7 @@ internal class OrderConfiguration : BaseEntityConfiguration<Order>
 }
 ```
 
-Configurations are auto-discovered via `modelBuilder.ApplyConfigurationsFromAssembly()` in `MyProjectDbContext`.
+Configurations are auto-discovered via `modelBuilder.ApplyConfigurationsFromAssembly()` in `NetrockDbContext`.
 
 ### Database Schema Strategy
 
@@ -298,13 +298,13 @@ Permissions are seeded via `SeedRolePermissionsAsync()` in `ApplicationBuilderEx
 Test user credentials are in `Infrastructure/Features/Authentication/Constants/SeedUsers.cs`. These are development-only — never used in production.
 
 After creating entity + configuration:
-1. Add `DbSet<Order>` to `MyProjectDbContext`
+1. Add `DbSet<Order>` to `NetrockDbContext`
 2. Run migration:
 
 ```bash
 dotnet ef migrations add AddOrder \
-  --project src/backend/MyProject.Infrastructure \
-  --startup-project src/backend/MyProject.WebApi \
+  --project src/backend/Netrock.Infrastructure \
+  --startup-project src/backend/Netrock.WebApi \
   --output-dir Features/Postgres/Migrations
 ```
 
@@ -414,7 +414,7 @@ internal class AuthenticationService(
     ITokenProvider tokenProvider,
     ICookieService cookieService,
     IOptions<AuthenticationOptions> authenticationOptions,
-    MyProjectDbContext dbContext,
+    NetrockDbContext dbContext,
     ILogger<AuthenticationService> logger) : IAuthenticationService
 {
     private readonly AuthenticationOptions.JwtOptions _jwtOptions = authenticationOptions.Value.Jwt;
@@ -941,9 +941,9 @@ Never use class-level `[Authorize(Roles = "...")]` on controllers that use permi
 
 ### DbContext Lifecycle
 
-`MyProjectDbContext` is registered as **scoped** (one per HTTP request) via `AddDbContext`. This is the correct lifetime for web APIs — each request gets a clean change tracker.
+`NetrockDbContext` is registered as **scoped** (one per HTTP request) via `AddDbContext`. This is the correct lifetime for web APIs — each request gets a clean change tracker.
 
-- **Services** that need direct query access inject `MyProjectDbContext` via primary constructor
+- **Services** that need direct query access inject `NetrockDbContext` via primary constructor
 - **Repositories** wrap `DbContext` with entity-specific query methods
 - **Never** use `IDbContextFactory` for HTTP request handling — it's for background services that need parallel/concurrent DB operations
 
@@ -995,7 +995,7 @@ public interface IOrderRepository : IBaseEntityRepository<Order>
 
 ```csharp
 // Infrastructure/Features/Orders/Persistence/OrderRepository.cs
-internal class OrderRepository(MyProjectDbContext dbContext)
+internal class OrderRepository(NetrockDbContext dbContext)
     : BaseEntityRepository<Order>(dbContext), IOrderRepository
 {
     public async Task<IReadOnlyList<Order>> GetByUserIdAsync(Guid userId, int pageNumber, int pageSize,
@@ -1545,10 +1545,10 @@ Before adding or modifying any endpoint, verify:
 
 ```
 src/backend/tests/
-├── MyProject.Unit.Tests/           # Shared + Domain + Application (pure logic, zero I/O)
-├── MyProject.Component.Tests/      # Service tests (mocked deps via NSubstitute, InMemory EF)
-├── MyProject.Api.Tests/            # Controller + validator tests (WebApplicationFactory)
-└── MyProject.Architecture.Tests/   # Dependency direction + naming convention enforcement
+├── Netrock.Unit.Tests/           # Shared + Domain + Application (pure logic, zero I/O)
+├── Netrock.Component.Tests/      # Service tests (mocked deps via NSubstitute, InMemory EF)
+├── Netrock.Api.Tests/            # Controller + validator tests (WebApplicationFactory)
+└── Netrock.Architecture.Tests/   # Dependency direction + naming convention enforcement
 ```
 
 | Project | References | What it tests |
@@ -1576,16 +1576,16 @@ All package versions are centralized in `Directory.Packages.props`.
 
 ```bash
 # All tests (Release mode matches CI)
-dotnet test src/backend/MyProject.slnx -c Release
+dotnet test src/backend/Netrock.slnx -c Release
 
 # Specific project
-dotnet test src/backend/tests/MyProject.Unit.Tests -c Release
+dotnet test src/backend/tests/Netrock.Unit.Tests -c Release
 
 # Specific test class
-dotnet test src/backend/tests/MyProject.Component.Tests -c Release --filter "FullyQualifiedName~AuthenticationServiceTests"
+dotnet test src/backend/tests/Netrock.Component.Tests -c Release --filter "FullyQualifiedName~AuthenticationServiceTests"
 
 # Specific test method
-dotnet test src/backend/tests/MyProject.Unit.Tests -c Release --filter "ResultTests.Success_ReturnsIsSuccessTrue"
+dotnet test src/backend/tests/Netrock.Unit.Tests -c Release --filter "ResultTests.Success_ReturnsIsSuccessTrue"
 ```
 
 No external dependencies needed — tests run without Docker, PostgreSQL, or Redis.
@@ -1605,7 +1605,7 @@ public async Task Login_LockedOutUser_ReturnsLockedMessage()
 public void SoftDelete_WhenNotDeleted_SetsIsDeletedTrue()
 ```
 
-### Unit Tests (`MyProject.Unit.Tests`)
+### Unit Tests (`Netrock.Unit.Tests`)
 
 Pure logic tests — no I/O, no mocking, no DI. Organized by layer:
 
@@ -1624,14 +1624,14 @@ Unit.Tests/
     └── AppPermissionsTests.cs      # All non-empty, no duplicates, ByCategory, ClaimType
 ```
 
-### Component Tests (`MyProject.Component.Tests`)
+### Component Tests (`Netrock.Component.Tests`)
 
 Test service business logic with mocked dependencies via NSubstitute and InMemory EF Core.
 
 ```
 Component.Tests/
 ├── Fixtures/
-│   ├── TestDbContextFactory.cs     # Creates InMemory MyProjectDbContext instances
+│   ├── TestDbContextFactory.cs     # Creates InMemory NetrockDbContext instances
 │   └── IdentityMockHelpers.cs      # UserManager<T> and RoleManager<T> mock factories
 ├── Persistence/
 │   └── BaseEntityRepositoryTests.cs     # CRUD, soft-delete, pagination (skipped — needs Testcontainers #174)
@@ -1644,12 +1644,12 @@ Component.Tests/
 
 **Key patterns:**
 
-- **InMemory EF Core** via `TestDbContextFactory.Create()` — returns a fresh `MyProjectDbContext` with a unique database name per test
+- **InMemory EF Core** via `TestDbContextFactory.Create()` — returns a fresh `NetrockDbContext` with a unique database name per test
 - **Identity mocking** via `IdentityMockHelpers` — creates properly configured `UserManager<T>` and `RoleManager<T>` mocks with their required dependencies
 - **NSubstitute** for all other dependencies (`ITokenProvider`, `ICookieService`, `IUserContext`, `ICacheService`, `TimeProvider`)
 - Each test class creates its own service instance with mocked dependencies in a constructor or helper method
 
-### API Integration Tests (`MyProject.Api.Tests`)
+### API Integration Tests (`Netrock.Api.Tests`)
 
 Test the full HTTP pipeline using `WebApplicationFactory<Program>`.
 
@@ -1686,7 +1686,7 @@ The factory configures a test host that starts without any external infrastructu
 | **Auth** | `PostConfigure<AuthenticationOptions>` overrides JWT Bearer defaults with `TestAuthHandler` (runs after the app's `Configure`, ensuring test scheme wins) |
 | **Time** | Replaces `TimeProvider` with `TimeProvider.System` |
 
-**Why manual DbContext registration?** `AddDbContext` uses `TryAdd` internally. When you `RemoveAll + AddDbContext` in `ConfigureTestServices`, both Npgsql and InMemory providers end up registered, causing a `ServiceException`. The factory bypasses this by manually registering `DbContextOptions<MyProjectDbContext>` with `UseInMemoryDatabase`.
+**Why manual DbContext registration?** `AddDbContext` uses `TryAdd` internally. When you `RemoveAll + AddDbContext` in `ConfigureTestServices`, both Npgsql and InMemory providers end up registered, causing a `ServiceException`. The factory bypasses this by manually registering `DbContextOptions<NetrockDbContext>` with `UseInMemoryDatabase`.
 
 #### `TestAuthHandler`
 
@@ -1752,7 +1752,7 @@ var result = await validator.ValidateAsync(new RegisterRequest { ... });
 Assert.True(result.IsValid);
 ```
 
-### Architecture Tests (`MyProject.Architecture.Tests`)
+### Architecture Tests (`Netrock.Architecture.Tests`)
 
 Enforce structural rules via reflection using NetArchTest.Rules:
 

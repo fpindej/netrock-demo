@@ -29,7 +29,7 @@ Commit strategy (atomic, one per logical unit):
 6. `feat({feature}): add {feature} page in frontend`
 
 Verification checklist:
-- `dotnet build src/backend/MyProject.slnx` passes
+- `dotnet build src/backend/Netrock.slnx` passes
 - `cd src/frontend && npm run format && npm run lint && npm run check` passes
 - Migration creates expected tables/columns
 - Navigation entry appears in sidebar

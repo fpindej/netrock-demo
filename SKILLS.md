@@ -18,11 +18,11 @@ Step-by-step recipes for common operations. Each recipe lists exact paths, patte
    ```xml
    <PackageReference Include="PackageName" />
    ```
-3. Verify: `dotnet build src/backend/MyProject.slnx`
+3. Verify: `dotnet build src/backend/Netrock.slnx`
 
 ### Add an Error Message
 
-1. Open `src/backend/MyProject.Shared/ErrorMessages.cs`
+1. Open `src/backend/Netrock.Shared/ErrorMessages.cs`
 2. Add `const string` to the appropriate nested class (or create a new one):
    ```csharp
    public static class Orders
@@ -37,7 +37,7 @@ Step-by-step recipes for common operations. Each recipe lists exact paths, patte
 
 **Domain layer:**
 
-1. Create `src/backend/MyProject.Domain/Entities/{Entity}.cs`:
+1. Create `src/backend/Netrock.Domain/Entities/{Entity}.cs`:
    ```csharp
    public class Order : BaseEntity
    {
@@ -51,52 +51,52 @@ Step-by-step recipes for common operations. Each recipe lists exact paths, patte
 
 **Application layer:**
 
-4. Create `src/backend/MyProject.Application/Features/{Feature}/I{Feature}Service.cs`
-5. Create DTOs in `src/backend/MyProject.Application/Features/{Feature}/Dtos/`:
+4. Create `src/backend/Netrock.Application/Features/{Feature}/I{Feature}Service.cs`
+5. Create DTOs in `src/backend/Netrock.Application/Features/{Feature}/Dtos/`:
    - `{Operation}Input.cs` (records)
    - `{Entity}Output.cs` (records)
-6. *(Optional)* If custom queries needed: create `src/backend/MyProject.Application/Features/{Feature}/Persistence/I{Feature}Repository.cs` extending `IBaseEntityRepository<T>`
+6. *(Optional)* If custom queries needed: create `src/backend/Netrock.Application/Features/{Feature}/Persistence/I{Feature}Repository.cs` extending `IBaseEntityRepository<T>`
 
 **Infrastructure layer:**
 
-7. Create EF config in `src/backend/MyProject.Infrastructure/Features/{Feature}/Configurations/{Entity}Configuration.cs`:
+7. Create EF config in `src/backend/Netrock.Infrastructure/Features/{Feature}/Configurations/{Entity}Configuration.cs`:
    - Extend `BaseEntityConfiguration<T>`, override `ConfigureEntity`
    - Mark `internal`
    - Add `.HasComment()` on enum columns
-8. Add `DbSet<Entity>` to `src/backend/MyProject.Infrastructure/Persistence/MyProjectDbContext.cs`
-9. Create service in `src/backend/MyProject.Infrastructure/Features/{Feature}/Services/{Feature}Service.cs`:
+8. Add `DbSet<Entity>` to `src/backend/Netrock.Infrastructure/Persistence/NetrockDbContext.cs`
+9. Create service in `src/backend/Netrock.Infrastructure/Features/{Feature}/Services/{Feature}Service.cs`:
    - Mark `internal`, use primary constructor
-10. *(Optional)* If custom repository: create `src/backend/MyProject.Infrastructure/Features/{Feature}/Persistence/{Feature}Repository.cs` extending `BaseEntityRepository<T>`
-11. Create DI extension in `src/backend/MyProject.Infrastructure/Features/{Feature}/Extensions/ServiceCollectionExtensions.cs`:
+10. *(Optional)* If custom repository: create `src/backend/Netrock.Infrastructure/Features/{Feature}/Persistence/{Feature}Repository.cs` extending `BaseEntityRepository<T>`
+11. Create DI extension in `src/backend/Netrock.Infrastructure/Features/{Feature}/Extensions/ServiceCollectionExtensions.cs`:
     - Use C# 13 `extension(IServiceCollection)` syntax
 
 **WebApi layer:**
 
-12. Create controller in `src/backend/MyProject.WebApi/Features/{Feature}/{Feature}Controller.cs`:
+12. Create controller in `src/backend/Netrock.WebApi/Features/{Feature}/{Feature}Controller.cs`:
     - Extend `ApiController` (authenticated) or `ControllerBase` (public)
     - XML docs + `[ProducesResponseType]` on every action
-13. Create request/response DTOs in `src/backend/MyProject.WebApi/Features/{Feature}/Dtos/{Operation}/`
-14. Create mapper in `src/backend/MyProject.WebApi/Features/{Feature}/{Feature}Mapper.cs` (mark `internal`)
+13. Create request/response DTOs in `src/backend/Netrock.WebApi/Features/{Feature}/Dtos/{Operation}/`
+14. Create mapper in `src/backend/Netrock.WebApi/Features/{Feature}/{Feature}Mapper.cs` (mark `internal`)
 15. Create validators co-located with request DTOs
-16. Wire DI in `src/backend/MyProject.WebApi/Program.cs`
+16. Wire DI in `src/backend/Netrock.WebApi/Program.cs`
 
 **Migration:**
 
 17. Run:
     ```bash
     dotnet ef migrations add Add{Entity} \
-      --project src/backend/MyProject.Infrastructure \
-      --startup-project src/backend/MyProject.WebApi \
+      --project src/backend/Netrock.Infrastructure \
+      --startup-project src/backend/Netrock.WebApi \
       --output-dir Features/Postgres/Migrations
     ```
 
 **Tests:**
 
-18. Add component test for the service in `src/backend/tests/MyProject.Component.Tests/Services/{Feature}ServiceTests.cs` (see [Add a Component Test](#add-a-component-test))
-19. Add API integration tests in `src/backend/tests/MyProject.Api.Tests/Controllers/{Feature}ControllerTests.cs` (see [Add an API Integration Test](#add-an-api-integration-test))
-20. Add validator tests in `src/backend/tests/MyProject.Api.Tests/Validators/{Validator}Tests.cs` (see [Add a Validator Test](#add-a-validator-test))
+18. Add component test for the service in `src/backend/tests/Netrock.Component.Tests/Services/{Feature}ServiceTests.cs` (see [Add a Component Test](#add-a-component-test))
+19. Add API integration tests in `src/backend/tests/Netrock.Api.Tests/Controllers/{Feature}ControllerTests.cs` (see [Add an API Integration Test](#add-an-api-integration-test))
+20. Add validator tests in `src/backend/tests/Netrock.Api.Tests/Validators/{Validator}Tests.cs` (see [Add a Validator Test](#add-a-validator-test))
 
-**Verify:** `dotnet test src/backend/MyProject.slnx -c Release`
+**Verify:** `dotnet test src/backend/Netrock.slnx -c Release`
 
 **Commit strategy:** entity+config+errors → interface+DTOs → service+DI → controller+DTOs+mapper+validators → migration → tests
 
@@ -113,7 +113,7 @@ Step-by-step recipes for common operations. Each recipe lists exact paths, patte
 8. Add/update component tests for the service method (see [Add a Component Test](#add-a-component-test))
 9. Add/update API integration tests for the new action (see [Add an API Integration Test](#add-an-api-integration-test))
 10. If validator added, add validator tests (see [Add a Validator Test](#add-a-validator-test))
-11. Verify: `dotnet test src/backend/MyProject.slnx -c Release`
+11. Verify: `dotnet test src/backend/Netrock.slnx -c Release`
 12. **After deploying/running:** regenerate frontend types (see [Regenerate API Types](#regenerate-api-types))
 
 > **Breaking change check:** If modifying an existing endpoint's request/response shape, this is a breaking change for the frontend. Either version the endpoint or update the frontend in the same PR.
@@ -121,8 +121,8 @@ Step-by-step recipes for common operations. Each recipe lists exact paths, patte
 ### Add an Options Class
 
 1. Create in the appropriate layer:
-   - Infrastructure: `src/backend/MyProject.Infrastructure/{Area}/Options/{Name}Options.cs`
-   - WebApi: `src/backend/MyProject.WebApi/Options/{Name}Options.cs`
+   - Infrastructure: `src/backend/Netrock.Infrastructure/{Area}/Options/{Name}Options.cs`
+   - WebApi: `src/backend/Netrock.WebApi/Options/{Name}Options.cs`
 2. Structure:
    ```csharp
    /// <summary>
@@ -139,7 +139,7 @@ Step-by-step recipes for common operations. Each recipe lists exact paths, patte
        public string Value { get; init; } = string.Empty;
    }
    ```
-3. Add section to `src/backend/MyProject.WebApi/appsettings.json` (and `appsettings.Development.json` if dev differs — note: dev/test appsettings are excluded from production publish via `StripDevConfig`; see backend `AGENTS.md` → Hosting Configuration → Production build hygiene)
+3. Add section to `src/backend/Netrock.WebApi/appsettings.json` (and `appsettings.Development.json` if dev differs — note: dev/test appsettings are excluded from production publish via `StripDevConfig`; see backend `AGENTS.md` → Hosting Configuration → Production build hygiene)
 4. Register in DI extension:
    ```csharp
    services.AddOptions<{Name}Options>()
@@ -153,8 +153,8 @@ Step-by-step recipes for common operations. Each recipe lists exact paths, patte
 
 ```bash
 dotnet ef migrations add {MigrationName} \
-  --project src/backend/MyProject.Infrastructure \
-  --startup-project src/backend/MyProject.WebApi \
+  --project src/backend/Netrock.Infrastructure \
+  --startup-project src/backend/Netrock.WebApi \
   --output-dir Features/Postgres/Migrations
 ```
 
@@ -162,21 +162,21 @@ To apply (development — runs automatically on startup, but can be run manually
 
 ```bash
 dotnet ef database update \
-  --project src/backend/MyProject.Infrastructure \
-  --startup-project src/backend/MyProject.WebApi
+  --project src/backend/Netrock.Infrastructure \
+  --startup-project src/backend/Netrock.WebApi
 ```
 
 ### Add a Role
 
-1. Add `public const string` field to `src/backend/MyProject.Application/Identity/Constants/AppRoles.cs`
+1. Add `public const string` field to `src/backend/Netrock.Application/Identity/Constants/AppRoles.cs`
 2. That's it — `AppRoles.All` discovers roles via reflection, seeding picks them up automatically
-3. *(Optional)* To seed default permissions for the new role, add entries to `SeedRolePermissionsAsync()` in `src/backend/MyProject.Infrastructure/Persistence/Extensions/ApplicationBuilderExtensions.cs`
+3. *(Optional)* To seed default permissions for the new role, add entries to `SeedRolePermissionsAsync()` in `src/backend/Netrock.Infrastructure/Persistence/Extensions/ApplicationBuilderExtensions.cs`
 
 ### Add a Permission
 
 **Backend:**
 
-1. Add `public const string` field to the appropriate nested class in `src/backend/MyProject.Application/Identity/Constants/AppPermissions.cs`:
+1. Add `public const string` field to the appropriate nested class in `src/backend/Netrock.Application/Identity/Constants/AppPermissions.cs`:
    ```csharp
    public static class Orders
    {
@@ -186,8 +186,8 @@ dotnet ef database update \
    ```
    `AppPermissions.All` discovers permissions via reflection — no manual registration needed.
 2. Add `[RequirePermission(AppPermissions.Orders.View)]` to the relevant controller actions
-3. *(Optional)* Seed the permission for existing roles in `SeedRolePermissionsAsync()` in `src/backend/MyProject.Infrastructure/Persistence/Extensions/ApplicationBuilderExtensions.cs`
-4. Verify: `dotnet build src/backend/MyProject.slnx`
+3. *(Optional)* Seed the permission for existing roles in `SeedRolePermissionsAsync()` in `src/backend/Netrock.Infrastructure/Persistence/Extensions/ApplicationBuilderExtensions.cs`
+4. Verify: `dotnet build src/backend/Netrock.slnx`
 
 **Frontend:**
 
@@ -208,11 +208,11 @@ dotnet ef database update \
 
 ### Add a Rate Limit Policy
 
-1. Add a constant to `src/backend/MyProject.WebApi/Shared/RateLimitPolicies.cs`:
+1. Add a constant to `src/backend/Netrock.WebApi/Shared/RateLimitPolicies.cs`:
    ```csharp
    public const string MyPolicy = "my-policy";
    ```
-2. Add a configuration class to `src/backend/MyProject.WebApi/Options/RateLimitingOptions.cs` (extend `FixedWindowPolicyOptions`):
+2. Add a configuration class to `src/backend/Netrock.WebApi/Options/RateLimitingOptions.cs` (extend `FixedWindowPolicyOptions`):
    ```csharp
    public sealed class MyPolicyLimitOptions : FixedWindowPolicyOptions
    {
@@ -230,19 +230,19 @@ dotnet ef database update \
    [ValidateObjectMembers]
    public MyPolicyLimitOptions MyPolicy { get; init; } = new();
    ```
-4. Register in `src/backend/MyProject.WebApi/Extensions/RateLimiterExtensions.cs` using the existing helpers:
+4. Register in `src/backend/Netrock.WebApi/Extensions/RateLimiterExtensions.cs` using the existing helpers:
    - `AddIpPolicy(...)` for unauthenticated endpoints (partitions by IP)
    - `AddUserPolicy(...)` for authenticated endpoints (partitions by user identity)
 5. Add config section to both `appsettings.json` and `appsettings.Development.json`
 6. Apply to endpoints: `[EnableRateLimiting(RateLimitPolicies.MyPolicy)]`
 7. Add `[ProducesResponseType(StatusCodes.Status429TooManyRequests)]` to the endpoint
-8. Verify: `dotnet build src/backend/MyProject.slnx`
+8. Verify: `dotnet build src/backend/Netrock.slnx`
 
 ### Add a Route Constraint
 
 For validating string path parameters (e.g. `{role}`, `{jobId}`) at the routing layer.
 
-1. Create `src/backend/MyProject.WebApi/Routing/{Name}RouteConstraint.cs`:
+1. Create `src/backend/Netrock.WebApi/Routing/{Name}RouteConstraint.cs`:
    ```csharp
    public partial class {Name}RouteConstraint : IRouteConstraint
    {
@@ -264,25 +264,25 @@ For validating string path parameters (e.g. `{role}`, `{jobId}`) at the routing 
    ```
 3. Use in routes: `[HttpGet("items/{id:myConstraint}")]`
 4. Non-matching routes return 404 automatically — no controller code needed
-5. Verify: `dotnet build src/backend/MyProject.slnx`
+5. Verify: `dotnet build src/backend/Netrock.slnx`
 
 ### Add a Background Job
 
 The template uses [Hangfire](https://www.hangfire.io/) for recurring background jobs with PostgreSQL persistence. Jobs implement the `IRecurringJobDefinition` interface and are auto-discovered at startup.
 
-**1. Create the job class** in `src/backend/MyProject.Infrastructure/Features/Jobs/RecurringJobs/{JobName}Job.cs`:
+**1. Create the job class** in `src/backend/Netrock.Infrastructure/Features/Jobs/RecurringJobs/{JobName}Job.cs`:
 
 ```csharp
 using Hangfire;
 using Microsoft.Extensions.Logging;
 
-namespace MyProject.Infrastructure.Features.Jobs.RecurringJobs;
+namespace Netrock.Infrastructure.Features.Jobs.RecurringJobs;
 
 /// <summary>
 /// Brief description of what this job does and why.
 /// </summary>
 internal sealed class MyCleanupJob(
-    MyProjectDbContext dbContext,
+    NetrockDbContext dbContext,
     TimeProvider timeProvider,
     ILogger<MyCleanupJob> logger) : IRecurringJobDefinition
 {
@@ -308,14 +308,14 @@ Key conventions:
 - Use descriptive `JobId` (kebab-case, e.g. `"expired-token-cleanup"`)
 - Use `Hangfire.Cron` helpers: `Cron.Hourly()`, `Cron.Daily()`, `Cron.Weekly()`, etc.
 
-**2. Register in DI** — add two lines to `src/backend/MyProject.Infrastructure/Features/Jobs/Extensions/ServiceCollectionExtensions.cs`:
+**2. Register in DI** — add two lines to `src/backend/Netrock.Infrastructure/Features/Jobs/Extensions/ServiceCollectionExtensions.cs`:
 
 ```csharp
 services.AddScoped<MyCleanupJob>();
 services.AddScoped<IRecurringJobDefinition>(sp => sp.GetRequiredService<MyCleanupJob>());
 ```
 
-**3. Verify:** `dotnet build src/backend/MyProject.slnx`
+**3. Verify:** `dotnet build src/backend/Netrock.slnx`
 
 That's it — `UseJobScheduling()` discovers all `IRecurringJobDefinition` implementations and registers them with Hangfire automatically.
 
@@ -336,12 +336,12 @@ Set `Enabled` to `false` to disable Hangfire entirely (e.g. read-only replicas, 
 
 For ad-hoc work that should run once in the background (send email, call external API, process file), use Hangfire's `IBackgroundJobClient` directly. No custom interface needed — any DI-registered service with a public method works.
 
-**1. Create the job class** (or use any existing service) in `src/backend/MyProject.Infrastructure/Features/Jobs/`:
+**1. Create the job class** (or use any existing service) in `src/backend/Netrock.Infrastructure/Features/Jobs/`:
 
 ```csharp
 using Microsoft.Extensions.Logging;
 
-namespace MyProject.Infrastructure.Features.Jobs;
+namespace Netrock.Infrastructure.Features.Jobs;
 
 internal sealed class WelcomeEmailJob(
     IEmailService emailService,
@@ -379,7 +379,7 @@ backgroundJobClient.Schedule<WelcomeEmailJob>(
     TimeSpan.FromMinutes(30));
 ```
 
-**4. Verify:** `dotnet build src/backend/MyProject.slnx`
+**4. Verify:** `dotnet build src/backend/Netrock.slnx`
 
 See `ExampleFireAndForgetJob.cs` in the codebase for a working reference. The Hangfire dashboard and admin UI at `/admin/jobs` show one-time job executions alongside recurring jobs.
 
@@ -387,16 +387,16 @@ See `ExampleFireAndForgetJob.cs` in the codebase for a working reference. The Ha
 
 ```bash
 # All tests (Release mode — matches CI)
-dotnet test src/backend/MyProject.slnx -c Release
+dotnet test src/backend/Netrock.slnx -c Release
 
 # Single project
-dotnet test src/backend/tests/MyProject.Unit.Tests -c Release
+dotnet test src/backend/tests/Netrock.Unit.Tests -c Release
 
 # Filter by class name
-dotnet test src/backend/tests/MyProject.Component.Tests -c Release --filter "FullyQualifiedName~AuthenticationServiceTests"
+dotnet test src/backend/tests/Netrock.Component.Tests -c Release --filter "FullyQualifiedName~AuthenticationServiceTests"
 
 # Filter by method name
-dotnet test src/backend/tests/MyProject.Unit.Tests -c Release --filter "ResultTests.Success_ReturnsIsSuccessTrue"
+dotnet test src/backend/tests/Netrock.Unit.Tests -c Release --filter "ResultTests.Success_ReturnsIsSuccessTrue"
 ```
 
 No external dependencies (Docker, PostgreSQL, Redis) needed — all tests run in-process.
@@ -405,10 +405,10 @@ No external dependencies (Docker, PostgreSQL, Redis) needed — all tests run in
 
 For pure logic in Shared, Domain, or Application layers.
 
-1. Create `src/backend/tests/MyProject.Unit.Tests/{Layer}/{ClassUnderTest}Tests.cs`
+1. Create `src/backend/tests/Netrock.Unit.Tests/{Layer}/{ClassUnderTest}Tests.cs`
 2. Structure:
    ```csharp
-   namespace MyProject.Unit.Tests.{Layer};
+   namespace Netrock.Unit.Tests.{Layer};
 
    public class {ClassUnderTest}Tests
    {
@@ -420,18 +420,18 @@ For pure logic in Shared, Domain, or Application layers.
    }
    ```
 3. No mocking, no DI — test pure inputs and outputs
-4. Verify: `dotnet test src/backend/tests/MyProject.Unit.Tests -c Release`
+4. Verify: `dotnet test src/backend/tests/Netrock.Unit.Tests -c Release`
 
 ### Add a Component Test
 
 For service business logic with mocked dependencies.
 
-1. Create `src/backend/tests/MyProject.Component.Tests/Services/{Service}Tests.cs`
+1. Create `src/backend/tests/Netrock.Component.Tests/Services/{Service}Tests.cs`
 2. Create mocks in constructor or setup method:
    ```csharp
    public class OrderServiceTests
    {
-       private readonly MyProjectDbContext _dbContext = TestDbContextFactory.Create();
+       private readonly NetrockDbContext _dbContext = TestDbContextFactory.Create();
        private readonly IOrderRepository _orderRepo = Substitute.For<IOrderRepository>();
        private readonly ICacheService _cache = Substitute.For<ICacheService>();
        // ... create service instance with mocks
@@ -447,13 +447,13 @@ For service business logic with mocked dependencies.
    Assert.True(result.IsSuccess);
    Assert.Equal(expectedId, result.Value);
    ```
-5. Verify: `dotnet test src/backend/tests/MyProject.Component.Tests -c Release`
+5. Verify: `dotnet test src/backend/tests/Netrock.Component.Tests -c Release`
 
 ### Add an API Integration Test
 
 For testing the full HTTP pipeline (routes, auth, validation, status codes).
 
-1. Create `src/backend/tests/MyProject.Api.Tests/Controllers/{Controller}Tests.cs`
+1. Create `src/backend/tests/Netrock.Api.Tests/Controllers/{Controller}Tests.cs`
 2. Structure:
    ```csharp
    public class OrdersControllerTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
@@ -494,7 +494,7 @@ For testing the full HTTP pipeline (routes, auth, validation, status codes).
    ```
 5. If the service interface isn't already mocked in `CustomWebApplicationFactory`, add it there first
 6. For success responses (200/201 with a body), add **response contract assertions**:
-   - Add a frozen contract record to `tests/MyProject.Api.Tests/Contracts/ResponseContracts.cs` matching the response shape
+   - Add a frozen contract record to `tests/Netrock.Api.Tests/Contracts/ResponseContracts.cs` matching the response shape
    - Deserialize with `ReadFromJsonAsync<ContractRecord>()` and assert key fields are populated
    - This catches silent field renames, nullability changes, and removed properties
    ```csharp
@@ -502,13 +502,13 @@ For testing the full HTTP pipeline (routes, auth, validation, status codes).
    Assert.NotNull(body);
    Assert.NotEqual(Guid.Empty, body.Id);
    ```
-7. Verify: `dotnet test src/backend/tests/MyProject.Api.Tests -c Release`
+7. Verify: `dotnet test src/backend/tests/Netrock.Api.Tests -c Release`
 
 ### Add a Validator Test
 
 For testing FluentValidation rules without starting the test server. Uses FluentValidation's `TestHelper` extensions.
 
-1. Create `src/backend/tests/MyProject.Api.Tests/Validators/{Validator}Tests.cs`
+1. Create `src/backend/tests/Netrock.Api.Tests/Validators/{Validator}Tests.cs`
 2. Instantiate the validator directly and use `TestValidate` + assertion helpers:
    ```csharp
    using FluentValidation.TestHelper;
@@ -543,7 +543,7 @@ For testing FluentValidation rules without starting the test server. Uses Fluent
        }
    }
    ```
-3. Verify: `dotnet test src/backend/tests/MyProject.Api.Tests -c Release`
+3. Verify: `dotnet test src/backend/tests/Netrock.Api.Tests -c Release`
 
 ---
 
@@ -715,7 +715,7 @@ Combines backend entity creation with frontend page. Follow in order:
 3. Infrastructure: EF config + DbSet + service + (optional) repository + DI extension
 4. WebApi: controller + DTOs + mapper + validators + Program.cs wiring
 5. Migration
-6. Verify: `dotnet build src/backend/MyProject.slnx`
+6. Verify: `dotnet build src/backend/Netrock.slnx`
 
 **Frontend (with backend running):**
 

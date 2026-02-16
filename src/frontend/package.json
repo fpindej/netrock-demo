@@ -15,7 +15,7 @@
 		"api:generate": "openapi-typescript http://localhost:13002/openapi/v1.json -o ./src/lib/api/v1.d.ts && prettier --write ./src/lib/api/v1.d.ts"
 	},
 	"devDependencies": {
-		"@eslint/compat": "^1.4.0",
+		"@eslint/compat": "^2.0.2",
 		"@eslint/js": "^9.39.1",
 		"@inlang/paraglide-js": "^2.11.0",
 		"@lucide/svelte": "^0.564.0",

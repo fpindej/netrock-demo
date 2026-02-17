@@ -11,17 +11,17 @@ x-api-environment: &api-environment
   Authentication__Jwt__Issuer: ${JWT_ISSUER:-NetrockIssuer}
   Authentication__Jwt__Audience: ${JWT_AUDIENCE:-NetrockAudience}
   Cors__AllowAllOrigins: "false"
-  Cors__AllowedOrigins__0: https://app.leadleak.online
+  Cors__AllowedOrigins__0: https://demo.netrock.dev
   Email__Resend__ApiKey: ${RESEND_API_KEY}
-  Email__FromAddress: ${EMAIL_FROM_ADDRESS:-noreply@leadleak.online}
-  Email__FromName: ${EMAIL_FROM_NAME:-LeadLeak}
-  Email__FrontendBaseUrl: https://app.leadleak.online
+  Email__FromAddress: ${EMAIL_FROM_ADDRESS:-noreply@netrock.dev}
+  Email__FromName: ${EMAIL_FROM_NAME:-Netrock}
+  Email__FrontendBaseUrl: https://demo.netrock.dev
   Captcha__SecretKey: ${CAPTCHA_SECRET_KEY}
   Hosting__ReverseProxy__TrustedNetworks__0: 172.16.0.0/12
 
 x-frontend-environment: &frontend-environment
   API_URL: http://api:8080
-  ORIGIN: https://app.leadleak.online
+  ORIGIN: https://demo.netrock.dev
   PROTOCOL_HEADER: x-forwarded-proto
   HOST_HEADER: x-forwarded-host
 

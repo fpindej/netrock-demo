@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Netrock.Infrastructure.Persistence;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Netrock.Infrastructure.Features.Postgres.Migrations
+namespace Netrock.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(NetrockDbContext))]
-    partial class NetrockDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260217033659_AddEmailTokens")]
+    partial class AddEmailTokens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

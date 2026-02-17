@@ -12,6 +12,7 @@ using Netrock.Application.Identity.Constants;
 using Netrock.Application.Features.Email;
 using Netrock.Shared;
 using Netrock.Infrastructure.Features.Authentication.Models;
+using Netrock.Infrastructure.Features.Authentication.Services;
 using Netrock.Infrastructure.Features.Email.Options;
 using Netrock.Infrastructure.Persistence;
 using Netrock.Infrastructure.Persistence.Extensions;
@@ -37,6 +38,7 @@ internal class AdminService(
     ICacheService cacheService,
     TimeProvider timeProvider,
     IEmailService emailService,
+    EmailTokenService emailTokenService,
     IOptions<EmailOptions> emailOptions,
     ILogger<AdminService> logger) : IAdminService
 {
@@ -411,9 +413,10 @@ internal class AdminService(
             return hierarchyResult;
         }
 
-        var token = await userManager.GeneratePasswordResetTokenAsync(user);
+        var identityToken = await userManager.GeneratePasswordResetTokenAsync(user);
+        var opaqueToken = await emailTokenService.CreateAsync(user.Id, identityToken, EmailTokenPurpose.PasswordReset, cancellationToken);
         var email = user.Email ?? user.UserName ?? string.Empty;
-        var resetUrl = BuildPasswordResetUrl(token, email);
+        var resetUrl = $"{_emailOptions.FrontendBaseUrl.TrimEnd('/')}/reset-password?token={opaqueToken}";
 
         var safeResetUrl = WebUtility.HtmlEncode(resetUrl);
         var htmlBody = $"""
@@ -484,8 +487,9 @@ internal class AdminService(
         }
 
         // Send invitation email with password reset link
-        var token = await userManager.GeneratePasswordResetTokenAsync(user);
-        var resetUrl = BuildPasswordResetUrl(token, input.Email);
+        var identityToken = await userManager.GeneratePasswordResetTokenAsync(user);
+        var opaqueToken = await emailTokenService.CreateAsync(user.Id, identityToken, EmailTokenPurpose.PasswordReset, cancellationToken);
+        var resetUrl = $"{_emailOptions.FrontendBaseUrl.TrimEnd('/')}/reset-password?token={opaqueToken}";
 
         var safeResetUrl = WebUtility.HtmlEncode(resetUrl);
         var htmlBody = $"""
@@ -727,16 +731,6 @@ internal class AdminService(
         {
             logger.LogError(ex, "Failed to send email to {To}", message.To);
         }
-    }
-
-    /// <summary>
-    /// Builds an absolute password-reset URL for the frontend, encoding the token and email as query parameters.
-    /// </summary>
-    private string BuildPasswordResetUrl(string token, string email)
-    {
-        var encodedToken = Uri.EscapeDataString(token);
-        var encodedEmail = Uri.EscapeDataString(email);
-        return $"{_emailOptions.FrontendBaseUrl.TrimEnd('/')}/reset-password?token={encodedToken}&email={encodedEmail}";
     }
 
     /// <summary>

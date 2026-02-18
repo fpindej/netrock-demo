@@ -520,9 +520,9 @@
 	"guide_locked": "Pro pokračování ověřte svůj e-mail",
 
 	"contacts_title": "Kontakty",
-	"contacts_description": "Spravujte svůj obchodní pipeline a sledujte leady.",
+	"contacts_description": "Spravujte svou obchodní pipeline a sledujte leady.",
 	"contacts_newContact": "Nový kontakt",
-	"contacts_empty_title": "Váš pipeline je prázdný",
+	"contacts_empty_title": "Vaše pipeline je prázdná",
 	"contacts_empty_description": "Začněte rychle s ukázkovými daty, nebo vytvořte svůj první kontakt ručně.",
 	"contacts_empty_cta": "Vytvořit ručně",
 	"contacts_empty_seed": "Vygenerovat {count} ukázkových kontaktů",
@@ -588,7 +588,7 @@
 	"audit_action_contactDelete": "Kontakt smazán",
 
 	"analytics_title": "Analytika pipeline",
-	"analytics_description": "Přehledy z vašeho obchodního pipeline.",
+	"analytics_description": "Přehledy z vaší obchodní pipeline.",
 	"analytics_totalContacts": "Celkem kontaktů",
 	"analytics_pipelineValue": "Hodnota pipeline",
 	"analytics_customers": "Zákazníci",

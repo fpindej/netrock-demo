@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Options;
 using Netrock.Application.Features.Admin;
 using Netrock.Application.Features.Audit;
 using Netrock.Application.Identity;
@@ -14,6 +15,7 @@ using Netrock.WebApi.Features.Admin.Dtos.SetPermissions;
 using Netrock.WebApi.Features.Admin.Dtos.UpdateRole;
 using Netrock.WebApi.Features.Audit;
 using Netrock.WebApi.Features.Audit.Dtos.ListAuditEvents;
+using Netrock.WebApi.Options;
 using Netrock.WebApi.Shared;
 
 namespace Netrock.WebApi.Features.Admin;
@@ -24,7 +26,7 @@ namespace Netrock.WebApi.Features.Admin;
 /// Role hierarchy and self-action protection are enforced at the service layer.
 /// </summary>
 [Tags("Admin")]
-public class AdminController(IAdminService adminService, IRoleManagementService roleManagementService, IAuditService auditService, IUserContext userContext) : ApiController
+public class AdminController(IAdminService adminService, IRoleManagementService roleManagementService, IAuditService auditService, IUserContext userContext, IOptions<DemoOptions> demoOptions) : ApiController
 {
     /// <summary>
     /// Gets a paginated list of all users, optionally filtered by a search term.
@@ -48,7 +50,14 @@ public class AdminController(IAdminService adminService, IRoleManagementService 
         var result = await adminService.GetUsersAsync(
             request.PageNumber, request.PageSize, request.Search, cancellationToken);
 
-        return Ok(result.ToResponse());
+        var response = result.ToResponse();
+
+        if (demoOptions.Value.Enabled)
+        {
+            response = response.WithAnonymizedUsers(userContext.AuthenticatedUserId);
+        }
+
+        return Ok(response);
     }
 
     /// <summary>
@@ -75,7 +84,14 @@ public class AdminController(IAdminService adminService, IRoleManagementService 
             return ProblemFactory.Create(result.Error, result.ErrorType);
         }
 
-        return Ok(result.Value.ToResponse());
+        var response = result.Value.ToResponse();
+
+        if (demoOptions.Value.Enabled && id != userContext.AuthenticatedUserId)
+        {
+            response = response.WithAnonymizedPii();
+        }
+
+        return Ok(response);
     }
 
     /// <summary>

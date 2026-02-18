@@ -18,12 +18,14 @@ x-api-environment: &api-environment
   Email__FrontendBaseUrl: https://demo.netrock.dev
   Captcha__SecretKey: ${CAPTCHA_SECRET_KEY}
   Hosting__ReverseProxy__TrustedNetworks__0: 172.16.0.0/12
+  Demo__Enabled: "true"
 
 x-frontend-environment: &frontend-environment
   API_URL: http://api:8080
   ORIGIN: https://demo.netrock.dev
   PROTOCOL_HEADER: x-forwarded-proto
   HOST_HEADER: x-forwarded-host
+  PUBLIC_DEMO_MODE: "true"
 
 x-common-settings: &common-settings
   restart: unless-stopped

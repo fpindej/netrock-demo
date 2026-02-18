@@ -118,13 +118,13 @@
 				</div>
 
 				<div class="text-center text-sm">
-					<a
-						href={resolve('/login')}
+					<button
+						onclick={() => history.back()}
 						class="inline-flex items-center gap-1 font-medium text-primary hover:underline"
 					>
 						<ArrowLeft class="h-4 w-4" />
-						{m.privacy_backToLogin()}
-					</a>
+						{m.privacy_back()}
+					</button>
 				</div>
 			</Card.Content>
 		</Card.Root>

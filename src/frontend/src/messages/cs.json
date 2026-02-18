@@ -663,7 +663,7 @@
 	"privacy_contact_title": "Kontakt",
 	"privacy_contact_body": "S dotazy či požadavky ohledně dat se obraťte na {linkOpen}{email}{linkClose}.",
 	"privacy_lastUpdated": "Poslední aktualizace: {date}",
-	"privacy_backToLogin": "Zpět na přihlášení",
+	"privacy_back": "Zpět",
 
 	"demo_viewingAs": "Zobrazeno jako",
 	"demo_switching": "Přepínání...",

@@ -663,7 +663,7 @@
 	"privacy_contact_title": "Contact",
 	"privacy_contact_body": "For any data-related questions or requests, reach out to {linkOpen}{email}{linkClose}.",
 	"privacy_lastUpdated": "Last updated: {date}",
-	"privacy_backToLogin": "Back to login",
+	"privacy_back": "Go back",
 
 	"demo_viewingAs": "Viewing as",
 	"demo_switching": "Switching...",

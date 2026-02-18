@@ -61,7 +61,7 @@
 
 	function formatValue(value: number | null | undefined) {
 		if (value == null) return '$0';
-		return new Intl.NumberFormat(undefined, {
+		return new Intl.NumberFormat('en-US', {
 			style: 'currency',
 			currency: 'USD',
 			minimumFractionDigits: 0,

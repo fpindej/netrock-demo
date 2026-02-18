@@ -23,7 +23,7 @@
 			title: m.contact_github_title,
 			description: m.contact_github_description,
 			icon: Github,
-			href: 'https://github.com/netrock-consulting',
+			href: 'https://github.com/fpindej/netrock',
 			external: true
 		},
 		{

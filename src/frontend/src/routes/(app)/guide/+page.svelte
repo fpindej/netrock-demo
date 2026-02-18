@@ -299,7 +299,7 @@
 							{#if step.content === 'github'}
 								<div class="mt-4 flex flex-wrap gap-2">
 									<a
-										href="https://github.com/netrock-consulting"
+										href="https://github.com/fpindej/netrock"
 										target="_blank"
 										rel="noopener noreferrer"
 									>

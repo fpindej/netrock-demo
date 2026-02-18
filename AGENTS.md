@@ -155,7 +155,7 @@ Before **every** commit, verify the code compiles and passes checks:
 
 - **Backend**: `dotnet build src/backend/Netrock.slnx`
 - **Backend tests**: `dotnet test src/backend/Netrock.slnx -c Release`
-- **Frontend**: `cd src/frontend && npm run format && npm run lint && npm run check`
+- **Frontend**: `cd src/frontend && pnpm run format && pnpm run lint && pnpm run check`
 
 Never commit code that doesn't compile, has lint errors, fails type checks, or breaks tests.
 
@@ -406,6 +406,7 @@ No config changes needed. Defaults work out of the box.
 |---|---|---|
 | .NET SDK | `10.0.100` (`rollForward: latestMajor`) | `global.json` |
 | Node.js | Engine-strict enforced | `src/frontend/package.json` + `.npmrc` |
+| pnpm | `10.x` (corepack-managed) | `src/frontend/package.json` `packageManager` field |
 | dotnet-ef | `10.0.0` | `.config/dotnet-tools.json` |
 
 ### Build Configuration
@@ -416,7 +417,7 @@ No config changes needed. Defaults work out of the box.
 | `Directory.Packages.props` | Centralized NuGet version management — all package versions defined here, not in `.csproj` files |
 | `nuget.config` | Locked to NuGet.org only (no custom feeds) |
 | `global.json` | Pins .NET SDK version |
-| `src/frontend/.npmrc` | `engine-strict=true` — npm refuses to install if Node version doesn't match |
+| `src/frontend/.npmrc` | `engine-strict=true`, `strict-peer-dependencies=true`, `frozen-lockfile=true` |
 
 ### CI/CD & Hooks
 
@@ -427,7 +428,7 @@ GitHub Actions workflows enforce quality gates on every PR and push to `master`:
 | **CI** | `.github/workflows/ci.yml` | Build + lint + type-check, gated by `dorny/paths-filter` so backend-only PRs skip frontend and vice versa. Single `ci-passed` gate job for branch protection. |
 | **Docker** | `.github/workflows/docker.yml` | Validates Docker images build successfully (no push). Triggered only when Dockerfiles or dependency manifests change. Uses GHA layer cache. |
 
-**Dependabot** (`.github/dependabot.yml`) opens weekly PRs for NuGet, npm, and GitHub Actions updates. Minor+patch versions are grouped to reduce noise.
+**Dependabot** (`.github/dependabot.yml`) opens weekly PRs for NuGet, pnpm, and GitHub Actions updates. Minor+patch versions are grouped to reduce noise.
 
 Pre-commit checks (build, format, lint, type check) remain manual steps documented in `CLAUDE.md` — CI enforces them server-side as a safety net.
 
@@ -436,15 +437,15 @@ Pre-commit checks (build, format, lint, type check) remain manual steps document
 | File | Purpose |
 |---|---|
 | `src/backend/Netrock.WebApi/Dockerfile` | Multi-stage production build (restore → build → publish → runtime) |
-| `src/frontend/Dockerfile` | Production build (build → runtime with Node adapter) |
-| `src/frontend/Dockerfile.local` | Development — mounts source, runs `npm run dev` for hot-reload |
+| `src/frontend/Dockerfile` | Multi-stage pnpm production build (base → prod-deps → builder → runtime) |
+| `src/frontend/Dockerfile.local` | Development — mounts source, runs `pnpm run dev` for hot-reload |
 | `docker-compose.local.yml` | 5-service local stack (api, frontend, db, redis, seq) |
 
 The backend Dockerfile uses layer caching: `.csproj` files are restored first (cached), then source is copied and built. This avoids re-downloading NuGet packages on every source change.
 
 The frontend Dockerfile accepts `PUBLIC_*` SvelteKit env vars as Docker build args — they are baked into the JS at build time via `$env/static/public`. When adding a new `PUBLIC_*` var:
 
-1. Add `ARG` + `ENV` to `src/frontend/Dockerfile` (before `npm run build`)
+1. Add `ARG` + `ENV` to `src/frontend/Dockerfile` (before `pnpm run build`)
 2. Add `--build-arg` to `deploy.sh`, `deploy.ps1`, and `.github/workflows/docker.yml`
 3. Add the var to `src/frontend/.env.test` (CI), `src/frontend/.env.example` (docs), and `docker-compose.local.yml` (`x-frontend-environment`)
 

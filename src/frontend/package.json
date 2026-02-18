@@ -3,6 +3,7 @@
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
+	"packageManager": "pnpm@10.11.0",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -49,5 +50,10 @@
 		"svelte-sonner": "^1.0.7",
 		"tailwind-merge": "^3.4.0",
 		"tailwind-variants": "^3.2.2"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
 	}
 }

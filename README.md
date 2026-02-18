@@ -136,7 +136,7 @@ NETrock is built **security-first**. Every decision defaults to the most restric
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
-- [Node.js 22+](https://nodejs.org/)
+- [Node.js 22+](https://nodejs.org/) with [pnpm](https://pnpm.io/) (enabled via `corepack enable`)
 - [Git](https://git-scm.com/)
 
 ### 1. Clone & Initialize

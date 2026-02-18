@@ -102,6 +102,16 @@ src/
     └── utilities.css              # Reusable effect classes
 ```
 
+## pnpm Configuration (`.npmrc`)
+
+| Setting                         | Effect                                                      |
+| ------------------------------- | ----------------------------------------------------------- |
+| `engine-strict=true`            | Fails install if Node version doesn't match `engines` field |
+| `strict-peer-dependencies=true` | Fails on unmet peer deps instead of just warning            |
+| `frozen-lockfile=true`          | Enforces lockfile integrity everywhere (dev, CI, Docker)    |
+
+Both `Dockerfile` and `Dockerfile.local` copy `.npmrc` into the image so these settings apply in Docker builds.
+
 ## API Type Generation
 
 Types are auto-generated from the backend's OpenAPI specification. **Never hand-edit `v1.d.ts`.**
@@ -109,7 +119,7 @@ Types are auto-generated from the backend's OpenAPI specification. **Never hand-
 ### Regenerate Types
 
 ```bash
-npm run api:generate
+pnpm run api:generate
 ```
 
 This fetches `/openapi/v1.json` from the running backend and generates `src/lib/api/v1.d.ts`. The backend must be running (either in Docker or from IDE).
@@ -141,7 +151,7 @@ export type User = components['schemas']['UserResponse'];
 
 1. Review changes in `v1.d.ts` for breaking changes
 2. Update any affected API calls
-3. Run `npm run check` to catch type errors
+3. Run `pnpm run check` to catch type errors
 
 ### Missing API Endpoints
 
@@ -559,7 +569,7 @@ import { SERVER_CONFIG } from '$lib/config/server';
 ### Adding shadcn Components
 
 ```bash
-npx shadcn-svelte@latest add <component-name>
+pnpm dlx shadcn-svelte@latest add <component-name>
 ```
 
 This generates components in `$lib/components/ui/<component>/`. The configuration lives in `components.json` at the frontend root:
@@ -645,7 +655,7 @@ Paraglide generates `$lib/paraglide/*` modules at build time. When running `svel
 Cannot find module '$lib/paraglide/messages' or its corresponding type declarations
 ```
 
-These are **not real errors** — the modules exist at runtime. The errors disappear after a full build (`npm run build`). Do not try to fix them.
+These are **not real errors** — the modules exist at runtime. The errors disappear after a full build (`pnpm run build`). Do not try to fix them.
 
 ## Styling
 
@@ -1109,15 +1119,15 @@ Never suppress the `svelte/no-navigation-without-resolve` lint rule.
 Run **all** of these before every commit:
 
 ```bash
-npm run format   # Prettier
-npm run lint     # ESLint
-npm run check    # Svelte + TypeScript type check
+pnpm run format   # Prettier
+pnpm run lint     # ESLint
+pnpm run check    # Svelte + TypeScript type check
 ```
 
 Run occasionally (always before PR):
 
 ```bash
-npm run build    # Production build
+pnpm run build    # Production build
 ```
 
 ### Known `svelte-check` Errors
@@ -1142,7 +1152,7 @@ npm run build    # Production build
 - Import server config from barrel (`$lib/config`)
 - Leave components in `$lib/components/` root — use feature folders
 - Mix reactive state (`.svelte.ts`) with pure utils (`.ts`)
-- Hand-edit `v1.d.ts` — run `npm run api:generate`
+- Hand-edit `v1.d.ts` — run `pnpm run api:generate`
 - Create UI components that shadcn already provides
 - Work around missing API endpoints — propose them instead
 - Suppress `svelte/no-navigation-without-resolve` — use `resolve()` with `goto()`

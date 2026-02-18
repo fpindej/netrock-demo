@@ -40,6 +40,6 @@
 		</main>
 	</div>
 </div>
-{#if data.isDemoMode}
+{#if data.isDemoMode && data.user.emailConfirmed}
 	<DemoPanel user={data.user} />
 {/if}

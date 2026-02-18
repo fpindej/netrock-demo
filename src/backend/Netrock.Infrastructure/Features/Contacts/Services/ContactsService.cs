@@ -1,3 +1,4 @@
+using Bogus;
 using Microsoft.EntityFrameworkCore;
 using Netrock.Application.Features.Audit;
 using Netrock.Application.Features.Contacts;
@@ -167,6 +168,69 @@ internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService 
             recentContacts);
 
         return Result<ContactsStatsOutput>.Success(stats);
+    }
+
+    /// <inheritdoc />
+    public async Task<Result<List<ContactOutput>>> SeedAsync(Guid userId, int count, CancellationToken ct)
+    {
+        var existing = await dbContext.Contacts.CountAsync(c => c.UserId == userId, ct);
+        if (existing > 0)
+        {
+            return Result<List<ContactOutput>>.Failure("Cannot seed when contacts already exist.", ErrorType.Validation);
+        }
+
+        var contacts = GenerateSeedContacts(userId, count);
+
+        dbContext.Contacts.AddRange(contacts);
+        await dbContext.SaveChangesAsync(ct);
+
+        foreach (var contact in contacts)
+        {
+            await auditService.LogAsync(
+                AuditActions.ContactCreate,
+                userId,
+                targetEntityType: "Contact",
+                targetEntityId: contact.Id,
+                ct: ct);
+        }
+
+        return Result<List<ContactOutput>>.Success(contacts.Select(ToOutput).ToList());
+    }
+
+    private static List<Contact> GenerateSeedContacts(Guid userId, int count)
+    {
+        var statuses = Enum.GetValues<ContactStatus>();
+        var sources = Enum.GetValues<ContactSource>();
+
+        var faker = new Faker<Contact>()
+            .CustomInstantiator(f =>
+            {
+                var status = f.PickRandom(statuses);
+                var source = f.PickRandom(sources);
+                var value = f.Random.Bool(0.8f) ? f.Finance.Amount(500, 50_000) : (decimal?)null;
+                var notes = f.Random.Bool(0.6f) ? f.Lorem.Sentence(4, 8) : null;
+
+                return new Contact(
+                    userId,
+                    f.Name.FullName(),
+                    f.Random.Bool(0.9f) ? f.Internet.Email() : null,
+                    f.Random.Bool(0.85f) ? f.Company.CompanyName() : null,
+                    f.Random.Bool(0.7f) ? f.Phone.PhoneNumber("+# ###-###-####") : null,
+                    status,
+                    source,
+                    value,
+                    notes);
+            });
+
+        var contacts = faker.Generate(count);
+
+        // Mark a couple as favorites
+        foreach (var c in contacts.Take(2))
+        {
+            c.Update(c.Name, c.Email, c.Company, c.Phone, c.Status, c.Source, c.Value, c.Notes, true);
+        }
+
+        return contacts;
     }
 
     private static ContactOutput ToOutput(Contact contact) => new(

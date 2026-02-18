@@ -60,4 +60,13 @@ public interface IContactsService
     /// <param name="ct">A cancellation token.</param>
     /// <returns>A result containing the pipeline statistics.</returns>
     Task<Result<ContactsStatsOutput>> GetStatsAsync(Guid userId, CancellationToken ct);
+
+    /// <summary>
+    /// Seeds sample contacts for the specified user.
+    /// </summary>
+    /// <param name="userId">The owner's user ID.</param>
+    /// <param name="count">The number of contacts to generate (1–50).</param>
+    /// <param name="ct">A cancellation token.</param>
+    /// <returns>A result containing the created contacts.</returns>
+    Task<Result<List<ContactOutput>>> SeedAsync(Guid userId, int count, CancellationToken ct);
 }

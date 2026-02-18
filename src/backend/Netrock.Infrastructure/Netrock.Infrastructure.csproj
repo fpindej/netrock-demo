@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="../Netrock.Application/Netrock.Application.csproj"/>
-        <ProjectReference Include="../Netrock.Domain/Netrock.Domain.csproj"/>
+        <ProjectReference Include="../Netrock.Application/Netrock.Application.csproj" />
+        <ProjectReference Include="../Netrock.Domain/Netrock.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Bogus" />
         <PackageReference Include="Serilog" />
         <PackageReference Include="Serilog.AspNetCore" />
         <PackageReference Include="Serilog.Sinks.Async" />
@@ -25,9 +26,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Netrock.Api.Tests"/>
-        <InternalsVisibleTo Include="Netrock.Component.Tests"/>
-        <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
+        <InternalsVisibleTo Include="Netrock.Api.Tests" />
+        <InternalsVisibleTo Include="Netrock.Component.Tests" />
+        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
     </ItemGroup>
 
 </Project>

@@ -172,6 +172,35 @@ public class ContactsController(
     }
 
     /// <summary>
+    /// Seeds sample contacts for the current user. Only works when the user has no existing contacts.
+    /// </summary>
+    /// <param name="count">Number of contacts to generate (1–50, default 10).</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>The list of created sample contacts.</returns>
+    /// <response code="201">Sample contacts created successfully.</response>
+    /// <response code="400">If the user already has contacts.</response>
+    /// <response code="401">If the user is not authenticated.</response>
+    [HttpPost("seed")]
+    [ProducesResponseType(typeof(List<ContactResponse>), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<List<ContactResponse>>> SeedContacts(
+        [FromQuery] int count = 10,
+        CancellationToken cancellationToken = default)
+    {
+        var userId = userContext.AuthenticatedUserId;
+        var clampedCount = Math.Clamp(count, 1, 50);
+        var result = await contactsService.SeedAsync(userId, clampedCount, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return ProblemFactory.Create(result.Error, result.ErrorType);
+        }
+
+        return StatusCode(StatusCodes.Status201Created, result.Value.Select(c => c.ToResponse()).ToList());
+    }
+
+    /// <summary>
     /// Gets the audit trail for a specific contact.
     /// </summary>
     /// <param name="id">The contact ID.</param>

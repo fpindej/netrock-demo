@@ -139,7 +139,7 @@
 					</Select.Trigger>
 					<Select.Content>
 						{#each sortOptions as opt (opt)}
-							<Select.Item value={opt}>{sortLabels[opt]()}</Select.Item>
+							<Select.Item value={opt} label={sortLabels[opt]()} />
 						{/each}
 					</Select.Content>
 				</Select.Root>

@@ -269,9 +269,11 @@
 							</button>
 							<div class="min-w-0">
 								<span class="block truncate font-medium">{contact.name}</span>
-								<p class="mt-0.5 truncate text-sm text-muted-foreground">
-									{contact.email ?? '\u00A0'}
-								</p>
+								{#if contact.email}
+									<p class="mt-0.5 truncate text-sm text-muted-foreground">
+										{contact.email}
+									</p>
+								{/if}
 							</div>
 						</div>
 					</td>

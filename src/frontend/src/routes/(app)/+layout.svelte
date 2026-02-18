@@ -29,11 +29,7 @@
 		{#if !data.user.emailConfirmed}
 			<EmailVerificationBanner />
 		{/if}
-		<main
-			class="flex flex-1 flex-col gap-4 overflow-y-auto p-4 lg:gap-6 lg:p-6 {data.isDemoMode
-				? 'pb-16'
-				: ''}"
-		>
+		<main class="flex flex-1 flex-col gap-4 overflow-y-auto p-4 lg:gap-6 lg:p-6">
 			{#key page.url.pathname}
 				<div
 					class="motion-safe:duration-300 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4"

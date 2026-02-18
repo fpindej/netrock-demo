@@ -515,8 +515,11 @@
 	"guide_step9_title": "i18n a motivy",
 	"guide_step9_description": "Přepínejte jazyky a motivy za běhu. Aktuálně angličtina a čeština, se světlým a tmavým režimem.",
 	"guide_step10_title": "Co dál?",
-	"guide_step10_description": "NETrock je open source. Dejte hvězdu, forkněte, vytvořte něco úžasného.",
+	"guide_step10_description": "NETrock vytvořil Filip Pindej. Dejte hvězdu, ozvěte se, nebo vytvořte něco úžasného.",
 	"guide_step10_github": "Zobrazit na GitHubu",
+	"guide_step10_linkedin": "LinkedIn",
+	"guide_step10_email": "E-mail",
+	"guide_step10_website": "Web",
 	"guide_locked": "Pro pokračování ověřte svůj e-mail",
 
 	"contacts_title": "Kontakty",
@@ -602,6 +605,22 @@
 	"analytics_recentContacts": "Nedávné kontakty",
 	"analytics_empty_title": "Zatím žádná data",
 	"analytics_empty_description": "Nejprve přidejte kontakty, abyste viděli analytiku pipeline.",
+
+	"nav_contact": "Kontakt",
+
+	"meta_contact_title": "Kontakt",
+	"meta_contact_description": "Napište nám.",
+
+	"contact_title": "Napište nám",
+	"contact_description": "Máte otázku, nápad, nebo se chcete jen pozdravit? Ozvěte se přes některý z těchto kanálů.",
+	"contact_email_title": "E-mail",
+	"contact_email_description": "Napište mi e-mail kdykoliv.",
+	"contact_linkedin_title": "LinkedIn",
+	"contact_linkedin_description": "Spojte se se mnou na LinkedInu.",
+	"contact_github_title": "GitHub",
+	"contact_github_description": "Podívejte se na zdrojový kód.",
+	"contact_website_title": "Web",
+	"contact_website_description": "Navštivte můj osobní web.",
 
 	"demo_viewingAs": "Zobrazeno jako",
 	"demo_switching": "Přepínání...",

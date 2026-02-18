@@ -7,6 +7,7 @@
 		BookOpen,
 		Users as UsersIcon,
 		BarChart3,
+		Mail,
 		Users,
 		Shield,
 		Clock,
@@ -43,6 +44,11 @@
 			title: m.nav_analytics,
 			href: resolve('/analytics'),
 			icon: BarChart3
+		},
+		{
+			title: m.nav_contact,
+			href: resolve('/contact'),
+			icon: Mail
 		}
 	];
 

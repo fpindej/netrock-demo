@@ -16,6 +16,9 @@
 		Clock,
 		Languages,
 		Github,
+		Linkedin,
+		Mail,
+		Globe,
 		AlertTriangle,
 		Loader2
 	} from '@lucide/svelte';
@@ -294,16 +297,40 @@
 							{/if}
 
 							{#if step.content === 'github'}
-								<a
-									href="https://github.com/netrock-consulting"
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									<Button variant="outline" size="sm" class="mt-4">
-										<Github class="me-2 h-4 w-4" />
-										{m.guide_step10_github()}
-									</Button>
-								</a>
+								<div class="mt-4 flex flex-wrap gap-2">
+									<a
+										href="https://github.com/netrock-consulting"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										<Button variant="outline" size="sm">
+											<Github class="me-2 h-4 w-4" />
+											{m.guide_step10_github()}
+										</Button>
+									</a>
+									<a
+										href="https://www.linkedin.com/in/filip-dorian-pindej/"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										<Button variant="outline" size="sm">
+											<Linkedin class="me-2 h-4 w-4" />
+											{m.guide_step10_linkedin()}
+										</Button>
+									</a>
+									<a href="mailto:contact@mail.pindej.cz">
+										<Button variant="outline" size="sm">
+											<Mail class="me-2 h-4 w-4" />
+											{m.guide_step10_email()}
+										</Button>
+									</a>
+									<a href="https://pindej.cz" target="_blank" rel="noopener noreferrer">
+										<Button variant="outline" size="sm">
+											<Globe class="me-2 h-4 w-4" />
+											{m.guide_step10_website()}
+										</Button>
+									</a>
+								</div>
 							{/if}
 						{:else}
 							<Badge variant="secondary" class="mt-4">{m.guide_locked()}</Badge>

@@ -515,8 +515,11 @@
 	"guide_step9_title": "i18n & Theming",
 	"guide_step9_description": "Switch languages and themes on the fly. Currently English and Czech, with light and dark modes.",
 	"guide_step10_title": "What's Next?",
-	"guide_step10_description": "NETrock is open source. Star the repo, fork it, build something amazing.",
+	"guide_step10_description": "NETrock is built by Filip Pindej. Star the repo, get in touch, or build something amazing.",
 	"guide_step10_github": "View on GitHub",
+	"guide_step10_linkedin": "LinkedIn",
+	"guide_step10_email": "Email",
+	"guide_step10_website": "Website",
 	"guide_locked": "Verify your email to continue",
 
 	"contacts_title": "Contacts",
@@ -602,6 +605,22 @@
 	"analytics_recentContacts": "Recent Contacts",
 	"analytics_empty_title": "No data yet",
 	"analytics_empty_description": "Add some contacts first to see your pipeline analytics.",
+
+	"nav_contact": "Contact",
+
+	"meta_contact_title": "Contact",
+	"meta_contact_description": "Get in touch.",
+
+	"contact_title": "Get in Touch",
+	"contact_description": "Have a question, idea, or just want to say hi? Reach out through any of these channels.",
+	"contact_email_title": "Email",
+	"contact_email_description": "Drop me an email anytime.",
+	"contact_linkedin_title": "LinkedIn",
+	"contact_linkedin_description": "Connect with me on LinkedIn.",
+	"contact_github_title": "GitHub",
+	"contact_github_description": "Check out the source code.",
+	"contact_website_title": "Website",
+	"contact_website_description": "Visit my personal website.",
 
 	"demo_viewingAs": "Viewing as",
 	"demo_switching": "Switching...",

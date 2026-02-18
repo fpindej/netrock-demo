@@ -212,7 +212,16 @@
 
 <!-- Desktop table -->
 <div class="hidden md:block">
-	<table class="w-full">
+	<table class="w-full table-fixed">
+		<colgroup>
+			<col class="w-10" />
+			<col class="w-[35%]" />
+			<col class="w-[20%]" />
+			<col class="w-[12%]" />
+			<col class="w-[12%]" />
+			<col class="w-[12%]" />
+			<col class="w-20" />
+		</colgroup>
 		<thead>
 			<tr class="border-b text-sm text-muted-foreground">
 				<th class="px-4 py-3 text-start">
@@ -244,7 +253,7 @@
 						/>
 					</td>
 					<td class="px-4 py-3">
-						<div class="flex items-center gap-2">
+						<div class="flex items-center gap-2 overflow-hidden">
 							<button
 								class="shrink-0 rounded p-0.5 transition-colors hover:bg-muted"
 								disabled={togglingFavoriteId === contact.id}
@@ -258,16 +267,16 @@
 									<Star class="h-3.5 w-3.5 text-muted-foreground/40" />
 								{/if}
 							</button>
-							<div>
-								<span class="font-medium">{contact.name}</span>
+							<div class="min-w-0">
+								<span class="block truncate font-medium">{contact.name}</span>
 								{#if contact.email}
-									<p class="mt-0.5 text-sm text-muted-foreground">{contact.email}</p>
+									<p class="mt-0.5 truncate text-sm text-muted-foreground">{contact.email}</p>
 								{/if}
 							</div>
 						</div>
 					</td>
 					<td class="px-4 py-3 text-sm text-muted-foreground">
-						{contact.company ?? ''}
+						<span class="block truncate">{contact.company ?? ''}</span>
 					</td>
 					<td class="px-4 py-3">
 						<Badge variant="secondary" class={statusColors[contact.status ?? ''] ?? ''}>

@@ -47,7 +47,7 @@
 		<ThemeToggle />
 	</div>
 
-	<div class="sm:mx-auto sm:w-full sm:max-w-2xl">
+	<div class="pt-8 sm:mx-auto sm:w-full sm:max-w-2xl sm:pt-0">
 		<Card.Root class="border-muted/60 bg-card/50 shadow-xl backdrop-blur-sm">
 			<Card.Header>
 				<Card.Title class="text-center text-2xl">{m.privacy_title()}</Card.Title>

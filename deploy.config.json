@@ -2,7 +2,7 @@
   "registry": "fpindej",
   "backendImage": "netrock-api",
   "frontendImage": "netrock-frontend",
-  "backendVersion": "0.1.26",
-  "frontendVersion": "0.1.37",
+  "backendVersion": "0.1.27",
+  "frontendVersion": "0.1.38",
   "platform": "linux/amd64"
 }

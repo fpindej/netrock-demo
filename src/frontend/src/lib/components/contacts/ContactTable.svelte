@@ -13,10 +13,11 @@
 
 	interface Props {
 		contacts: Contact[];
+		totalCount: number;
 		onEdit: (contact: Contact) => void;
 	}
 
-	let { contacts, onEdit }: Props = $props();
+	let { contacts, totalCount, onEdit }: Props = $props();
 
 	const statusLabels: Record<string, () => string> = {
 		Lead: m.contacts_status_Lead,
@@ -43,13 +44,25 @@
 
 	// Selection state
 	let selectedIds = new SvelteSet<string>();
+	let allAcrossPagesSelected = $state(false);
 
 	let allSelected = $derived(contacts.length > 0 && selectedIds.size === contacts.length);
 	let someSelected = $derived(selectedIds.size > 0 && selectedIds.size < contacts.length);
+	let effectiveSelectionCount = $derived(allAcrossPagesSelected ? totalCount : selectedIds.size);
+
+	// Reset selection when page changes (contacts array reference changes)
+	$effect(() => {
+		// Subscribe to contacts array identity
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+		contacts;
+		selectedIds.clear();
+		allAcrossPagesSelected = false;
+	});
 
 	function toggleSelectAll() {
 		if (allSelected) {
 			selectedIds.clear();
+			allAcrossPagesSelected = false;
 		} else {
 			for (const c of contacts) {
 				selectedIds.add(c.id!);
@@ -58,11 +71,24 @@
 	}
 
 	function toggleSelect(id: string) {
+		allAcrossPagesSelected = false;
 		if (selectedIds.has(id)) {
 			selectedIds.delete(id);
 		} else {
 			selectedIds.add(id);
 		}
+	}
+
+	function selectAllAcrossPages() {
+		for (const c of contacts) {
+			selectedIds.add(c.id!);
+		}
+		allAcrossPagesSelected = true;
+	}
+
+	function clearSelection() {
+		selectedIds.clear();
+		allAcrossPagesSelected = false;
 	}
 
 	// Single delete state
@@ -101,18 +127,23 @@
 
 	async function bulkDelete() {
 		isBulkDeleting = true;
-		const ids = [...selectedIds];
+		const count = effectiveSelectionCount;
 
-		const { response } = await browserClient.DELETE('/api/v1/contacts/bulk', {
-			body: { ids }
-		});
+		const { response } = allAcrossPagesSelected
+			? await browserClient.DELETE('/api/v1/contacts/bulk', {
+					body: { ids: [], all: true }
+				})
+			: await browserClient.DELETE('/api/v1/contacts/bulk', {
+					body: { ids: [...selectedIds] }
+				});
 
 		isBulkDeleting = false;
 
 		if (response.ok) {
-			toast.success(m.contacts_bulkDelete_success({ count: ids.length }));
+			toast.success(m.contacts_bulkDelete_success({ count }));
 			bulkDeleteConfirmOpen = false;
 			selectedIds.clear();
+			allAcrossPagesSelected = false;
 			await invalidateAll();
 		} else {
 			toast.error(m.contacts_bulkDelete_error());
@@ -147,26 +178,35 @@
 			maximumFractionDigits: 0
 		}).format(value);
 	}
-
-	function formatDate(dateStr: string) {
-		return new Date(dateStr).toLocaleDateString(undefined, {
-			month: 'short',
-			day: 'numeric',
-			year: 'numeric'
-		});
-	}
 </script>
 
 <!-- Bulk actions bar -->
 {#if selectedIds.size > 0}
-	<div class="flex items-center gap-3 border-b bg-muted/50 px-4 py-2">
+	<div class="flex flex-wrap items-center gap-3 border-b bg-muted/50 px-4 py-2">
 		<span class="text-sm font-medium">
-			{m.contacts_selected({ count: selectedIds.size })}
+			{m.contacts_selected({ count: effectiveSelectionCount })}
 		</span>
 		<Button variant="destructive" size="sm" onclick={() => (bulkDeleteConfirmOpen = true)}>
 			<Trash2 class="me-2 h-3.5 w-3.5" />
 			{m.contacts_bulkDelete()}
 		</Button>
+	</div>
+{/if}
+
+<!-- Select all across pages banner -->
+{#if allSelected && !allAcrossPagesSelected && totalCount > contacts.length}
+	<div class="border-b bg-blue-50 px-4 py-2 text-center text-sm dark:bg-blue-950/30">
+		{m.contacts_allOnPageSelected({ count: contacts.length })}
+		<button class="ms-1 font-medium text-primary underline" onclick={selectAllAcrossPages}>
+			{m.contacts_selectAllAcrossPages({ count: totalCount })}
+		</button>
+	</div>
+{:else if allAcrossPagesSelected}
+	<div class="border-b bg-blue-50 px-4 py-2 text-center text-sm dark:bg-blue-950/30">
+		{m.contacts_allContactsSelected({ count: totalCount })}
+		<button class="ms-1 font-medium text-primary underline" onclick={clearSelection}>
+			{m.contacts_clearSelection()}
+		</button>
 	</div>
 {/if}
 
@@ -262,69 +302,82 @@
 </div>
 
 <!-- Mobile cards -->
-<div class="space-y-3 md:hidden">
-	{#each contacts as contact (contact.id)}
-		<div
-			class="rounded-lg border p-4 transition-colors hover:bg-muted/50 {selectedIds.has(contact.id!)
-				? 'bg-muted/30'
-				: ''}"
-		>
-			<div class="flex items-start gap-3">
-				<div class="pt-0.5">
-					<Checkbox
-						checked={selectedIds.has(contact.id!)}
-						onCheckedChange={() => toggleSelect(contact.id!)}
-					/>
-				</div>
-				<div class="min-w-0 flex-1">
-					<div class="flex items-center gap-2">
-						<button
-							class="shrink-0 rounded p-0.5 transition-colors hover:bg-muted"
-							disabled={togglingFavoriteId === contact.id}
-							onclick={() => toggleFavorite(contact)}
-						>
-							{#if togglingFavoriteId === contact.id}
-								<Loader2 class="h-3.5 w-3.5 animate-spin text-muted-foreground" />
-							{:else if contact.isFavorite}
-								<Star class="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-							{:else}
-								<Star class="h-3.5 w-3.5 text-muted-foreground/40" />
-							{/if}
-						</button>
-						<h4 class="truncate font-medium">{contact.name}</h4>
+<div class="md:hidden">
+	<!-- Mobile select-all header -->
+	<div class="flex items-center gap-2 border-b px-4 py-2">
+		<Checkbox
+			checked={allSelected}
+			indeterminate={someSelected}
+			onCheckedChange={toggleSelectAll}
+		/>
+		<span class="text-sm text-muted-foreground">{m.contacts_selectAll()}</span>
+	</div>
+
+	<div class="space-y-2 p-2">
+		{#each contacts as contact (contact.id)}
+			<div
+				class="rounded-lg border px-4 py-3 transition-colors hover:bg-muted/50 {selectedIds.has(
+					contact.id!
+				)
+					? 'bg-muted/30'
+					: ''}"
+			>
+				<div class="flex items-start gap-3">
+					<div class="pt-0.5">
+						<Checkbox
+							checked={selectedIds.has(contact.id!)}
+							onCheckedChange={() => toggleSelect(contact.id!)}
+						/>
 					</div>
-					{#if contact.company}
-						<p class="mt-0.5 text-sm text-muted-foreground">{contact.company}</p>
-					{/if}
-					{#if contact.email}
-						<p class="mt-0.5 text-sm text-muted-foreground">{contact.email}</p>
-					{/if}
+					<div class="min-w-0 flex-1">
+						<div class="flex items-center gap-2">
+							<button
+								class="shrink-0 rounded p-0.5 transition-colors hover:bg-muted"
+								disabled={togglingFavoriteId === contact.id}
+								onclick={() => toggleFavorite(contact)}
+							>
+								{#if togglingFavoriteId === contact.id}
+									<Loader2 class="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+								{:else if contact.isFavorite}
+									<Star class="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+								{:else}
+									<Star class="h-3.5 w-3.5 text-muted-foreground/40" />
+								{/if}
+							</button>
+							<h4 class="truncate font-medium">{contact.name}</h4>
+						</div>
+						{#if contact.company}
+							<p class="mt-0.5 truncate text-sm text-muted-foreground">{contact.company}</p>
+						{/if}
+						{#if contact.email}
+							<p class="mt-0.5 truncate text-sm text-muted-foreground">{contact.email}</p>
+						{/if}
+					</div>
 				</div>
-				<div class="flex shrink-0 items-center gap-1">
-					<Button variant="ghost" size="icon" class="h-8 w-8" onclick={() => onEdit(contact)}>
-						<Pencil class="h-4 w-4" />
-					</Button>
-					<Button
-						variant="ghost"
-						size="icon"
-						class="h-8 w-8 text-destructive hover:text-destructive"
-						onclick={() => confirmDelete(contact)}
-					>
-						<Trash2 class="h-4 w-4" />
-					</Button>
+				<div class="ms-7 mt-2 flex flex-wrap items-center gap-2">
+					<Badge variant="secondary" class={statusColors[contact.status ?? ''] ?? ''}>
+						{statusLabels[contact.status ?? '']?.() ?? contact.status}
+					</Badge>
+					{#if contact.value != null}
+						<span class="text-sm font-medium">{formatValue(contact.value)}</span>
+					{/if}
+					<div class="ms-auto flex items-center gap-1">
+						<Button variant="ghost" size="icon" class="h-7 w-7" onclick={() => onEdit(contact)}>
+							<Pencil class="h-3.5 w-3.5" />
+						</Button>
+						<Button
+							variant="ghost"
+							size="icon"
+							class="h-7 w-7 text-destructive hover:text-destructive"
+							onclick={() => confirmDelete(contact)}
+						>
+							<Trash2 class="h-3.5 w-3.5" />
+						</Button>
+					</div>
 				</div>
 			</div>
-			<div class="ms-7 mt-2 flex flex-wrap items-center gap-2">
-				<Badge variant="secondary" class={statusColors[contact.status ?? ''] ?? ''}>
-					{statusLabels[contact.status ?? '']?.() ?? contact.status}
-				</Badge>
-				{#if contact.value != null}
-					<span class="text-sm font-medium">{formatValue(contact.value)}</span>
-				{/if}
-				<span class="text-xs text-muted-foreground">{formatDate(contact.createdAt ?? '')}</span>
-			</div>
-		</div>
-	{/each}
+		{/each}
+	</div>
 </div>
 
 <!-- Delete confirmation dialog -->
@@ -351,7 +404,7 @@
 		<Dialog.Header>
 			<Dialog.Title>{m.contacts_bulkDelete_title()}</Dialog.Title>
 			<Dialog.Description>
-				{m.contacts_bulkDelete_description({ count: selectedIds.size })}
+				{m.contacts_bulkDelete_description({ count: effectiveSelectionCount })}
 			</Dialog.Description>
 		</Dialog.Header>
 		<Dialog.Footer class="flex-col-reverse sm:flex-row">
@@ -362,7 +415,7 @@
 				{#if isBulkDeleting}
 					<Loader2 class="me-2 h-4 w-4 animate-spin" />
 				{/if}
-				{m.contacts_bulkDelete_confirm({ count: selectedIds.size })}
+				{m.contacts_bulkDelete_confirm({ count: effectiveSelectionCount })}
 			</Button>
 		</Dialog.Footer>
 	</Dialog.Content>

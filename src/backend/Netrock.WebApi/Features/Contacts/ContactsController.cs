@@ -178,7 +178,9 @@ public class ContactsController(
         CancellationToken cancellationToken)
     {
         var userId = userContext.AuthenticatedUserId;
-        var result = await contactsService.BulkDeleteAsync(userId, request.Ids, cancellationToken);
+        var result = request.All
+            ? await contactsService.DeleteAllAsync(userId, cancellationToken)
+            : await contactsService.BulkDeleteAsync(userId, request.Ids, cancellationToken);
 
         if (!result.IsSuccess)
         {

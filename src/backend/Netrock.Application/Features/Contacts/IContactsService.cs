@@ -73,6 +73,14 @@ public interface IContactsService
     Task<Result<int>> BulkDeleteAsync(Guid userId, List<Guid> contactIds, CancellationToken ct);
 
     /// <summary>
+    /// Deletes all contacts belonging to the specified user.
+    /// </summary>
+    /// <param name="userId">The owner's user ID.</param>
+    /// <param name="ct">A cancellation token.</param>
+    /// <returns>A result containing the number of deleted contacts.</returns>
+    Task<Result<int>> DeleteAllAsync(Guid userId, CancellationToken ct);
+
+    /// <summary>
     /// Toggles the favorite status of a contact.
     /// </summary>
     /// <param name="userId">The owner's user ID.</param>

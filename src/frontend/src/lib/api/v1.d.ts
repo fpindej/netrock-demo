@@ -3245,8 +3245,10 @@ export interface components {
 		};
 		/** @description Request to delete multiple contacts at once. */
 		BulkDeleteContactsRequest: {
-			/** @description The IDs of the contacts to delete. */
+			/** @description The IDs of the contacts to delete. Ignored when all is true. */
 			ids: string[];
+			/** @description When true, deletes all contacts belonging to the current user regardless of ids. */
+			all?: boolean;
 		};
 		/** @description Represents a contact in API responses. */
 		ContactResponse: {

@@ -204,6 +204,33 @@ internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService 
     }
 
     /// <inheritdoc />
+    public async Task<Result<int>> DeleteAllAsync(Guid userId, CancellationToken ct)
+    {
+        var contacts = await dbContext.Contacts
+            .Where(c => c.UserId == userId)
+            .ToListAsync(ct);
+
+        foreach (var contact in contacts)
+        {
+            contact.SoftDelete();
+        }
+
+        await dbContext.SaveChangesAsync(ct);
+
+        foreach (var contact in contacts)
+        {
+            await auditService.LogAsync(
+                AuditActions.ContactDelete,
+                userId,
+                targetEntityType: "Contact",
+                targetEntityId: contact.Id,
+                ct: ct);
+        }
+
+        return Result<int>.Success(contacts.Count);
+    }
+
+    /// <inheritdoc />
     public async Task<Result<ContactOutput>> ToggleFavoriteAsync(Guid userId, Guid contactId, CancellationToken ct)
     {
         var contact = await dbContext.Contacts

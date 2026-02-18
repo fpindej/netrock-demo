@@ -44,7 +44,7 @@
 </svelte:head>
 
 <div class="space-y-6">
-	<div class="flex items-center justify-between">
+	<div class="flex flex-wrap items-center justify-between gap-3">
 		<div>
 			<h3 class="text-lg font-medium">{m.contacts_title()}</h3>
 			<p class="text-sm text-muted-foreground">{m.contacts_description()}</p>
@@ -68,9 +68,9 @@
 	{#if isEmpty}
 		<ContactEmptyState onCreate={() => (createDialogOpen = true)} />
 	{:else}
-		<Card.Root>
+		<Card.Root class="overflow-hidden">
 			<Card.Content class="p-0">
-				<ContactTable {contacts} onEdit={handleEdit} />
+				<ContactTable {contacts} totalCount={data.contacts?.totalCount ?? 0} onEdit={handleEdit} />
 			</Card.Content>
 		</Card.Root>
 

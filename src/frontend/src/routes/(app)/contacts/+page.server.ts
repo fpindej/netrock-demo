@@ -7,6 +7,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 
 	const pageNumber = Number(url.searchParams.get('page') ?? '1');
 	const pageSize = Number(url.searchParams.get('pageSize') ?? '10');
+	const search = url.searchParams.get('search') ?? '';
 
 	const {
 		data,
@@ -16,7 +17,8 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 		params: {
 			query: {
 				PageNumber: pageNumber,
-				PageSize: pageSize
+				PageSize: pageSize,
+				Search: search || undefined
 			}
 		}
 	});
@@ -26,6 +28,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 	}
 
 	return {
-		contacts: data
+		contacts: data,
+		search
 	};
 };

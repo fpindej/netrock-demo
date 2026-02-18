@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Bogus;
 using Microsoft.EntityFrameworkCore;
 using Netrock.Application.Features.Audit;
@@ -17,12 +18,24 @@ namespace Netrock.Infrastructure.Features.Contacts.Services;
 internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService auditService) : IContactsService
 {
     /// <inheritdoc />
-    public async Task<Result<(List<ContactOutput> Items, int TotalCount)>> GetContactsAsync(Guid userId, int pageNumber, int pageSize, CancellationToken ct)
+    public async Task<Result<(List<ContactOutput> Items, int TotalCount)>> GetContactsAsync(Guid userId, int pageNumber, int pageSize, string? search, CancellationToken ct)
     {
         var query = dbContext.Contacts
             .Where(c => c.UserId == userId)
             .OrderByDescending(c => c.IsFavorite)
-            .ThenByDescending(c => c.CreatedAt);
+            .ThenByDescending(c => c.CreatedAt)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var s = search.Trim().ToLowerInvariant();
+            query = query.Where(c =>
+                c.Name.ToLower().Contains(s) ||
+                c.Name.Similarity(s) > 0.3 ||
+                (c.Email != null && (c.Email.ToLower().Contains(s) || c.Email.Similarity(s) > 0.3)) ||
+                (c.Company != null && (c.Company.ToLower().Contains(s) || c.Company.Similarity(s) > 0.3)) ||
+                (c.Phone != null && c.Phone.ToLower().Contains(s)));
+        }
 
         var totalCount = await query.CountAsync(ct);
 
@@ -88,6 +101,19 @@ internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService 
             return Result<ContactOutput>.Failure(ErrorMessages.Contacts.NotFound, ErrorType.NotFound);
         }
 
+        var changes = new Dictionary<string, object>();
+        if (contact.Name != input.Name) changes["name"] = new { from = contact.Name, to = input.Name };
+        if (contact.Email != input.Email) changes["email"] = new { from = contact.Email ?? "", to = input.Email ?? "" };
+        if (contact.Company != input.Company) changes["company"] = new { from = contact.Company ?? "", to = input.Company ?? "" };
+        if (contact.Phone != input.Phone) changes["phone"] = new { from = contact.Phone ?? "", to = input.Phone ?? "" };
+        if (contact.Status != input.Status) changes["status"] = new { from = contact.Status.ToString(), to = input.Status.ToString() };
+        if (contact.Source != input.Source) changes["source"] = new { from = contact.Source.ToString(), to = input.Source.ToString() };
+        if (contact.Value != input.Value) changes["value"] = new { from = contact.Value?.ToString() ?? "", to = input.Value?.ToString() ?? "" };
+        if (contact.Notes != input.Notes) changes["notes"] = new { from = contact.Notes ?? "", to = input.Notes ?? "" };
+        if (contact.IsFavorite != input.IsFavorite) changes["isFavorite"] = new { from = contact.IsFavorite, to = input.IsFavorite };
+
+        var metadata = changes.Count > 0 ? JsonSerializer.Serialize(new { changes }) : null;
+
         contact.Update(
             input.Name,
             input.Email,
@@ -106,6 +132,7 @@ internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService 
             userId,
             targetEntityType: "Contact",
             targetEntityId: contact.Id,
+            metadata: metadata,
             ct: ct);
 
         return Result<ContactOutput>.Success(ToOutput(contact));
@@ -242,6 +269,9 @@ internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService 
             return Result<ContactOutput>.Failure(ErrorMessages.Contacts.NotFound, ErrorType.NotFound);
         }
 
+        var newFavorite = !contact.IsFavorite;
+        var favoriteMetadata = JsonSerializer.Serialize(new { isFavorite = newFavorite });
+
         contact.Update(
             contact.Name,
             contact.Email,
@@ -251,15 +281,16 @@ internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService 
             contact.Source,
             contact.Value,
             contact.Notes,
-            !contact.IsFavorite);
+            newFavorite);
 
         await dbContext.SaveChangesAsync(ct);
 
         await auditService.LogAsync(
-            AuditActions.ContactUpdate,
+            AuditActions.ContactFavorite,
             userId,
             targetEntityType: "Contact",
             targetEntityId: contact.Id,
+            metadata: favoriteMetadata,
             ct: ct);
 
         return Result<ContactOutput>.Success(ToOutput(contact));

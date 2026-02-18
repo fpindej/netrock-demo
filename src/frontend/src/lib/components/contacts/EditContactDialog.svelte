@@ -6,7 +6,8 @@
 	import { Label } from '$lib/components/ui/label';
 	import * as Select from '$lib/components/ui/select';
 	import { Checkbox } from '$lib/components/ui/checkbox';
-	import { Loader2 } from '@lucide/svelte';
+	import { Loader2, ChevronDown, ChevronUp } from '@lucide/svelte';
+	import { SvelteSet } from 'svelte/reactivity';
 	import { browserClient, handleMutationError } from '$lib/api';
 	import { toast } from '$lib/components/ui/sonner';
 	import { invalidateAll } from '$app/navigation';
@@ -15,6 +16,7 @@
 		getAuditActionLabel,
 		getAuditActionVariant,
 		getAuditDescription,
+		getAuditChanges,
 		formatAuditDate
 	} from '$lib/utils/audit';
 	import { Timeline, TimelineItem, TimelineContent } from '$lib/components/ui/timeline';
@@ -58,8 +60,17 @@
 	let isSaving = $state(false);
 	let fieldErrors = $state<Record<string, string>>({});
 	let auditEvents = $state<AuditEvent[]>([]);
+	let expandedEvents = new SvelteSet<string>();
 	const cooldown = createCooldown();
 	const fieldShakes = createFieldShakes();
+
+	function toggleExpanded(eventId: string) {
+		if (expandedEvents.has(eventId)) {
+			expandedEvents.delete(eventId);
+		} else {
+			expandedEvents.add(eventId);
+		}
+	}
 
 	$effect(() => {
 		if (contact) {
@@ -72,6 +83,7 @@
 			value = contact.value != null ? String(contact.value) : '';
 			notes = contact.notes ?? '';
 			isFavorite = contact.isFavorite ?? false;
+			expandedEvents.clear();
 			loadAudit(contact.id!);
 		}
 	});
@@ -134,7 +146,7 @@
 			<Dialog.Title>{m.contacts_edit_title()}</Dialog.Title>
 			<Dialog.Description>{m.contacts_edit_description()}</Dialog.Description>
 		</Dialog.Header>
-		<div class="max-h-[60vh] space-y-4 overflow-y-auto py-4">
+		<div class="scrollbar-thin max-h-[60vh] space-y-4 overflow-y-auto py-4 pe-1">
 			<div class="grid gap-2">
 				<Label for="edit-contact-name">{m.contacts_field_name()}</Label>
 				<Input
@@ -267,6 +279,8 @@
 					</p>
 					<Timeline>
 						{#each auditEvents as event, i (event.id)}
+							{@const changes = getAuditChanges(event.metadata)}
+							{@const isExpanded = event.id ? expandedEvents.has(event.id) : false}
 							<TimelineItem
 								variant={getAuditActionVariant(event.action)}
 								isLast={i === auditEvents.length - 1}
@@ -275,7 +289,35 @@
 									title={getAuditActionLabel(event.action)}
 									timestamp={formatAuditDate(event.createdAt)}
 									description={getAuditDescription(event.action, event.metadata)}
-								/>
+								>
+									{#if changes}
+										<button
+											type="button"
+											class="mt-1 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+											onclick={() => event.id && toggleExpanded(event.id)}
+										>
+											{#if isExpanded}
+												<ChevronUp class="h-3 w-3" />
+												{m.contacts_audit_hideDetails()}
+											{:else}
+												<ChevronDown class="h-3 w-3" />
+												{m.contacts_audit_showDetails()}
+											{/if}
+										</button>
+										{#if isExpanded}
+											<ul class="mt-1 space-y-0.5 text-xs text-muted-foreground">
+												{#each Object.entries(changes) as [field, change] (field)}
+													<li>
+														<span class="font-medium capitalize">{field}:</span>
+														{change.from || '–'}
+														<span class="mx-0.5">&rarr;</span>
+														{change.to || '–'}
+													</li>
+												{/each}
+											</ul>
+										{/if}
+									{/if}
+								</TimelineContent>
 							</TimelineItem>
 						{/each}
 					</Timeline>

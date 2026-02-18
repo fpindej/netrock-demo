@@ -82,4 +82,7 @@ public static class AuditActions
 
     /// <summary>User deleted a contact.</summary>
     public const string ContactDelete = "ContactDelete";
+
+    /// <summary>User toggled a contact's favorite status.</summary>
+    public const string ContactFavorite = "ContactFavorite";
 }

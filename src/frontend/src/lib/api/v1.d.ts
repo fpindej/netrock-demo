@@ -279,6 +279,8 @@ export interface paths {
 					PageNumber?: number;
 					/** @description The number of items per page (maximum 100). */
 					PageSize?: number;
+					/** @description Optional search term to filter contacts by name, email, company, or phone. */
+					Search?: string;
 				};
 				header?: never;
 				path?: never;

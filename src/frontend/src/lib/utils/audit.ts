@@ -56,6 +56,8 @@ export function getAuditActionLabel(action: string | undefined): string {
 			return m.audit_action_contactUpdate();
 		case 'ContactDelete':
 			return m.audit_action_contactDelete();
+		case 'ContactFavorite':
+			return m.audit_action_contactFavorite();
 		default:
 			return action ?? '-';
 	}
@@ -89,6 +91,8 @@ export function getAuditActionVariant(action: string | undefined): TimelineVaria
 			return 'warning';
 		case 'ContactUpdate':
 			return 'default';
+		case 'ContactFavorite':
+			return 'warning';
 		default:
 			return 'default';
 	}
@@ -118,6 +122,17 @@ export function getAuditDescription(
 	try {
 		const parsed = JSON.parse(metadata) as Record<string, unknown>;
 
+		if (action === 'ContactFavorite') {
+			const isFav = parsed['isFavorite'];
+			return isFav ? m.audit_desc_favoriteOn() : m.audit_desc_favoriteOff();
+		}
+
+		if (action === 'ContactUpdate' && parsed['changes']) {
+			const changes = parsed['changes'] as Record<string, unknown>;
+			const count = Object.keys(changes).length;
+			return m.audit_desc_fieldsChanged({ count });
+		}
+
 		if (parsed['Role'] || parsed['role']) {
 			return m.audit_desc_role({ role: String(parsed['Role'] ?? parsed['role']) });
 		}
@@ -128,6 +143,28 @@ export function getAuditDescription(
 		}
 	} catch {
 		return metadata;
+	}
+
+	return undefined;
+}
+
+interface AuditFieldChange {
+	from: string;
+	to: string;
+}
+
+export function getAuditChanges(
+	metadata: string | null | undefined
+): Record<string, AuditFieldChange> | undefined {
+	if (!metadata) return undefined;
+
+	try {
+		const parsed = JSON.parse(metadata) as Record<string, unknown>;
+		if (parsed['changes']) {
+			return parsed['changes'] as Record<string, AuditFieldChange>;
+		}
+	} catch {
+		// ignore
 	}
 
 	return undefined;

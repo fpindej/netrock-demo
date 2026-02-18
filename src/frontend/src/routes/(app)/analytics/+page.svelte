@@ -2,10 +2,20 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Users, DollarSign, UserCheck, BarChart3, Star } from '@lucide/svelte';
+	import { EditContactDialog } from '$lib/components/contacts';
 	import * as m from '$lib/paraglide/messages';
+	import type { Contact } from '$lib/types';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	let editDialogOpen = $state(false);
+	let editingContact = $state<Contact | null>(null);
+
+	function handleContactClick(contact: Contact) {
+		editingContact = contact;
+		editDialogOpen = true;
+	}
 
 	const statusLabels: Record<string, () => string> = {
 		Lead: m.contacts_status_Lead,
@@ -196,7 +206,10 @@
 				<Card.Content class="p-0">
 					<div class="divide-y">
 						{#each data.stats.recentContacts as contact (contact.id)}
-							<div class="flex items-center justify-between px-6 py-3">
+							<button
+								class="flex w-full cursor-pointer items-center justify-between px-6 py-3 text-start transition-colors hover:bg-muted/50"
+								onclick={() => handleContactClick(contact)}
+							>
 								<div class="min-w-0 flex-1">
 									<div class="flex items-center gap-2">
 										{#if contact.isFavorite}
@@ -230,7 +243,7 @@
 										{formatDate(contact.createdAt ?? '')}
 									</span>
 								</div>
-							</div>
+							</button>
 						{/each}
 					</div>
 				</Card.Content>
@@ -238,3 +251,5 @@
 		{/if}
 	{/if}
 </div>
+
+<EditContactDialog bind:open={editDialogOpen} contact={editingContact} />

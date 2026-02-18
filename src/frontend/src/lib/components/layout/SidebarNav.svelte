@@ -4,7 +4,6 @@
 	import { cn, hasPermission, Permissions } from '$lib/utils';
 	import { buttonVariants } from '$lib/components/ui/button';
 	import {
-		LayoutDashboard,
 		BookOpen,
 		StickyNote,
 		BarChart3,
@@ -30,11 +29,6 @@
 	type AdminNavItem = NavItem & { permission: string };
 
 	let items: NavItem[] = [
-		{
-			title: m.nav_dashboard,
-			href: resolve('/'),
-			icon: LayoutDashboard
-		},
 		{
 			title: m.nav_guide,
 			href: resolve('/guide'),
@@ -78,9 +72,6 @@
 	);
 
 	function isActive(href: string, pathname: string) {
-		if (href === resolve('/')) {
-			return pathname === href;
-		}
 		return pathname.startsWith(href);
 	}
 </script>

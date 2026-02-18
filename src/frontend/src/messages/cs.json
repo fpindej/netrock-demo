@@ -609,6 +609,11 @@
 	"contacts_searchPlaceholder": "Hledat kontakty...",
 	"contacts_noSearchResults": "Žádné kontakty neodpovídají vašemu hledání.",
 	"contacts_clearSearch": "Vymazat hledání",
+	"contacts_sortBy": "Řadit podle",
+	"contacts_sort_newest": "Nejnovější",
+	"contacts_sort_nameAsc": "Jméno A → Z",
+	"contacts_sort_nameDesc": "Jméno Z → A",
+	"contacts_sort_favorites": "Oblíbené",
 	"contacts_audit_showDetails": "Zobrazit podrobnosti",
 	"contacts_audit_hideDetails": "Skrýt podrobnosti",
 

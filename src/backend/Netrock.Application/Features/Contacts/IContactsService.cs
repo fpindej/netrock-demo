@@ -9,15 +9,16 @@ namespace Netrock.Application.Features.Contacts;
 public interface IContactsService
 {
     /// <summary>
-    /// Gets a paginated list of contacts for the specified user, optionally filtered by search term.
+    /// Gets a paginated list of contacts for the specified user, optionally filtered and sorted.
     /// </summary>
     /// <param name="userId">The owner's user ID.</param>
     /// <param name="pageNumber">The page number (1-based).</param>
     /// <param name="pageSize">The number of items per page.</param>
     /// <param name="search">Optional search term to filter by name, email, company, or phone.</param>
+    /// <param name="sortBy">Sort order for the results.</param>
     /// <param name="ct">A cancellation token.</param>
     /// <returns>A result containing the paginated contacts and total count.</returns>
-    Task<Result<(List<ContactOutput> Items, int TotalCount)>> GetContactsAsync(Guid userId, int pageNumber, int pageSize, string? search, CancellationToken ct);
+    Task<Result<(List<ContactOutput> Items, int TotalCount)>> GetContactsAsync(Guid userId, int pageNumber, int pageSize, string? search, string? sortBy, CancellationToken ct);
 
     /// <summary>
     /// Gets a single contact by ID, scoped to the specified user.

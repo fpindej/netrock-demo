@@ -8,6 +8,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 	const pageNumber = Number(url.searchParams.get('page') ?? '1');
 	const pageSize = Number(url.searchParams.get('pageSize') ?? '10');
 	const search = url.searchParams.get('search') ?? '';
+	const sortBy = url.searchParams.get('sortBy') ?? 'Newest';
 
 	const {
 		data,
@@ -18,7 +19,8 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 			query: {
 				PageNumber: pageNumber,
 				PageSize: pageSize,
-				Search: search || undefined
+				Search: search || undefined,
+				SortBy: (sortBy as 'Newest' | 'NameAsc' | 'NameDesc' | 'Favorites') || undefined
 			}
 		}
 	});
@@ -29,6 +31,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 
 	return {
 		contacts: data,
-		search
+		search,
+		sortBy
 	};
 };

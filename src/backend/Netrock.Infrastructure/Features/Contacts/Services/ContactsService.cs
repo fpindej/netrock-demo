@@ -18,12 +18,10 @@ namespace Netrock.Infrastructure.Features.Contacts.Services;
 internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService auditService) : IContactsService
 {
     /// <inheritdoc />
-    public async Task<Result<(List<ContactOutput> Items, int TotalCount)>> GetContactsAsync(Guid userId, int pageNumber, int pageSize, string? search, CancellationToken ct)
+    public async Task<Result<(List<ContactOutput> Items, int TotalCount)>> GetContactsAsync(Guid userId, int pageNumber, int pageSize, string? search, string? sortBy, CancellationToken ct)
     {
         var query = dbContext.Contacts
             .Where(c => c.UserId == userId)
-            .OrderByDescending(c => c.IsFavorite)
-            .ThenByDescending(c => c.CreatedAt)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(search))
@@ -31,14 +29,23 @@ internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService 
             var s = search.Trim().ToLowerInvariant();
             query = query.Where(c =>
                 c.Name.ToLower().Contains(s) ||
-                (c.Email != null && c.Email.ToLower().Contains(s)) ||
-                (c.Company != null && c.Company.ToLower().Contains(s)) ||
+                c.Name.Similarity(s) > 0.3 ||
+                (c.Email != null && (c.Email.ToLower().Contains(s) || c.Email.Similarity(s) > 0.3)) ||
+                (c.Company != null && (c.Company.ToLower().Contains(s) || c.Company.Similarity(s) > 0.3)) ||
                 (c.Phone != null && c.Phone.ToLower().Contains(s)));
         }
 
+        var ordered = sortBy switch
+        {
+            "NameAsc" => query.OrderBy(c => c.Name),
+            "NameDesc" => query.OrderByDescending(c => c.Name),
+            "Favorites" => query.OrderByDescending(c => c.IsFavorite).ThenByDescending(c => c.CreatedAt),
+            _ => query.OrderByDescending(c => c.CreatedAt) // Newest
+        };
+
         var totalCount = await query.CountAsync(ct);
 
-        var contacts = await query
+        var contacts = await ordered
             .Paginate(pageNumber, pageSize)
             .Select(c => ToOutput(c))
             .ToListAsync(ct);

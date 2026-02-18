@@ -5,7 +5,8 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-	import { Plus, Search } from '@lucide/svelte';
+	import * as Select from '$lib/components/ui/select';
+	import { Plus, Search, ArrowUpDown } from '@lucide/svelte';
 	import {
 		ContactTable,
 		CreateContactDialog,
@@ -26,8 +27,17 @@
 	let searchInput = $state(data.search ?? '');
 	let searchTimeout: ReturnType<typeof setTimeout>;
 
+	const sortOptions = ['Newest', 'NameAsc', 'NameDesc', 'Favorites'] as const;
+	const sortLabels: Record<string, () => string> = {
+		Newest: m.contacts_sort_newest,
+		NameAsc: m.contacts_sort_nameAsc,
+		NameDesc: m.contacts_sort_nameDesc,
+		Favorites: m.contacts_sort_favorites
+	};
+
 	let contacts = $derived(data.contacts?.items ?? []);
 	let totalCount = $derived(data.contacts?.totalCount ?? 0);
+	let currentSort = $derived(data.sortBy ?? 'Newest');
 	let isSearchActive = $derived(!!(data.search && data.search.length > 0));
 	let isEmpty = $derived(totalCount === 0 && !isSearchActive);
 	let isEmptySearch = $derived(totalCount === 0 && isSearchActive);
@@ -54,6 +64,19 @@
 				keepFocus: true
 			});
 		}, 300);
+	}
+
+	function handleSortChange(value: string) {
+		const params = new SvelteURLSearchParams(page.url.searchParams);
+		if (value && value !== 'Newest') {
+			params.set('sortBy', value);
+		} else {
+			params.delete('sortBy');
+		}
+		params.delete('page');
+		const query = params.toString();
+		// eslint-disable-next-line svelte/no-navigation-without-resolve -- page.url.pathname is already resolved
+		goto(`${page.url.pathname}${query ? `?${query}` : ''}`, { replaceState: true });
 	}
 
 	function clearSearch() {
@@ -94,7 +117,7 @@
 	{#if isEmpty}
 		<ContactEmptyState onCreate={() => (createDialogOpen = true)} />
 	{:else}
-		<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+		<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 			<div class="relative max-w-sm flex-1">
 				<Search class="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 				<Input
@@ -108,11 +131,24 @@
 					}}
 				/>
 			</div>
-			{#if totalCount > 0}
-				<p class="text-sm text-muted-foreground">
-					{totalCount} contacts
-				</p>
-			{/if}
+			<div class="flex items-center gap-3">
+				<Select.Root type="single" value={currentSort} onValueChange={(v) => handleSortChange(v)}>
+					<Select.Trigger class="w-[180px]">
+						<ArrowUpDown class="me-2 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+						{sortLabels[currentSort]?.() ?? currentSort}
+					</Select.Trigger>
+					<Select.Content>
+						{#each sortOptions as opt (opt)}
+							<Select.Item value={opt}>{sortLabels[opt]()}</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
+				{#if totalCount > 0}
+					<p class="hidden text-sm text-muted-foreground sm:block">
+						{totalCount} contacts
+					</p>
+				{/if}
+			</div>
 		</div>
 
 		{#if isEmptySearch}

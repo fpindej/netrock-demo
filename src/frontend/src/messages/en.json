@@ -609,6 +609,11 @@
 	"contacts_searchPlaceholder": "Search contacts...",
 	"contacts_noSearchResults": "No contacts match your search.",
 	"contacts_clearSearch": "Clear search",
+	"contacts_sortBy": "Sort by",
+	"contacts_sort_newest": "Newest first",
+	"contacts_sort_nameAsc": "Name A → Z",
+	"contacts_sort_nameDesc": "Name Z → A",
+	"contacts_sort_favorites": "Favorites first",
 	"contacts_audit_showDetails": "Show details",
 	"contacts_audit_hideDetails": "Hide details",
 

@@ -281,6 +281,8 @@ export interface paths {
 					PageSize?: number;
 					/** @description Optional search term to filter contacts by name, email, company, or phone. */
 					Search?: string;
+					/** @description Sort order: Newest, NameAsc, NameDesc, Favorites. */
+					SortBy?: 'Newest' | 'NameAsc' | 'NameDesc' | 'Favorites';
 				};
 				header?: never;
 				path?: never;

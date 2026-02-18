@@ -32,7 +32,7 @@ public class ContactsController(
         CancellationToken cancellationToken)
     {
         var userId = userContext.AuthenticatedUserId;
-        var result = await contactsService.GetContactsAsync(userId, request.PageNumber, request.PageSize, request.Search, cancellationToken);
+        var result = await contactsService.GetContactsAsync(userId, request.PageNumber, request.PageSize, request.Search, request.SortBy.ToString(), cancellationToken);
 
         if (!result.IsSuccess)
         {

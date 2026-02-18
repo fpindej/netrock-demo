@@ -44,5 +44,9 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 
         RuleFor(x => x.LastName)
             .MaximumLength(255);
+
+        RuleFor(x => x.ConsentGiven)
+            .Equal(true)
+            .WithMessage("You must consent to data processing to register.");
     }
 }

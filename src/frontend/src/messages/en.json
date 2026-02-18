@@ -123,6 +123,8 @@
 	"auth_register_success": "Account created successfully",
 	"auth_register_failed": "Registration failed",
 	"auth_register_passwordMismatch": "Passwords do not match",
+	"auth_register_consent": "I agree to the {linkOpen}data processing terms{linkClose}",
+	"auth_register_consentRequired": "You must agree to data processing to continue",
 	"auth_captcha_error": "CAPTCHA verification failed. Please try again.",
 
 	"auth_forgotPassword_title": "Forgot password?",
@@ -245,6 +247,10 @@
 	"error_default_title": "Computer Says No",
 	"error_default_description": "Something went wrong. We're not sure what, but it's probably not good.",
 	"error_goHome": "Go back home",
+
+	"settings_yourData_title": "Your Data",
+	"settings_yourData_description": "Your personal information (email, name, phone) is stored securely and is never shared with third parties. You can view and edit your data on your profile, or delete your account below.",
+	"settings_yourData_viewPrivacy": "View full data processing notice",
 
 	"settings_deleteAccount_dangerDescription": "Once you delete your account, there is no going back. All your data will be permanently removed.",
 	"settings_deleteAccount_title": "Delete Account",
@@ -621,6 +627,27 @@
 	"contact_github_description": "Check out the source code.",
 	"contact_website_title": "Website",
 	"contact_website_description": "Visit my personal website.",
+
+	"meta_privacy_title": "Data Processing Notice",
+	"meta_privacy_description": "How we handle your personal data.",
+
+	"privacy_title": "Data Processing Notice",
+	"privacy_subtitle": "How we collect, use, and protect your personal data.",
+	"privacy_whatWeCollect_title": "What We Collect",
+	"privacy_whatWeCollect_body": "Email address (required), first and last name (optional), phone number (optional), and usage activity logs for security purposes.",
+	"privacy_purpose_title": "Purpose",
+	"privacy_purpose_body": "Your data is used solely for account management and the functionality of this demo application. It is not used for marketing or analytics.",
+	"privacy_storage_title": "Storage & Sharing",
+	"privacy_storage_body": "Your data is stored securely and is never shared with or sold to third parties. Other users cannot see your personal information — emails and phone numbers are anonymized in administrative views.",
+	"privacy_rights_title": "Your Rights",
+	"privacy_rights_body": "You have the right to access, correct, and delete your personal data at any time.",
+	"privacy_rights_access": "View and edit your data on your {linkOpen}Profile{linkClose} page.",
+	"privacy_rights_delete": "Delete your account and all associated data in {linkOpen}Settings{linkClose}.",
+	"privacy_rights_request": "For data export or other requests, contact us at {linkOpen}{email}{linkClose}.",
+	"privacy_contact_title": "Contact",
+	"privacy_contact_body": "For any data-related questions or requests, reach out to {linkOpen}{email}{linkClose}.",
+	"privacy_lastUpdated": "Last updated: {date}",
+	"privacy_backToLogin": "Back to login",
 
 	"demo_viewingAs": "Viewing as",
 	"demo_switching": "Switching...",

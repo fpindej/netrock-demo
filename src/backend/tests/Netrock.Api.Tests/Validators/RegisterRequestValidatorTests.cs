@@ -14,7 +14,8 @@ public class RegisterRequestValidatorTests
         {
             Email = "test@example.com",
             Password = "Password1",
-            CaptchaToken = "valid-token"
+            CaptchaToken = "valid-token",
+            ConsentGiven = true
         };
 
         var result = _validator.TestValidate(request);
@@ -107,6 +108,23 @@ public class RegisterRequestValidatorTests
 
         result.ShouldHaveValidationErrorFor(x => x.Password)
             .WithErrorMessage("Password must contain at least one digit.");
+    }
+
+    [Fact]
+    public void ConsentNotGiven_ShouldFail()
+    {
+        var request = new RegisterRequest
+        {
+            Email = "test@example.com",
+            Password = "Password1",
+            CaptchaToken = "valid-token",
+            ConsentGiven = false
+        };
+
+        var result = _validator.TestValidate(request);
+
+        result.ShouldHaveValidationErrorFor(x => x.ConsentGiven)
+            .WithErrorMessage("You must consent to data processing to register.");
     }
 
     [Fact]

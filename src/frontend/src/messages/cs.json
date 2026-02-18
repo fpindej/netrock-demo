@@ -123,6 +123,8 @@
 	"auth_register_success": "Účet byl úspěšně vytvořen",
 	"auth_register_failed": "Registrace se nezdařila",
 	"auth_register_passwordMismatch": "Hesla se neshodují",
+	"auth_register_consent": "Souhlasím s {linkOpen}podmínkami zpracování dat{linkClose}",
+	"auth_register_consentRequired": "Pro pokračování musíte souhlasit se zpracováním dat",
 	"auth_captcha_error": "Ověření CAPTCHA se nezdařilo. Zkuste to prosím znovu.",
 
 	"auth_forgotPassword_title": "Zapomenuté heslo?",
@@ -245,6 +247,10 @@
 	"error_default_title": "Počítač říká ne",
 	"error_default_description": "Něco se pokazilo. Nejsme si jistí co, ale pravděpodobně to není dobré.",
 	"error_goHome": "Zpět na úvod",
+
+	"settings_yourData_title": "Vaše údaje",
+	"settings_yourData_description": "Vaše osobní údaje (e-mail, jméno, telefon) jsou bezpečně uloženy a nikdy nejsou sdíleny s třetími stranami. Své údaje můžete zobrazit a upravit v profilu, nebo smazat účet níže.",
+	"settings_yourData_viewPrivacy": "Zobrazit úplné podmínky zpracování dat",
 
 	"settings_deleteAccount_dangerDescription": "Jakmile smažete svůj účet, není cesty zpět. Všechna vaše data budou trvale odstraněna.",
 	"settings_deleteAccount_title": "Smazat účet",
@@ -621,6 +627,27 @@
 	"contact_github_description": "Podívejte se na zdrojový kód.",
 	"contact_website_title": "Web",
 	"contact_website_description": "Navštivte můj osobní web.",
+
+	"meta_privacy_title": "Zpracování osobních údajů",
+	"meta_privacy_description": "Jak nakládáme s vašimi osobními údaji.",
+
+	"privacy_title": "Zpracování osobních údajů",
+	"privacy_subtitle": "Jak shromažďujeme, používáme a chráníme vaše osobní údaje.",
+	"privacy_whatWeCollect_title": "Co shromažďujeme",
+	"privacy_whatWeCollect_body": "E-mailovou adresu (povinné), jméno a příjmení (volitelné), telefonní číslo (volitelné) a protokoly o aktivitě pro bezpečnostní účely.",
+	"privacy_purpose_title": "Účel",
+	"privacy_purpose_body": "Vaše údaje slouží výhradně ke správě účtu a fungování této demo aplikace. Nejsou využívány k marketingu ani analytice.",
+	"privacy_storage_title": "Uložení a sdílení",
+	"privacy_storage_body": "Vaše údaje jsou bezpečně uloženy a nikdy nejsou sdíleny ani prodávány třetím stranám. Ostatní uživatelé nevidí vaše osobní údaje — e-maily a telefonní čísla jsou v administraci anonymizována.",
+	"privacy_rights_title": "Vaše práva",
+	"privacy_rights_body": "Máte právo kdykoliv přistupovat ke svým údajům, opravit je a smazat.",
+	"privacy_rights_access": "Zobrazte a upravte své údaje na stránce {linkOpen}Profil{linkClose}.",
+	"privacy_rights_delete": "Smažte svůj účet a všechna související data v {linkOpen}Nastavení{linkClose}.",
+	"privacy_rights_request": "Pro export dat nebo jiné požadavky nás kontaktujte na {linkOpen}{email}{linkClose}.",
+	"privacy_contact_title": "Kontakt",
+	"privacy_contact_body": "S dotazy či požadavky ohledně dat se obraťte na {linkOpen}{email}{linkClose}.",
+	"privacy_lastUpdated": "Poslední aktualizace: {date}",
+	"privacy_backToLogin": "Zpět na přihlášení",
 
 	"demo_viewingAs": "Zobrazeno jako",
 	"demo_switching": "Přepínání...",

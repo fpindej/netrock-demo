@@ -51,4 +51,11 @@ public class RegisterRequest
     /// </summary>
     [MaxLength(255)]
     public string? LastName { get; [UsedImplicitly] init; }
+
+    /// <summary>
+    /// Whether the user has consented to the processing of their personal data.
+    /// Must be <c>true</c> to complete registration.
+    /// </summary>
+    [Required]
+    public bool ConsentGiven { get; init; }
 }

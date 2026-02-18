@@ -3585,6 +3585,11 @@ export interface components {
 			firstName?: null | string;
 			/** @description The last name of the user. */
 			lastName?: null | string;
+			/**
+			 * @description Whether the user has consented to the processing of their personal data.
+			 *     Must be `true` to complete registration.
+			 */
+			consentGiven: boolean;
 		};
 		/** @description Represents the response returned after successful user registration. */
 		RegisterResponse: {

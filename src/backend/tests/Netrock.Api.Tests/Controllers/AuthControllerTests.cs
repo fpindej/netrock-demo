@@ -97,7 +97,7 @@ public class AuthControllerTests : IClassFixture<CustomWebApplicationFactory>, I
             .Returns(Result<Guid>.Success(Guid.NewGuid()));
 
         var response = await _client.SendAsync(
-            Post("/api/auth/register", JsonContent.Create(new { Email = "new@example.com", Password = "Password1!", CaptchaToken = "valid-token" })));
+            Post("/api/auth/register", JsonContent.Create(new { Email = "new@example.com", Password = "Password1!", CaptchaToken = "valid-token", ConsentGiven = true })));
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         var body = await response.Content.ReadFromJsonAsync<RegisterUserResponse>();
@@ -109,7 +109,7 @@ public class AuthControllerTests : IClassFixture<CustomWebApplicationFactory>, I
     public async Task Register_InvalidEmail_Returns400()
     {
         var response = await _client.SendAsync(
-            Post("/api/auth/register", JsonContent.Create(new { Email = "not-an-email", Password = "Password1!", CaptchaToken = "valid-token" })));
+            Post("/api/auth/register", JsonContent.Create(new { Email = "not-an-email", Password = "Password1!", CaptchaToken = "valid-token", ConsentGiven = true })));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -118,7 +118,7 @@ public class AuthControllerTests : IClassFixture<CustomWebApplicationFactory>, I
     public async Task Register_WeakPassword_Returns400()
     {
         var response = await _client.SendAsync(
-            Post("/api/auth/register", JsonContent.Create(new { Email = "test@example.com", Password = "weak", CaptchaToken = "valid-token" })));
+            Post("/api/auth/register", JsonContent.Create(new { Email = "test@example.com", Password = "weak", CaptchaToken = "valid-token", ConsentGiven = true })));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -132,7 +132,7 @@ public class AuthControllerTests : IClassFixture<CustomWebApplicationFactory>, I
             .Returns(Result<Guid>.Failure("Email already registered."));
 
         var response = await _client.SendAsync(
-            Post("/api/auth/register", JsonContent.Create(new { Email = "dup@example.com", Password = "Password1!", CaptchaToken = "valid-token" })));
+            Post("/api/auth/register", JsonContent.Create(new { Email = "dup@example.com", Password = "Password1!", CaptchaToken = "valid-token", ConsentGiven = true })));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         await AssertProblemDetailsAsync(response, 400, "Email already registered.");
@@ -145,7 +145,7 @@ public class AuthControllerTests : IClassFixture<CustomWebApplicationFactory>, I
             .Returns(false);
 
         var response = await _client.SendAsync(
-            Post("/api/auth/register", JsonContent.Create(new { Email = "new@example.com", Password = "Password1!", CaptchaToken = "invalid-token" })));
+            Post("/api/auth/register", JsonContent.Create(new { Email = "new@example.com", Password = "Password1!", CaptchaToken = "invalid-token", ConsentGiven = true })));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         await AssertProblemDetailsAsync(response, 400, ErrorMessages.Auth.CaptchaInvalid);
@@ -155,7 +155,16 @@ public class AuthControllerTests : IClassFixture<CustomWebApplicationFactory>, I
     public async Task Register_MissingCaptcha_Returns400()
     {
         var response = await _client.SendAsync(
-            Post("/api/auth/register", JsonContent.Create(new { Email = "new@example.com", Password = "Password1!" })));
+            Post("/api/auth/register", JsonContent.Create(new { Email = "new@example.com", Password = "Password1!", ConsentGiven = true })));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Register_WithoutConsent_Returns400()
+    {
+        var response = await _client.SendAsync(
+            Post("/api/auth/register", JsonContent.Create(new { Email = "new@example.com", Password = "Password1!", CaptchaToken = "valid-token", ConsentGiven = false })));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }

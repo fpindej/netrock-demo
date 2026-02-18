@@ -10,7 +10,9 @@
 	import { Loader2 } from '@lucide/svelte';
 	import { createFieldShakes, createCooldown } from '$lib/state';
 	import { TurnstileWidget } from '$lib/components/auth';
+	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
+	import { resolve } from '$app/paths';
 
 	interface Props {
 		open?: boolean;
@@ -25,6 +27,7 @@
 	let firstName = $state('');
 	let lastName = $state('');
 	let phoneNumber = $state('');
+	let consentGiven = $state(false);
 	let captchaToken = $state('');
 	let resetCaptcha: (() => void) | null = $state(null);
 	let isLoading = $state(false);
@@ -79,6 +82,7 @@
 		firstName = '';
 		lastName = '';
 		phoneNumber = '';
+		consentGiven = false;
 		captchaToken = '';
 		error = null;
 		fieldErrors = {};
@@ -115,6 +119,7 @@
 					email,
 					password,
 					captchaToken,
+					consentGiven,
 					firstName: firstName || undefined,
 					lastName: lastName || undefined,
 					phoneNumber: phoneNumber || undefined
@@ -270,10 +275,29 @@
 				onError={() => (error = m.auth_captcha_error())}
 				resetRef={(fn) => (resetCaptcha = fn)}
 			/>
+			<div class="flex items-start gap-2">
+				<Checkbox
+					id="consentGiven"
+					bind:checked={consentGiven}
+					disabled={isLoading}
+					aria-invalid={!!fieldErrors.consentGiven}
+				/>
+				<!-- eslint-disable svelte/no-at-html-tags -- i18n link interpolation, no user input -->
+				<label for="consentGiven" class="text-sm leading-tight">
+					{@html m.auth_register_consent({
+						linkOpen: `<a href="${resolve('/privacy')}" target="_blank" rel="noopener noreferrer" class="font-medium text-primary hover:underline">`,
+						linkClose: '</a>'
+					})}
+				</label>
+				<!-- eslint-enable svelte/no-at-html-tags -->
+			</div>
+			{#if fieldErrors.consentGiven}
+				<p class="text-xs text-destructive">{fieldErrors.consentGiven}</p>
+			{/if}
 			<Dialog.Footer>
 				<Button
 					type="submit"
-					disabled={isLoading || cooldown.active || !captchaToken}
+					disabled={isLoading || cooldown.active || !captchaToken || !consentGiven}
 					class="w-full"
 				>
 					{#if cooldown.active}

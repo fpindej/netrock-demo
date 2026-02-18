@@ -3,6 +3,8 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import * as m from '$lib/paraglide/messages';
+	import { Shield } from '@lucide/svelte';
+	import { resolve } from '$app/paths';
 
 	let deleteDialogOpen = $state(false);
 </script>
@@ -22,6 +24,31 @@
 		<ChangePasswordForm />
 
 		<ActivityLog />
+
+		<Card.Root>
+			<Card.Header>
+				<div class="flex items-center gap-3">
+					<div class="rounded-lg bg-primary/10 p-2">
+						<Shield class="h-5 w-5 text-primary" />
+					</div>
+					<div>
+						<Card.Title>{m.settings_yourData_title()}</Card.Title>
+					</div>
+				</div>
+			</Card.Header>
+			<Card.Content>
+				<p class="text-sm text-muted-foreground">
+					{m.settings_yourData_description()}
+				</p>
+				<div class="mt-4">
+					<a href={resolve('/privacy')} target="_blank" rel="noopener noreferrer">
+						<Button variant="outline" size="sm">
+							{m.settings_yourData_viewPrivacy()}
+						</Button>
+					</a>
+				</div>
+			</Card.Content>
+		</Card.Root>
 
 		<div class="space-y-4">
 			<h4 class="text-sm font-medium text-destructive">{m.common_dangerZone()}</h4>

@@ -1060,6 +1060,21 @@ public class AuthenticationServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task ResetPassword_SameAsCurrentPassword_ReturnsFailure()
+    {
+        var user = CreateTestUser();
+        _userManager.FindByIdAsync(user.Id.ToString()).Returns(user);
+        var rawToken = await SeedEmailTokenAsync(user.Id, "identity-reset-token", EmailTokenPurpose.PasswordReset);
+        _userManager.CheckPasswordAsync(user, "SamePass1!").Returns(true);
+
+        var result = await _sut.ResetPasswordAsync(
+            new ResetPasswordInput(rawToken, "SamePass1!"));
+
+        Assert.True(result.IsFailure);
+        Assert.Equal(ErrorMessages.Auth.PasswordSameAsCurrent, result.Error);
+    }
+
+    [Fact]
     public async Task ResetPassword_InvalidIdentityToken_ReturnsTokenInvalidError()
     {
         var user = CreateTestUser();

@@ -12,18 +12,20 @@
 	import { fly, scale } from 'svelte/transition';
 	import { Check, CircleAlert } from '@lucide/svelte';
 	import { LoginBackground } from '$lib/components/auth';
-	import { toast } from '$lib/components/ui/sonner';
 
 	interface Props {
 		token: string;
+		invited?: boolean;
 	}
 
-	let { token }: Props = $props();
+	let { token, invited = false }: Props = $props();
 
 	let newPassword = $state('');
 	let confirmPassword = $state('');
 	let isLoading = $state(false);
 	let isSuccess = $state(false);
+	let isError = $state(false);
+	let errorMessage = $state('');
 	let fieldErrors = $state<Record<string, string>>({});
 	const fieldShakes = createFieldShakes();
 	const cooldown = createCooldown();
@@ -35,6 +37,8 @@
 		if (isLoading || cooldown.active) return;
 
 		fieldErrors = {};
+		isError = false;
+		errorMessage = '';
 
 		if (newPassword !== confirmPassword) {
 			fieldErrors = { confirmPassword: m.auth_resetPassword_mismatch() };
@@ -54,21 +58,28 @@
 			} else {
 				handleMutationError(response, apiError, {
 					cooldown,
-					fallback: m.auth_resetPassword_error(),
+					fallback: invited ? m.auth_setPassword_error() : m.auth_resetPassword_error(),
 					onValidationError(errors) {
 						fieldErrors = errors;
 						fieldShakes.triggerFields(Object.keys(errors));
-						toast.error(getErrorMessage(apiError, m.auth_resetPassword_error()));
+						isError = true;
+						errorMessage = getErrorMessage(
+							apiError,
+							invited ? m.auth_setPassword_error() : m.auth_resetPassword_error()
+						);
 					},
 					onError() {
-						toast.error(m.auth_resetPassword_error(), {
-							description: getErrorMessage(apiError, m.auth_resetPassword_error())
-						});
+						isError = true;
+						errorMessage = getErrorMessage(
+							apiError,
+							invited ? m.auth_setPassword_error() : m.auth_resetPassword_error()
+						);
 					}
 				});
 			}
 		} catch {
-			toast.error(m.auth_resetPassword_error());
+			isError = true;
+			errorMessage = invited ? m.auth_setPassword_error() : m.auth_resetPassword_error();
 		} finally {
 			isLoading = false;
 		}
@@ -99,9 +110,18 @@
 				</Card.Header>
 				<Card.Content>
 					<div class="text-center text-sm">
-						<a href={resolve('/forgot-password')} class="font-medium text-primary hover:underline">
-							{m.auth_resetPassword_requestNew()}
-						</a>
+						{#if invited}
+							<p class="text-muted-foreground">
+								{m.auth_setPassword_contactAdmin()}
+							</p>
+						{:else}
+							<a
+								href={resolve('/forgot-password')}
+								class="font-medium text-primary hover:underline"
+							>
+								{m.auth_resetPassword_requestNew()}
+							</a>
+						{/if}
 					</div>
 				</Card.Content>
 			</Card.Root>
@@ -117,13 +137,26 @@
 			>
 				<Card.Header>
 					<Card.Title class="text-center text-2xl">
-						{m.auth_resetPassword_title()}
+						{invited ? m.auth_setPassword_title() : m.auth_resetPassword_title()}
 					</Card.Title>
 					<Card.Description class="text-center">
-						{m.auth_resetPassword_subtitle()}
+						{invited ? m.auth_setPassword_subtitle() : m.auth_resetPassword_subtitle()}
 					</Card.Description>
 				</Card.Header>
 				<Card.Content>
+					{#if isError && errorMessage}
+						<div
+							class="mb-4 flex items-start gap-3 rounded-lg border border-destructive/30 bg-destructive/10 p-3"
+						>
+							<CircleAlert class="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+							<div class="text-sm">
+								<p class="font-medium text-destructive">
+									{m.auth_resetPassword_errorTitle()}
+								</p>
+								<p class="text-destructive/80">{errorMessage}</p>
+							</div>
+						</div>
+					{/if}
 					<form class="space-y-6" onsubmit={submit}>
 						<div class="grid gap-2">
 							<Label for="newPassword">{m.auth_resetPassword_newPassword()}</Label>
@@ -168,9 +201,9 @@
 							{#if cooldown.active}
 								{m.common_waitSeconds({ seconds: cooldown.remaining })}
 							{:else if isLoading}
-								{m.auth_resetPassword_submitting()}
+								{invited ? m.auth_setPassword_submitting() : m.auth_resetPassword_submitting()}
 							{:else}
-								{m.auth_resetPassword_submit()}
+								{invited ? m.auth_setPassword_submit() : m.auth_resetPassword_submit()}
 							{/if}
 						</Button>
 					</form>
@@ -190,10 +223,12 @@
 						<Check class="h-8 w-8" />
 					</div>
 					<Card.Title class="text-center text-2xl">
-						{m.auth_resetPassword_successTitle()}
+						{invited ? m.auth_setPassword_successTitle() : m.auth_resetPassword_successTitle()}
 					</Card.Title>
 					<Card.Description class="text-center">
-						{m.auth_resetPassword_successDescription()}
+						{invited
+							? m.auth_setPassword_successDescription()
+							: m.auth_resetPassword_successDescription()}
 					</Card.Description>
 				</Card.Header>
 				<Card.Content>

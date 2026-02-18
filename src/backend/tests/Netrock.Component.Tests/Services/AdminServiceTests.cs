@@ -54,7 +54,7 @@ public class AdminServiceTests : IDisposable
 
         _sut = new AdminService(
             _userManager, _roleManager, _dbContext, _cacheService, _timeProvider,
-            _emailService, emailTokenService, emailOptions, logger);
+            _emailService, emailTokenService, authOptions, emailOptions, logger);
     }
 
     public void Dispose()

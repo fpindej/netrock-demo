@@ -1,4 +1,3 @@
-using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -7,6 +6,7 @@ using Netrock.Shared;
 using Netrock.Infrastructure.Cryptography;
 using Netrock.Infrastructure.Features.Authentication.Models;
 using Netrock.Infrastructure.Features.Authentication.Options;
+using Netrock.Infrastructure.Features.Email;
 using Netrock.Infrastructure.Features.Email.Options;
 using Netrock.Infrastructure.Persistence;
 using Netrock.Application.Cookies.Constants;
@@ -294,23 +294,25 @@ internal class AuthenticationService(
         var opaqueToken = await emailTokenService.CreateAsync(user.Id, identityToken, EmailTokenPurpose.PasswordReset, cancellationToken);
         var resetUrl = $"{_emailOptions.FrontendBaseUrl.TrimEnd('/')}/reset-password?token={opaqueToken}";
 
-        var safeResetUrl = WebUtility.HtmlEncode(resetUrl);
-        var htmlBody = $"""
-            <h2>Reset Your Password</h2>
-            <p>You requested a password reset. Click the link below to set a new password:</p>
-            <p><a href="{safeResetUrl}">Reset Password</a></p>
-            <p>If you didn't request this, you can safely ignore this email.</p>
-            <p>This link will expire in {_emailTokenOptions.ExpiresInHours} hours.</p>
+        var innerHtml = $"""
+            <h2 style="margin:0 0 16px; font-size:22px; color:#18181b;">Reset Your Password</h2>
+            <p style="margin:0 0 8px;">You requested a password reset. Click the button below to set a new password:</p>
+            {EmailLayout.Button(resetUrl, "Reset Password")}
+            <p style="margin:0 0 4px; font-size:13px; color:#71717a;">If you didn't request this, you can safely ignore this email.</p>
+            <p style="margin:0; font-size:13px; color:#71717a;">This link will expire in {_emailTokenOptions.ExpiresInHours} hours.</p>
             """;
+        var htmlBody = EmailLayout.RenderHtml(innerHtml, _emailOptions.FromName);
 
-        var plainTextBody = $"""
+        var innerText = $"""
             Reset Your Password
 
             You requested a password reset. Visit the following link to set a new password:
             {resetUrl}
 
             If you didn't request this, you can safely ignore this email.
+            This link will expire in {_emailTokenOptions.ExpiresInHours} hours.
             """;
+        var plainTextBody = EmailLayout.RenderPlainText(innerText, _emailOptions.FromName);
 
         var message = new EmailMessage(
             To: email,
@@ -339,6 +341,12 @@ internal class AuthenticationService(
         if (user is null)
         {
             return Result.Failure(ErrorMessages.Auth.ResetPasswordFailed);
+        }
+
+        var isSamePassword = await userManager.CheckPasswordAsync(user, input.NewPassword);
+        if (isSamePassword)
+        {
+            return Result.Failure(ErrorMessages.Auth.PasswordSameAsCurrent);
         }
 
         var resetResult = await userManager.ResetPasswordAsync(user, emailToken.IdentityToken, input.NewPassword);
@@ -497,15 +505,15 @@ internal class AuthenticationService(
         var opaqueToken = await emailTokenService.CreateAsync(user.Id, identityToken, EmailTokenPurpose.EmailVerification, cancellationToken);
         var verifyUrl = $"{_emailOptions.FrontendBaseUrl.TrimEnd('/')}/verify-email?token={opaqueToken}";
 
-        var safeVerifyUrl = WebUtility.HtmlEncode(verifyUrl);
-        var htmlBody = $"""
-            <h2>Verify Your Email Address</h2>
-            <p>Thank you for registering. Please click the link below to verify your email address:</p>
-            <p><a href="{safeVerifyUrl}">Verify Email</a></p>
-            <p>If you didn't create an account, you can safely ignore this email.</p>
+        var innerHtml = $"""
+            <h2 style="margin:0 0 16px; font-size:22px; color:#18181b;">Verify Your Email Address</h2>
+            <p style="margin:0 0 8px;">Thank you for registering. Please click the button below to verify your email address:</p>
+            {EmailLayout.Button(verifyUrl, "Verify Email")}
+            <p style="margin:0; font-size:13px; color:#71717a;">If you didn't create an account, you can safely ignore this email.</p>
             """;
+        var htmlBody = EmailLayout.RenderHtml(innerHtml, _emailOptions.FromName);
 
-        var plainTextBody = $"""
+        var innerText = $"""
             Verify Your Email Address
 
             Thank you for registering. Visit the following link to verify your email address:
@@ -513,6 +521,7 @@ internal class AuthenticationService(
 
             If you didn't create an account, you can safely ignore this email.
             """;
+        var plainTextBody = EmailLayout.RenderPlainText(innerText, _emailOptions.FromName);
 
         var message = new EmailMessage(
             To: user.Email,

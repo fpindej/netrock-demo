@@ -45,6 +45,8 @@
 	"meta_forgotPassword_description": "Reset your account password.",
 	"meta_resetPassword_title": "Reset Password",
 	"meta_resetPassword_description": "Choose a new password for your account.",
+	"meta_setPassword_title": "Set Password",
+	"meta_setPassword_description": "Set a password for your new account.",
 	"meta_verifyEmail_title": "Verify Email",
 	"meta_verifyEmail_description": "Verify your email address.",
 
@@ -146,6 +148,16 @@
 	"auth_resetPassword_invalidLink": "Invalid reset link",
 	"auth_resetPassword_invalidLinkDescription": "This password reset link is invalid or has expired.",
 	"auth_resetPassword_requestNew": "Request a new link",
+	"auth_resetPassword_errorTitle": "Something went wrong",
+
+	"auth_setPassword_title": "Set your password",
+	"auth_setPassword_subtitle": "Choose a password for your new account.",
+	"auth_setPassword_submit": "Set password",
+	"auth_setPassword_submitting": "Setting...",
+	"auth_setPassword_error": "Failed to set password",
+	"auth_setPassword_contactAdmin": "Please contact your administrator for a new invitation.",
+	"auth_setPassword_successTitle": "Password set",
+	"auth_setPassword_successDescription": "Your password has been set. You can now sign in to your account.",
 
 	"auth_verifyEmail_verifying": "Verifying your email...",
 	"auth_verifyEmail_successTitle": "Email verified",

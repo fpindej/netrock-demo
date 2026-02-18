@@ -45,6 +45,8 @@
 	"meta_forgotPassword_description": "Obnovte heslo ke svému účtu.",
 	"meta_resetPassword_title": "Obnovení hesla",
 	"meta_resetPassword_description": "Zvolte si nové heslo ke svému účtu.",
+	"meta_setPassword_title": "Nastavení hesla",
+	"meta_setPassword_description": "Nastavte si heslo ke svému novému účtu.",
 	"meta_verifyEmail_title": "Ověření e-mailu",
 	"meta_verifyEmail_description": "Ověřte svou e-mailovou adresu.",
 
@@ -146,6 +148,16 @@
 	"auth_resetPassword_invalidLink": "Neplatný odkaz pro obnovení",
 	"auth_resetPassword_invalidLinkDescription": "Tento odkaz pro obnovení hesla je neplatný nebo vypršel.",
 	"auth_resetPassword_requestNew": "Požádat o nový odkaz",
+	"auth_resetPassword_errorTitle": "Něco se pokazilo",
+
+	"auth_setPassword_title": "Nastavte si heslo",
+	"auth_setPassword_subtitle": "Zvolte si heslo ke svému novému účtu.",
+	"auth_setPassword_submit": "Nastavit heslo",
+	"auth_setPassword_submitting": "Nastavuji...",
+	"auth_setPassword_error": "Nepodařilo se nastavit heslo",
+	"auth_setPassword_contactAdmin": "Kontaktujte prosím svého administrátora pro novou pozvánku.",
+	"auth_setPassword_successTitle": "Heslo nastaveno",
+	"auth_setPassword_successDescription": "Vaše heslo bylo nastaveno. Nyní se můžete přihlásit ke svému účtu.",
 
 	"auth_verifyEmail_verifying": "Ověřování vašeho e-mailu...",
 	"auth_verifyEmail_successTitle": "E-mail ověřen",

@@ -448,10 +448,9 @@ internal class AdminService(
             <h2 style="margin:0 0 16px; font-size:22px; color:#18181b;">Reset Your Password</h2>
             <p style="margin:0 0 8px;">An administrator has requested a password reset for your account. Click the button below to set a new password:</p>
             {EmailLayout.Button(resetUrl, "Reset Password")}
-            <p style="margin:0 0 4px; font-size:13px; color:#71717a;">If you did not expect this, please contact your administrator.</p>
-            <p style="margin:0; font-size:13px; color:#71717a;">This link will expire in {_emailTokenExpiresInHours} hours.</p>
+            {EmailLayout.ExpiryAndSafetyNote(_emailTokenExpiresInHours, "If you did not expect this, please contact your administrator.")}
             """;
-        var htmlBody = EmailLayout.RenderHtml(innerHtml, _emailOptions.FromName);
+        var htmlBody = EmailLayout.RenderHtml(innerHtml, _emailOptions.FromName, _emailOptions.SupportEmail);
 
         var innerText = $"""
             Reset Your Password
@@ -462,7 +461,7 @@ internal class AdminService(
             If you did not expect this, please contact your administrator.
             This link will expire in {_emailTokenExpiresInHours} hours.
             """;
-        var plainTextBody = EmailLayout.RenderPlainText(innerText, _emailOptions.FromName);
+        var plainTextBody = EmailLayout.RenderPlainText(innerText, _emailOptions.FromName, _emailOptions.SupportEmail);
 
         var message = new EmailMessage(
             To: email,
@@ -526,9 +525,9 @@ internal class AdminService(
             <h2 style="margin:0 0 16px; font-size:22px; color:#18181b;">You've Been Invited</h2>
             <p style="margin:0 0 8px;">An account has been created for you. Click the button below to set your password and get started:</p>
             {EmailLayout.Button(resetUrl, "Set Your Password")}
-            <p style="margin:0; font-size:13px; color:#71717a;">This link will expire in {_emailTokenExpiresInHours} hours.</p>
+            {EmailLayout.ExpiryAndSafetyNote(_emailTokenExpiresInHours, "If you did not expect this, you can safely ignore this email.")}
             """;
-        var htmlBody = EmailLayout.RenderHtml(innerHtml, _emailOptions.FromName);
+        var htmlBody = EmailLayout.RenderHtml(innerHtml, _emailOptions.FromName, _emailOptions.SupportEmail);
 
         var innerText = $"""
             You've Been Invited
@@ -536,9 +535,10 @@ internal class AdminService(
             An account has been created for you. Visit the following link to set your password and get started:
             {resetUrl}
 
+            If you did not expect this, you can safely ignore this email.
             This link will expire in {_emailTokenExpiresInHours} hours.
             """;
-        var plainTextBody = EmailLayout.RenderPlainText(innerText, _emailOptions.FromName);
+        var plainTextBody = EmailLayout.RenderPlainText(innerText, _emailOptions.FromName, _emailOptions.SupportEmail);
 
         var message = new EmailMessage(
             To: input.Email,

@@ -313,10 +313,9 @@ internal class AuthenticationService(
             <h2 style="margin:0 0 16px; font-size:22px; color:#18181b;">Reset Your Password</h2>
             <p style="margin:0 0 8px;">You requested a password reset. Click the button below to set a new password:</p>
             {EmailLayout.Button(resetUrl, "Reset Password")}
-            <p style="margin:0 0 4px; font-size:13px; color:#71717a;">If you didn't request this, you can safely ignore this email.</p>
-            <p style="margin:0; font-size:13px; color:#71717a;">This link will expire in {_emailTokenOptions.ExpiresInHours} hours.</p>
+            {EmailLayout.ExpiryAndSafetyNote(_emailTokenOptions.ExpiresInHours, "If you didn't request this, you can safely ignore this email.")}
             """;
-        var htmlBody = EmailLayout.RenderHtml(innerHtml, _emailOptions.FromName);
+        var htmlBody = EmailLayout.RenderHtml(innerHtml, _emailOptions.FromName, _emailOptions.SupportEmail);
 
         var innerText = $"""
             Reset Your Password
@@ -327,7 +326,7 @@ internal class AuthenticationService(
             If you didn't request this, you can safely ignore this email.
             This link will expire in {_emailTokenOptions.ExpiresInHours} hours.
             """;
-        var plainTextBody = EmailLayout.RenderPlainText(innerText, _emailOptions.FromName);
+        var plainTextBody = EmailLayout.RenderPlainText(innerText, _emailOptions.FromName, _emailOptions.SupportEmail);
 
         var message = new EmailMessage(
             To: email,
@@ -532,9 +531,9 @@ internal class AuthenticationService(
             <h2 style="margin:0 0 16px; font-size:22px; color:#18181b;">Verify Your Email Address</h2>
             <p style="margin:0 0 8px;">Thank you for registering. Please click the button below to verify your email address:</p>
             {EmailLayout.Button(verifyUrl, "Verify Email")}
-            <p style="margin:0; font-size:13px; color:#71717a;">If you didn't create an account, you can safely ignore this email.</p>
+            {EmailLayout.ExpiryAndSafetyNote(_emailTokenOptions.ExpiresInHours, "If you didn't create an account, you can safely ignore this email.")}
             """;
-        var htmlBody = EmailLayout.RenderHtml(innerHtml, _emailOptions.FromName);
+        var htmlBody = EmailLayout.RenderHtml(innerHtml, _emailOptions.FromName, _emailOptions.SupportEmail);
 
         var innerText = $"""
             Verify Your Email Address
@@ -543,8 +542,9 @@ internal class AuthenticationService(
             {verifyUrl}
 
             If you didn't create an account, you can safely ignore this email.
+            This link will expire in {_emailTokenOptions.ExpiresInHours} hours.
             """;
-        var plainTextBody = EmailLayout.RenderPlainText(innerText, _emailOptions.FromName);
+        var plainTextBody = EmailLayout.RenderPlainText(innerText, _emailOptions.FromName, _emailOptions.SupportEmail);
 
         var message = new EmailMessage(
             To: user.Email,

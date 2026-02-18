@@ -32,6 +32,12 @@ public sealed class EmailOptions : IValidatableObject
     public string FrontendBaseUrl { get; init; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the support/contact email address shown in email footers.
+    /// When empty, the contact line is omitted from emails.
+    /// </summary>
+    public string SupportEmail { get; init; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the Resend API configuration. When <see cref="ResendOptions.ApiKey"/> is non-empty,
     /// the application uses Resend for email delivery; otherwise it falls back to the no-op logger.
     /// </summary>

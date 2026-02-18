@@ -10,10 +10,15 @@ internal static class EmailLayout
 {
     /// <summary>
     /// Wraps inner HTML content in a full HTML5 email document with header, content area, and footer.
+    /// When <paramref name="supportEmail"/> is provided, a "Questions?" contact line is included in the footer.
     /// </summary>
-    internal static string RenderHtml(string innerHtml, string appName)
+    internal static string RenderHtml(string innerHtml, string appName, string? supportEmail = null)
     {
         var safeAppName = WebUtility.HtmlEncode(appName);
+
+        var contactLine = string.IsNullOrWhiteSpace(supportEmail)
+            ? string.Empty
+            : $"""<br/>Questions? Contact us at <a href="mailto:{WebUtility.HtmlEncode(supportEmail)}" style="color:#71717a;">{WebUtility.HtmlEncode(supportEmail)}</a>""";
 
         return $$"""
             <!DOCTYPE html>
@@ -65,7 +70,7 @@ internal static class EmailLayout
                                 </tr>
                                 <tr>
                                     <td style="background-color:#ffffff; padding:20px 32px 24px; border-radius:0 0 8px 8px; text-align:center; font-size:13px; color:#71717a; line-height:1.5;">
-                                        Sent by {{safeAppName}}
+                                        Sent by {{safeAppName}}{{contactLine}}
                                     </td>
                                 </tr>
                             </table>
@@ -79,9 +84,14 @@ internal static class EmailLayout
 
     /// <summary>
     /// Wraps inner plain-text content with an app-name header, separator lines, and footer.
+    /// When <paramref name="supportEmail"/> is provided, a contact line is included in the footer.
     /// </summary>
-    internal static string RenderPlainText(string innerText, string appName)
+    internal static string RenderPlainText(string innerText, string appName, string? supportEmail = null)
     {
+        var contactLine = string.IsNullOrWhiteSpace(supportEmail)
+            ? string.Empty
+            : $"\nQuestions? Contact us at {supportEmail}";
+
         return $"""
             {appName}
             ────────────────────────────────
@@ -89,7 +99,18 @@ internal static class EmailLayout
             {innerText}
 
             ────────────────────────────────
-            Sent by {appName}
+            Sent by {appName}{contactLine}
+            """;
+    }
+
+    /// <summary>
+    /// Returns the standard HTML note shown below a CTA button: link expiration and safety disclaimer.
+    /// </summary>
+    internal static string ExpiryAndSafetyNote(int expiresInHours, string safetyMessage)
+    {
+        return $"""
+            <p style="margin:0 0 4px; font-size:13px; color:#71717a;">{WebUtility.HtmlEncode(safetyMessage)}</p>
+            <p style="margin:0; font-size:13px; color:#71717a;">This link will expire in {expiresInHours} hours.</p>
             """;
     }
 

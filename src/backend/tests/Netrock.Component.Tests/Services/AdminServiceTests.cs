@@ -5,6 +5,7 @@ using Microsoft.Extensions.Time.Testing;
 using Netrock.Application.Caching;
 using Netrock.Application.Caching.Constants;
 using Netrock.Application.Features.Admin.Dtos;
+using Netrock.Application.Features.Audit;
 using Netrock.Application.Features.Email;
 using Netrock.Application.Identity.Constants;
 using Netrock.Infrastructure.Features.Email.Options;
@@ -51,10 +52,11 @@ public class AdminServiceTests : IDisposable
         });
         var emailOptions = Options.Create(new EmailOptions { FrontendBaseUrl = "https://example.com" });
         var emailTokenService = new EmailTokenService(_dbContext, _timeProvider, authOptions);
+        var auditService = Substitute.For<IAuditService>();
 
         _sut = new AdminService(
             _userManager, _roleManager, _dbContext, _cacheService, _timeProvider,
-            _emailService, emailTokenService, authOptions, emailOptions, logger);
+            _emailService, emailTokenService, auditService, authOptions, emailOptions, logger);
     }
 
     public void Dispose()

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Netrock.Application.Caching;
 using Netrock.Application.Features.Admin;
+using Netrock.Application.Features.Audit;
 using Netrock.Application.Features.Captcha;
 using Netrock.Application.Features.Email;
 using Netrock.Application.Features.Jobs;
@@ -30,6 +31,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     public IEmailService EmailService { get; } = Substitute.For<IEmailService>();
     public ICacheService CacheService { get; } = Substitute.For<ICacheService>();
     public ICaptchaService CaptchaService { get; } = Substitute.For<ICaptchaService>();
+    public IAuditService AuditService { get; } = Substitute.For<IAuditService>();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -95,6 +97,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             services.RemoveAll<ICaptchaService>();
             services.AddSingleton(CaptchaService);
 
+            services.RemoveAll<IAuditService>();
+            services.AddSingleton(AuditService);
+
             // Override auth scheme — PostConfigure runs after the app's Configure,
             // ensuring the test scheme wins over the JWT Bearer defaults.
             services.PostConfigure<AuthenticationOptions>(options =>
@@ -128,5 +133,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         EmailService.ClearSubstitute(ClearOptions.All);
         CacheService.ClearSubstitute(ClearOptions.All);
         CaptchaService.ClearSubstitute(ClearOptions.All);
+        AuditService.ClearSubstitute(ClearOptions.All);
     }
 }

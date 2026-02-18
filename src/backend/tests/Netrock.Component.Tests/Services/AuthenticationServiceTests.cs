@@ -7,6 +7,7 @@ using Netrock.Application.Caching;
 using Netrock.Application.Caching.Constants;
 using Netrock.Application.Cookies;
 using Netrock.Application.Cookies.Constants;
+using Netrock.Application.Features.Audit;
 using Netrock.Application.Features.Authentication.Dtos;
 using Netrock.Application.Features.Email;
 using Netrock.Application.Identity;
@@ -69,6 +70,7 @@ public class AuthenticationServiceTests : IDisposable
         });
 
         var emailTokenService = new EmailTokenService(_dbContext, _timeProvider, authOptions);
+        var auditService = Substitute.For<IAuditService>();
 
         _sut = new AuthenticationService(
             _userManager,
@@ -80,6 +82,7 @@ public class AuthenticationServiceTests : IDisposable
             _cacheService,
             _emailService,
             emailTokenService,
+            auditService,
             authOptions,
             emailOptions,
             Substitute.For<ILogger<AuthenticationService>>(),

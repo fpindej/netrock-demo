@@ -3,6 +3,7 @@ using Netrock.Application.Caching;
 using Netrock.Application.Caching.Constants;
 using Netrock.Application.Cookies;
 using Netrock.Application.Cookies.Constants;
+using Netrock.Application.Features.Audit;
 using Netrock.Application.Features.Authentication.Dtos;
 using Netrock.Application.Identity;
 using Netrock.Application.Identity.Constants;
@@ -35,9 +36,11 @@ public class UserServiceTests : IDisposable
         _cacheService = Substitute.For<ICacheService>();
         _cookieService = Substitute.For<ICookieService>();
         _dbContext = TestDbContextFactory.Create();
+        var auditService = Substitute.For<IAuditService>();
 
         _sut = new UserService(
-            _userManager, _roleManager, _userContext, _cacheService, _dbContext, _cookieService);
+            _userManager, _roleManager, _userContext, _cacheService, _dbContext, _cookieService,
+            auditService);
     }
 
     public void Dispose()

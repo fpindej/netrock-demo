@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ using Netrock.Application.Caching;
 using Netrock.Application.Caching.Constants;
 using Netrock.Application.Features.Admin;
 using Netrock.Application.Features.Admin.Dtos;
+using Netrock.Application.Features.Audit;
 using Netrock.Application.Identity.Constants;
 using Netrock.Application.Features.Email;
 using Netrock.Shared;
@@ -40,6 +42,7 @@ internal class AdminService(
     TimeProvider timeProvider,
     IEmailService emailService,
     EmailTokenService emailTokenService,
+    IAuditService auditService,
     IOptions<AuthenticationOptions> authenticationOptions,
     IOptions<EmailOptions> emailOptions,
     ILogger<AdminService> logger) : IAdminService
@@ -142,6 +145,10 @@ internal class AdminService(
         logger.LogInformation("Role '{Role}' assigned to user '{UserId}' by admin '{CallerUserId}'",
             input.Role, userId, callerUserId);
 
+        await auditService.LogAsync(AuditActions.AdminAssignRole, userId: callerUserId,
+            targetEntityType: "User", targetEntityId: userId,
+            metadata: JsonSerializer.Serialize(new { role = input.Role }), ct: cancellationToken);
+
         return Result.Success();
     }
 
@@ -205,6 +212,10 @@ internal class AdminService(
         logger.LogInformation("Role '{Role}' removed from user '{UserId}' by admin '{CallerUserId}'",
             role, userId, callerUserId);
 
+        await auditService.LogAsync(AuditActions.AdminRemoveRole, userId: callerUserId,
+            targetEntityType: "User", targetEntityId: userId,
+            metadata: JsonSerializer.Serialize(new { role }), ct: cancellationToken);
+
         return Result.Success();
     }
 
@@ -245,6 +256,9 @@ internal class AdminService(
         logger.LogWarning("User '{UserId}' has been locked out by admin '{CallerUserId}'",
             userId, callerUserId);
 
+        await auditService.LogAsync(AuditActions.AdminLockUser, userId: callerUserId,
+            targetEntityType: "User", targetEntityId: userId, ct: cancellationToken);
+
         return Result.Success();
     }
 
@@ -279,6 +293,9 @@ internal class AdminService(
         await InvalidateUserCacheAsync(userId);
         logger.LogInformation("User '{UserId}' has been unlocked by admin '{CallerUserId}'",
             userId, callerUserId);
+
+        await auditService.LogAsync(AuditActions.AdminUnlockUser, userId: callerUserId,
+            targetEntityType: "User", targetEntityId: userId, ct: cancellationToken);
 
         return Result.Success();
     }
@@ -326,6 +343,9 @@ internal class AdminService(
         await InvalidateUserCacheAsync(userId);
         logger.LogWarning("User '{UserId}' has been deleted by admin '{CallerUserId}'",
             userId, callerUserId);
+
+        await auditService.LogAsync(AuditActions.AdminDeleteUser, userId: callerUserId,
+            targetEntityType: "User", targetEntityId: userId, ct: cancellationToken);
 
         return Result.Success();
     }
@@ -396,6 +416,9 @@ internal class AdminService(
         logger.LogInformation("Email for user '{UserId}' manually verified by admin '{CallerUserId}'",
             userId, callerUserId);
 
+        await auditService.LogAsync(AuditActions.AdminVerifyEmail, userId: callerUserId,
+            targetEntityType: "User", targetEntityId: userId, ct: cancellationToken);
+
         return Result.Success();
     }
 
@@ -452,6 +475,9 @@ internal class AdminService(
 
         logger.LogInformation("Password reset email sent for user '{UserId}' by admin '{CallerUserId}'",
             userId, callerUserId);
+
+        await auditService.LogAsync(AuditActions.AdminSendPasswordReset, userId: callerUserId,
+            targetEntityType: "User", targetEntityId: userId, ct: cancellationToken);
 
         return Result.Success();
     }
@@ -525,6 +551,9 @@ internal class AdminService(
 
         logger.LogInformation("User '{UserId}' created via admin invitation for email '{Email}' by admin '{CallerUserId}'",
             user.Id, input.Email, callerUserId);
+
+        await auditService.LogAsync(AuditActions.AdminCreateUser, userId: callerUserId,
+            targetEntityType: "User", targetEntityId: user.Id, ct: cancellationToken);
 
         return Result<Guid>.Success(user.Id);
     }

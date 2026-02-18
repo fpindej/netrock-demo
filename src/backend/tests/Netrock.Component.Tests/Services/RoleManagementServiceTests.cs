@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Netrock.Application.Caching;
 using Netrock.Application.Features.Admin.Dtos;
+using Netrock.Application.Features.Audit;
 using Netrock.Application.Identity.Constants;
 using Netrock.Component.Tests.Fixtures;
 using Netrock.Infrastructure.Features.Admin.Services;
@@ -25,10 +26,11 @@ public class RoleManagementServiceTests : IDisposable
         _userManager = IdentityMockHelpers.CreateMockUserManager();
         _cacheService = Substitute.For<ICacheService>();
         _dbContext = TestDbContextFactory.Create();
+        var auditService = Substitute.For<IAuditService>();
         var logger = Substitute.For<ILogger<RoleManagementService>>();
 
         _sut = new RoleManagementService(
-            _roleManager, _userManager, _dbContext, _cacheService, logger);
+            _roleManager, _userManager, _dbContext, _cacheService, auditService, logger);
     }
 
     public void Dispose()

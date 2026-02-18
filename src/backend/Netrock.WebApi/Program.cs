@@ -3,6 +3,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Netrock.Infrastructure.Features.Admin.Extensions;
+using Netrock.Infrastructure.Features.Audit.Extensions;
 using Netrock.Infrastructure.Features.Captcha.Extensions;
 using Netrock.Infrastructure.Features.Email.Extensions;
 using Netrock.Infrastructure.Features.Jobs.Extensions;
@@ -57,6 +58,9 @@ try
 
         Log.Debug("Adding admin services");
         builder.Services.AddAdminServices();
+
+        Log.Debug("Adding audit services");
+        builder.Services.AddAuditServices();
 
         Log.Debug("Adding email services");
         builder.Services.AddEmailServices(builder.Configuration);

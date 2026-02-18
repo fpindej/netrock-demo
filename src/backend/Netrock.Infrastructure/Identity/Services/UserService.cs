@@ -4,6 +4,7 @@ using Netrock.Application.Caching;
 using Netrock.Application.Caching.Constants;
 using Netrock.Application.Cookies;
 using Netrock.Application.Cookies.Constants;
+using Netrock.Application.Features.Audit;
 using Netrock.Application.Features.Authentication.Dtos;
 using Netrock.Application.Identity;
 using Netrock.Application.Identity.Constants;
@@ -23,7 +24,8 @@ internal class UserService(
     IUserContext userContext,
     ICacheService cacheService,
     NetrockDbContext dbContext,
-    ICookieService cookieService) : IUserService
+    ICookieService cookieService,
+    IAuditService auditService) : IUserService
 {
     private static readonly CacheEntryOptions UserCacheOptions =
         CacheEntryOptions.AbsoluteExpireIn(TimeSpan.FromMinutes(1));
@@ -143,6 +145,8 @@ internal class UserService(
             Permissions: permissions,
             IsEmailConfirmed: user.EmailConfirmed);
 
+        await auditService.LogAsync(AuditActions.ProfileUpdate, userId: userId.Value, ct: cancellationToken);
+
         return Result<UserOutput>.Success(output);
     }
 
@@ -175,6 +179,8 @@ internal class UserService(
         {
             return lastAdminResult;
         }
+
+        await auditService.LogAsync(AuditActions.AccountDeletion, userId: userId.Value, ct: cancellationToken);
 
         await RevokeUserTokens(user, userId.Value, cancellationToken);
         await DeleteUser(user);

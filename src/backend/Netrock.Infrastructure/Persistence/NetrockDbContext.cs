@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Netrock.Domain.Entities;
+using Netrock.Infrastructure.Features.Audit.Models;
 using Netrock.Infrastructure.Features.Authentication.Models;
 using Netrock.Infrastructure.Features.Jobs.Models;
 using Netrock.Infrastructure.Persistence.Extensions;
@@ -28,6 +29,11 @@ internal class NetrockDbContext(DbContextOptions<NetrockDbContext> options)
     /// Gets or sets the paused jobs table for persisting pause state across restarts.
     /// </summary>
     public DbSet<PausedJob> PausedJobs { get; set; }
+
+    /// <summary>
+    /// Gets or sets the audit events table for the append-only audit log.
+    /// </summary>
+    public DbSet<AuditEvent> AuditEvents { get; set; }
 
     /// <summary>
     /// Gets or sets the notes table for user-owned notes.

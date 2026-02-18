@@ -55,6 +55,10 @@
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
+		<DropdownMenu.Item onclick={() => goto(resolve('/privacy'))}>
+			{m.nav_privacy()}
+		</DropdownMenu.Item>
+		<DropdownMenu.Separator />
 		<DropdownMenu.Item onclick={logout}>
 			{m.nav_logout()}
 			<DropdownMenu.Shortcut>{getShortcutSymbol(ShortcutAction.Logout)}</DropdownMenu.Shortcut>

@@ -11,7 +11,13 @@
 	import { toast } from '$lib/components/ui/sonner';
 	import { invalidateAll } from '$app/navigation';
 	import { createCooldown, createFieldShakes } from '$lib/state';
-	import { getAuditActionLabel, formatAuditDate } from '$lib/utils/audit';
+	import {
+		getAuditActionLabel,
+		getAuditActionVariant,
+		getAuditDescription,
+		formatAuditDate
+	} from '$lib/utils/audit';
+	import { Timeline, TimelineItem, TimelineContent } from '$lib/components/ui/timeline';
 	import * as m from '$lib/paraglide/messages';
 	import type { Contact, AuditEvent } from '$lib/types';
 
@@ -259,16 +265,20 @@
 					<p class="mb-2 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
 						{m.contacts_edit_activity()}
 					</p>
-					<div class="space-y-2">
-						{#each auditEvents as event (event.id)}
-							<div class="flex items-center justify-between text-sm">
-								<span class="text-muted-foreground">{getAuditActionLabel(event.action)}</span>
-								<span class="text-xs text-muted-foreground">
-									{formatAuditDate(event.createdAt)}
-								</span>
-							</div>
+					<Timeline>
+						{#each auditEvents as event, i (event.id)}
+							<TimelineItem
+								variant={getAuditActionVariant(event.action)}
+								isLast={i === auditEvents.length - 1}
+							>
+								<TimelineContent
+									title={getAuditActionLabel(event.action)}
+									timestamp={formatAuditDate(event.createdAt)}
+									description={getAuditDescription(event.action, event.metadata)}
+								/>
+							</TimelineItem>
 						{/each}
-					</div>
+					</Timeline>
 				</div>
 			{/if}
 		</div>

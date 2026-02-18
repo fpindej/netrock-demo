@@ -215,11 +215,11 @@
 	<table class="w-full table-fixed">
 		<colgroup>
 			<col class="w-10" />
-			<col class="w-[35%]" />
-			<col class="w-[20%]" />
-			<col class="w-[12%]" />
-			<col class="w-[12%]" />
-			<col class="w-[12%]" />
+			<col class="w-[30%]" />
+			<col class="w-[18%]" />
+			<col class="w-[14%]" />
+			<col class="w-[13%]" />
+			<col class="w-[13%]" />
 			<col class="w-20" />
 		</colgroup>
 		<thead>
@@ -279,12 +279,17 @@
 						<span class="block truncate">{contact.company ?? ''}</span>
 					</td>
 					<td class="px-4 py-3">
-						<Badge variant="secondary" class={statusColors[contact.status ?? ''] ?? ''}>
+						<Badge
+							variant="secondary"
+							class="max-w-full truncate {statusColors[contact.status ?? ''] ?? ''}"
+						>
 							{statusLabels[contact.status ?? '']?.() ?? contact.status}
 						</Badge>
 					</td>
 					<td class="px-4 py-3 text-sm text-muted-foreground">
-						{sourceLabels[contact.source ?? '']?.() ?? contact.source}
+						<span class="block truncate"
+							>{sourceLabels[contact.source ?? '']?.() ?? contact.source}</span
+						>
 					</td>
 					<td class="px-4 py-3 text-end text-sm font-medium">
 						{formatValue(contact.value)}
@@ -364,7 +369,10 @@
 					</div>
 				</div>
 				<div class="ms-7 mt-2 flex flex-wrap items-center gap-2">
-					<Badge variant="secondary" class={statusColors[contact.status ?? ''] ?? ''}>
+					<Badge
+						variant="secondary"
+						class="max-w-full truncate {statusColors[contact.status ?? ''] ?? ''}"
+					>
 						{statusLabels[contact.status ?? '']?.() ?? contact.status}
 					</Badge>
 					{#if contact.value != null}

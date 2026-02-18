@@ -53,6 +53,7 @@
 	"nav_dashboard": "Dashboard",
 	"nav_profile": "Profile",
 	"nav_settings": "Settings",
+	"nav_privacy": "Privacy",
 	"nav_logout": "Logout",
 	"nav_loggedInAs": "Logged in as",
 	"nav_collapse": "Collapse sidebar",

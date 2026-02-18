@@ -9,12 +9,14 @@ namespace Netrock.Application.Features.Contacts;
 public interface IContactsService
 {
     /// <summary>
-    /// Gets all contacts for the specified user.
+    /// Gets a paginated list of contacts for the specified user.
     /// </summary>
     /// <param name="userId">The owner's user ID.</param>
+    /// <param name="pageNumber">The page number (1-based).</param>
+    /// <param name="pageSize">The number of items per page.</param>
     /// <param name="ct">A cancellation token.</param>
-    /// <returns>A result containing the list of contacts.</returns>
-    Task<Result<List<ContactOutput>>> GetContactsAsync(Guid userId, CancellationToken ct);
+    /// <returns>A result containing the paginated contacts and total count.</returns>
+    Task<Result<(List<ContactOutput> Items, int TotalCount)>> GetContactsAsync(Guid userId, int pageNumber, int pageSize, CancellationToken ct);
 
     /// <summary>
     /// Gets a single contact by ID, scoped to the specified user.
@@ -60,6 +62,24 @@ public interface IContactsService
     /// <param name="ct">A cancellation token.</param>
     /// <returns>A result containing the pipeline statistics.</returns>
     Task<Result<ContactsStatsOutput>> GetStatsAsync(Guid userId, CancellationToken ct);
+
+    /// <summary>
+    /// Deletes multiple contacts, scoped to the specified user.
+    /// </summary>
+    /// <param name="userId">The owner's user ID.</param>
+    /// <param name="contactIds">The contact IDs to delete.</param>
+    /// <param name="ct">A cancellation token.</param>
+    /// <returns>A result containing the number of deleted contacts.</returns>
+    Task<Result<int>> BulkDeleteAsync(Guid userId, List<Guid> contactIds, CancellationToken ct);
+
+    /// <summary>
+    /// Toggles the favorite status of a contact.
+    /// </summary>
+    /// <param name="userId">The owner's user ID.</param>
+    /// <param name="contactId">The contact ID.</param>
+    /// <param name="ct">A cancellation token.</param>
+    /// <returns>A result containing the updated contact.</returns>
+    Task<Result<ContactOutput>> ToggleFavoriteAsync(Guid userId, Guid contactId, CancellationToken ct);
 
     /// <summary>
     /// Seeds sample contacts for the specified user.

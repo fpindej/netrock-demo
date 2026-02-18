@@ -11,6 +11,7 @@ export type ListUsersResponse = components['schemas']['ListUsersResponse'];
 export type RoleDetail = components['schemas']['RoleDetailResponse'];
 export type PermissionGroup = components['schemas']['PermissionGroupResponse'];
 export type Contact = components['schemas']['ContactResponse'];
+export type ListContactsResponse = components['schemas']['ListContactsResponse'];
 export type ContactsStats = components['schemas']['ContactsStatsResponse'];
 export type AuditEvent = components['schemas']['AuditEventResponse'];
 export type ListAuditEventsResponse = components['schemas']['ListAuditEventsResponse'];

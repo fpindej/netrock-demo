@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { Star, Pencil, Trash2 } from '@lucide/svelte';
+	import { Star, Pencil, Trash2, Loader2 } from '@lucide/svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { Badge } from '$lib/components/ui/badge';
+	import { Checkbox } from '$lib/components/ui/checkbox';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { browserClient } from '$lib/api';
 	import { toast } from '$lib/components/ui/sonner';
 	import { invalidateAll } from '$app/navigation';
+	import { SvelteSet } from 'svelte/reactivity';
 	import * as m from '$lib/paraglide/messages';
 	import type { Contact } from '$lib/types';
 
@@ -39,6 +41,31 @@
 		Other: m.contacts_source_Other
 	};
 
+	// Selection state
+	let selectedIds = new SvelteSet<string>();
+
+	let allSelected = $derived(contacts.length > 0 && selectedIds.size === contacts.length);
+	let someSelected = $derived(selectedIds.size > 0 && selectedIds.size < contacts.length);
+
+	function toggleSelectAll() {
+		if (allSelected) {
+			selectedIds.clear();
+		} else {
+			for (const c of contacts) {
+				selectedIds.add(c.id!);
+			}
+		}
+	}
+
+	function toggleSelect(id: string) {
+		if (selectedIds.has(id)) {
+			selectedIds.delete(id);
+		} else {
+			selectedIds.add(id);
+		}
+	}
+
+	// Single delete state
 	let deleteConfirmOpen = $state(false);
 	let contactToDelete = $state<Contact | null>(null);
 	let isDeleting = $state(false);
@@ -68,6 +95,49 @@
 		}
 	}
 
+	// Bulk delete state
+	let bulkDeleteConfirmOpen = $state(false);
+	let isBulkDeleting = $state(false);
+
+	async function bulkDelete() {
+		isBulkDeleting = true;
+		const ids = [...selectedIds];
+
+		const { response } = await browserClient.DELETE('/api/v1/contacts/bulk', {
+			body: { ids }
+		});
+
+		isBulkDeleting = false;
+
+		if (response.ok) {
+			toast.success(m.contacts_bulkDelete_success({ count: ids.length }));
+			bulkDeleteConfirmOpen = false;
+			selectedIds.clear();
+			await invalidateAll();
+		} else {
+			toast.error(m.contacts_bulkDelete_error());
+		}
+	}
+
+	// Favorite toggle
+	let togglingFavoriteId = $state<string | null>(null);
+
+	async function toggleFavorite(contact: Contact) {
+		togglingFavoriteId = contact.id!;
+
+		const { response } = await browserClient.PATCH('/api/v1/contacts/{id}/favorite', {
+			params: { path: { id: contact.id! } }
+		});
+
+		togglingFavoriteId = null;
+
+		if (response.ok) {
+			await invalidateAll();
+		} else {
+			toast.error(m.contacts_favorite_error());
+		}
+	}
+
 	function formatValue(value: number | null | undefined) {
 		if (value == null) return '';
 		return new Intl.NumberFormat(undefined, {
@@ -87,11 +157,31 @@
 	}
 </script>
 
+<!-- Bulk actions bar -->
+{#if selectedIds.size > 0}
+	<div class="flex items-center gap-3 border-b bg-muted/50 px-4 py-2">
+		<span class="text-sm font-medium">
+			{m.contacts_selected({ count: selectedIds.size })}
+		</span>
+		<Button variant="destructive" size="sm" onclick={() => (bulkDeleteConfirmOpen = true)}>
+			<Trash2 class="me-2 h-3.5 w-3.5" />
+			{m.contacts_bulkDelete()}
+		</Button>
+	</div>
+{/if}
+
 <!-- Desktop table -->
 <div class="hidden md:block">
 	<table class="w-full">
 		<thead>
 			<tr class="border-b text-sm text-muted-foreground">
+				<th class="px-4 py-3 text-start">
+					<Checkbox
+						checked={allSelected}
+						indeterminate={someSelected}
+						onCheckedChange={toggleSelectAll}
+					/>
+				</th>
 				<th class="px-4 py-3 text-start font-medium">{m.contacts_table_name()}</th>
 				<th class="px-4 py-3 text-start font-medium">{m.contacts_table_company()}</th>
 				<th class="px-4 py-3 text-start font-medium">{m.contacts_table_status()}</th>
@@ -102,12 +192,32 @@
 		</thead>
 		<tbody>
 			{#each contacts as contact (contact.id)}
-				<tr class="border-b transition-colors hover:bg-muted/50">
+				<tr
+					class="border-b transition-colors hover:bg-muted/50 {selectedIds.has(contact.id!)
+						? 'bg-muted/30'
+						: ''}"
+				>
+					<td class="px-4 py-3">
+						<Checkbox
+							checked={selectedIds.has(contact.id!)}
+							onCheckedChange={() => toggleSelect(contact.id!)}
+						/>
+					</td>
 					<td class="px-4 py-3">
 						<div class="flex items-center gap-2">
-							{#if contact.isFavorite}
-								<Star class="h-3.5 w-3.5 shrink-0 fill-yellow-400 text-yellow-400" />
-							{/if}
+							<button
+								class="shrink-0 rounded p-0.5 transition-colors hover:bg-muted"
+								disabled={togglingFavoriteId === contact.id}
+								onclick={() => toggleFavorite(contact)}
+							>
+								{#if togglingFavoriteId === contact.id}
+									<Loader2 class="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+								{:else if contact.isFavorite}
+									<Star class="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+								{:else}
+									<Star class="h-3.5 w-3.5 text-muted-foreground/40" />
+								{/if}
+							</button>
 							<div>
 								<span class="font-medium">{contact.name}</span>
 								{#if contact.email}
@@ -154,13 +264,33 @@
 <!-- Mobile cards -->
 <div class="space-y-3 md:hidden">
 	{#each contacts as contact (contact.id)}
-		<div class="rounded-lg border p-4 transition-colors hover:bg-muted/50">
-			<div class="flex items-start justify-between gap-2">
+		<div
+			class="rounded-lg border p-4 transition-colors hover:bg-muted/50 {selectedIds.has(contact.id!)
+				? 'bg-muted/30'
+				: ''}"
+		>
+			<div class="flex items-start gap-3">
+				<div class="pt-0.5">
+					<Checkbox
+						checked={selectedIds.has(contact.id!)}
+						onCheckedChange={() => toggleSelect(contact.id!)}
+					/>
+				</div>
 				<div class="min-w-0 flex-1">
 					<div class="flex items-center gap-2">
-						{#if contact.isFavorite}
-							<Star class="h-3.5 w-3.5 shrink-0 fill-yellow-400 text-yellow-400" />
-						{/if}
+						<button
+							class="shrink-0 rounded p-0.5 transition-colors hover:bg-muted"
+							disabled={togglingFavoriteId === contact.id}
+							onclick={() => toggleFavorite(contact)}
+						>
+							{#if togglingFavoriteId === contact.id}
+								<Loader2 class="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+							{:else if contact.isFavorite}
+								<Star class="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+							{:else}
+								<Star class="h-3.5 w-3.5 text-muted-foreground/40" />
+							{/if}
+						</button>
 						<h4 class="truncate font-medium">{contact.name}</h4>
 					</div>
 					{#if contact.company}
@@ -184,7 +314,7 @@
 					</Button>
 				</div>
 			</div>
-			<div class="mt-2 flex flex-wrap items-center gap-2">
+			<div class="ms-7 mt-2 flex flex-wrap items-center gap-2">
 				<Badge variant="secondary" class={statusColors[contact.status ?? ''] ?? ''}>
 					{statusLabels[contact.status ?? '']?.() ?? contact.status}
 				</Badge>
@@ -210,6 +340,29 @@
 			</Button>
 			<Button variant="destructive" disabled={isDeleting} onclick={deleteContact}>
 				{m.contacts_delete_confirm()}
+			</Button>
+		</Dialog.Footer>
+	</Dialog.Content>
+</Dialog.Root>
+
+<!-- Bulk delete confirmation dialog -->
+<Dialog.Root bind:open={bulkDeleteConfirmOpen}>
+	<Dialog.Content>
+		<Dialog.Header>
+			<Dialog.Title>{m.contacts_bulkDelete_title()}</Dialog.Title>
+			<Dialog.Description>
+				{m.contacts_bulkDelete_description({ count: selectedIds.size })}
+			</Dialog.Description>
+		</Dialog.Header>
+		<Dialog.Footer class="flex-col-reverse sm:flex-row">
+			<Button variant="outline" onclick={() => (bulkDeleteConfirmOpen = false)}>
+				{m.common_cancel()}
+			</Button>
+			<Button variant="destructive" disabled={isBulkDeleting} onclick={bulkDelete}>
+				{#if isBulkDeleting}
+					<Loader2 class="me-2 h-4 w-4 animate-spin" />
+				{/if}
+				{m.contacts_bulkDelete_confirm({ count: selectedIds.size })}
 			</Button>
 		</Dialog.Footer>
 	</Dialog.Content>

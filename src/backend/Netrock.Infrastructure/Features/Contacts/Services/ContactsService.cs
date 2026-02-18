@@ -5,6 +5,7 @@ using Netrock.Application.Features.Contacts;
 using Netrock.Application.Features.Contacts.Dtos;
 using Netrock.Domain.Entities;
 using Netrock.Infrastructure.Persistence;
+using Netrock.Infrastructure.Persistence.Extensions;
 using Netrock.Shared;
 
 namespace Netrock.Infrastructure.Features.Contacts.Services;
@@ -16,16 +17,21 @@ namespace Netrock.Infrastructure.Features.Contacts.Services;
 internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService auditService) : IContactsService
 {
     /// <inheritdoc />
-    public async Task<Result<List<ContactOutput>>> GetContactsAsync(Guid userId, CancellationToken ct)
+    public async Task<Result<(List<ContactOutput> Items, int TotalCount)>> GetContactsAsync(Guid userId, int pageNumber, int pageSize, CancellationToken ct)
     {
-        var contacts = await dbContext.Contacts
+        var query = dbContext.Contacts
             .Where(c => c.UserId == userId)
             .OrderByDescending(c => c.IsFavorite)
-            .ThenByDescending(c => c.CreatedAt)
+            .ThenByDescending(c => c.CreatedAt);
+
+        var totalCount = await query.CountAsync(ct);
+
+        var contacts = await query
+            .Paginate(pageNumber, pageSize)
             .Select(c => ToOutput(c))
             .ToListAsync(ct);
 
-        return Result<List<ContactOutput>>.Success(contacts);
+        return Result<(List<ContactOutput>, int)>.Success((contacts, totalCount));
     }
 
     /// <inheritdoc />
@@ -168,6 +174,68 @@ internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService 
             recentContacts);
 
         return Result<ContactsStatsOutput>.Success(stats);
+    }
+
+    /// <inheritdoc />
+    public async Task<Result<int>> BulkDeleteAsync(Guid userId, List<Guid> contactIds, CancellationToken ct)
+    {
+        var contacts = await dbContext.Contacts
+            .Where(c => c.UserId == userId && contactIds.Contains(c.Id))
+            .ToListAsync(ct);
+
+        foreach (var contact in contacts)
+        {
+            contact.SoftDelete();
+        }
+
+        await dbContext.SaveChangesAsync(ct);
+
+        foreach (var contact in contacts)
+        {
+            await auditService.LogAsync(
+                AuditActions.ContactDelete,
+                userId,
+                targetEntityType: "Contact",
+                targetEntityId: contact.Id,
+                ct: ct);
+        }
+
+        return Result<int>.Success(contacts.Count);
+    }
+
+    /// <inheritdoc />
+    public async Task<Result<ContactOutput>> ToggleFavoriteAsync(Guid userId, Guid contactId, CancellationToken ct)
+    {
+        var contact = await dbContext.Contacts
+            .Where(c => c.UserId == userId && c.Id == contactId)
+            .FirstOrDefaultAsync(ct);
+
+        if (contact is null)
+        {
+            return Result<ContactOutput>.Failure(ErrorMessages.Contacts.NotFound, ErrorType.NotFound);
+        }
+
+        contact.Update(
+            contact.Name,
+            contact.Email,
+            contact.Company,
+            contact.Phone,
+            contact.Status,
+            contact.Source,
+            contact.Value,
+            contact.Notes,
+            !contact.IsFavorite);
+
+        await dbContext.SaveChangesAsync(ct);
+
+        await auditService.LogAsync(
+            AuditActions.ContactUpdate,
+            userId,
+            targetEntityType: "Contact",
+            targetEntityId: contact.Id,
+            ct: ct);
+
+        return Result<ContactOutput>.Success(ToOutput(contact));
     }
 
     /// <inheritdoc />

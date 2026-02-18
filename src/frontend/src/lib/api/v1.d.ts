@@ -271,10 +271,15 @@ export interface paths {
 			path?: never;
 			cookie?: never;
 		};
-		/** Gets all contacts for the current user. */
+		/** Gets a paginated list of contacts for the current user. */
 		get: {
 			parameters: {
-				query?: never;
+				query?: {
+					/** @description The page number to retrieve (1-based). */
+					PageNumber?: number;
+					/** @description The number of items per page (maximum 100). */
+					PageSize?: number;
+				};
 				header?: never;
 				path?: never;
 				cookie?: never;
@@ -287,7 +292,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						'application/json': components['schemas']['ContactResponse'][];
+						'application/json': components['schemas']['ListContactsResponse'];
 					};
 				};
 				/** @description If the user is not authenticated. */
@@ -501,6 +506,121 @@ export interface paths {
 		options?: never;
 		head?: never;
 		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/contacts/bulk': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		/** Deletes multiple contacts at once. */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['BulkDeleteContactsRequest'];
+				};
+			};
+			responses: {
+				/** @description Returns the count of deleted contacts. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': number;
+					};
+				};
+				/** @description If the request is invalid. */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/contacts/{id}/favorite': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		/** Toggles the favorite status of a contact. */
+		patch: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The contact ID. */
+					id: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Contact favorite status toggled. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ContactResponse'];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the contact was not found. */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
 		trace?: never;
 	};
 	'/api/v1/contacts/stats': {
@@ -3123,6 +3243,11 @@ export interface components {
 			/** @description The new password to set for the account. */
 			newPassword: string;
 		};
+		/** @description Request to delete multiple contacts at once. */
+		BulkDeleteContactsRequest: {
+			/** @description The IDs of the contacts to delete. */
+			ids: string[];
+		};
 		/** @description Represents a contact in API responses. */
 		ContactResponse: {
 			/**
@@ -3265,6 +3390,35 @@ export interface components {
 			error?: null | string;
 		};
 		/** @description Paginated response containing a list of audit events. */
+		/** @description Paginated response containing a list of contacts. */
+		ListContactsResponse: {
+			/** @description The contacts for the current page. */
+			items?: components['schemas']['ContactResponse'][];
+			/**
+			 * Format: int32
+			 * @description The total number of items (across all pages).
+			 */
+			totalCount?: number;
+			/**
+			 * Format: int32
+			 * @description The current page number.
+			 */
+			pageNumber?: number;
+			/**
+			 * Format: int32
+			 * @description The number of items per page.
+			 */
+			pageSize?: number;
+			/**
+			 * Format: int32
+			 * @description The total number of pages.
+			 */
+			totalPages?: number;
+			/** @description Indicates if there is a previous page. */
+			hasPreviousPage?: boolean;
+			/** @description Indicates if there is a next page. */
+			hasNextPage?: boolean;
+		};
 		ListAuditEventsResponse: {
 			/** @description The audit events for the current page. */
 			items?: components['schemas']['AuditEventResponse'][];

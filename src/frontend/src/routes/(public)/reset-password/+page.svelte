@@ -17,4 +17,4 @@
 	<meta name="description" content={pageDescription} />
 </svelte:head>
 
-<ResetPasswordForm token={data.token} invited={data.invited} />
+<ResetPasswordForm token={data.token} invited={data.invited} user={data.user} />

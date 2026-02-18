@@ -149,6 +149,12 @@
 	"auth_resetPassword_invalidLinkDescription": "Tento odkaz pro obnovení hesla je neplatný nebo vypršel.",
 	"auth_resetPassword_requestNew": "Požádat o nový odkaz",
 	"auth_resetPassword_errorTitle": "Něco se pokazilo",
+	"auth_resetPassword_alreadySignedInTitle": "Již jste přihlášeni",
+	"auth_resetPassword_alreadySignedInDescription": "Jste přihlášeni jako {email}. Pro pokračování v obnově hesla se odhlaste.",
+	"auth_resetPassword_alreadySignedInInvitedDescription": "Jste přihlášeni jako {email}. Pro přijetí pozvánky a nastavení nového účtu se musíte nejprve odhlásit.",
+	"auth_resetPassword_signOutAndContinue": "Odhlásit se a pokračovat",
+	"auth_resetPassword_signingOut": "Odhlašování...",
+	"auth_resetPassword_goToDashboard": "Přejít na nástěnku",
 
 	"auth_setPassword_title": "Nastavte si heslo",
 	"auth_setPassword_subtitle": "Zvolte si heslo ke svému novému účtu.",

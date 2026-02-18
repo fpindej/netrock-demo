@@ -149,6 +149,12 @@
 	"auth_resetPassword_invalidLinkDescription": "This password reset link is invalid or has expired.",
 	"auth_resetPassword_requestNew": "Request a new link",
 	"auth_resetPassword_errorTitle": "Something went wrong",
+	"auth_resetPassword_alreadySignedInTitle": "Already signed in",
+	"auth_resetPassword_alreadySignedInDescription": "You're currently signed in as {email}. Sign out to continue with your password reset.",
+	"auth_resetPassword_alreadySignedInInvitedDescription": "You're currently signed in as {email}. To accept this invitation and set up your new account, you need to sign out first.",
+	"auth_resetPassword_signOutAndContinue": "Sign out and continue",
+	"auth_resetPassword_signingOut": "Signing out...",
+	"auth_resetPassword_goToDashboard": "Go to dashboard",
 
 	"auth_setPassword_title": "Set your password",
 	"auth_setPassword_subtitle": "Choose a password for your new account.",

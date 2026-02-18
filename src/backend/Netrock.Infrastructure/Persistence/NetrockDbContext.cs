@@ -36,9 +36,9 @@ internal class NetrockDbContext(DbContextOptions<NetrockDbContext> options)
     public DbSet<AuditEvent> AuditEvents { get; set; }
 
     /// <summary>
-    /// Gets or sets the notes table for user-owned notes.
+    /// Gets or sets the contacts table for user-owned CRM contacts.
     /// </summary>
-    public DbSet<Note> Notes { get; set; }
+    public DbSet<Contact> Contacts { get; set; }
 
     /// <summary>
     /// Configures the model by applying all <see cref="IEntityTypeConfiguration{TEntity}"/> from this assembly,

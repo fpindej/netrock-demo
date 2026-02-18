@@ -9,7 +9,7 @@
 		Rocket,
 		ShieldCheck,
 		User,
-		StickyNote,
+		Users as UsersIcon,
 		BarChart3,
 		Users,
 		Shield,
@@ -114,9 +114,9 @@
 			number: 4,
 			title: m.guide_step4_title,
 			description: m.guide_step4_description,
-			icon: StickyNote,
+			icon: UsersIcon,
 			content: 'link',
-			href: resolve('/notes'),
+			href: resolve('/contacts'),
 			linkText: m.guide_step4_link
 		},
 		{

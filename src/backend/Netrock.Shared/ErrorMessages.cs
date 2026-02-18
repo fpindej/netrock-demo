@@ -123,6 +123,14 @@ public static class ErrorMessages
     }
 
     /// <summary>
+    /// Contact pipeline error messages.
+    /// </summary>
+    public static class Contacts
+    {
+        public const string NotFound = "Contact not found.";
+    }
+
+    /// <summary>
     /// Generic entity operation error messages (repository layer).
     /// </summary>
     public static class Entity

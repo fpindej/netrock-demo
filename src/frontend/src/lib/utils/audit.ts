@@ -50,6 +50,12 @@ export function getAuditActionLabel(action: string | undefined): string {
 			return m.audit_action_adminDeleteRole();
 		case 'AdminSetRolePermissions':
 			return m.audit_action_adminSetRolePermissions();
+		case 'ContactCreate':
+			return m.audit_action_contactCreate();
+		case 'ContactUpdate':
+			return m.audit_action_contactUpdate();
+		case 'ContactDelete':
+			return m.audit_action_contactDelete();
 		default:
 			return action ?? '-';
 	}
@@ -63,12 +69,14 @@ export function getAuditActionVariant(action: string | undefined): TimelineVaria
 		case 'Register':
 		case 'EmailVerification':
 		case 'AdminUnlockUser':
+		case 'ContactCreate':
 			return 'success';
 		case 'LoginFailure':
 		case 'AccountDeletion':
 		case 'AdminDeleteUser':
 		case 'AdminDeleteRole':
 		case 'AdminLockUser':
+		case 'ContactDelete':
 			return 'destructive';
 		case 'AdminCreateUser':
 		case 'AdminVerifyEmail':
@@ -79,6 +87,8 @@ export function getAuditActionVariant(action: string | undefined): TimelineVaria
 		case 'AdminUpdateRole':
 		case 'AdminSetRolePermissions':
 			return 'warning';
+		case 'ContactUpdate':
+			return 'default';
 		default:
 			return 'default';
 	}

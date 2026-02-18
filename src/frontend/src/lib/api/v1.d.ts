@@ -195,290 +195,6 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	'/api/v1/notes': {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/** Gets all notes for the current user. */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Returns the user's notes. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['NoteResponse'][];
-					};
-				};
-				/** @description If the user is not authenticated. */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		put?: never;
-		/** Creates a new note. */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			/** @description A cancellation token. */
-			requestBody: {
-				content: {
-					'application/json': components['schemas']['CreateNoteRequest'];
-				};
-			};
-			responses: {
-				/** @description Note created successfully. */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['NoteResponse'];
-					};
-				};
-				/** @description If the request is invalid. */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the user is not authenticated. */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	'/api/v1/notes/{id}': {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/** Gets a single note by ID. */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description The note ID. */
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Returns the note. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['NoteResponse'];
-					};
-				};
-				/** @description If the user is not authenticated. */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the note was not found. */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		/** Updates an existing note. */
-		put: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description The note ID. */
-					id: string;
-				};
-				cookie?: never;
-			};
-			/** @description A cancellation token. */
-			requestBody: {
-				content: {
-					'application/json': components['schemas']['UpdateNoteRequest'];
-				};
-			};
-			responses: {
-				/** @description Note updated successfully. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['NoteResponse'];
-					};
-				};
-				/** @description If the request is invalid. */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the user is not authenticated. */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the note was not found. */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		post?: never;
-		/** Deletes a note. */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description The note ID. */
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Note deleted successfully. */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description If the user is not authenticated. */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the note was not found. */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	'/api/v1/notes/stats': {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/** Gets aggregated statistics for the current user's notes. */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Returns the statistics. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['NotesStatsResponse'];
-					};
-				};
-				/** @description If the user is not authenticated. */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
 	'/api/v1/demo/switch-role': {
 		parameters: {
 			query?: never;
@@ -542,6 +258,350 @@ export interface paths {
 				};
 			};
 		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/contacts': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets all contacts for the current user. */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the user's contacts. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ContactResponse'][];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		put?: never;
+		/** Creates a new contact. */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			/** @description A cancellation token. */
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['CreateContactRequest'];
+				};
+			};
+			responses: {
+				/** @description Contact created successfully. */
+				201: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ContactResponse'];
+					};
+				};
+				/** @description If the request is invalid. */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/contacts/{id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets a single contact by ID. */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The contact ID. */
+					id: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the contact. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ContactResponse'];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the contact was not found. */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		/** Updates an existing contact. */
+		put: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The contact ID. */
+					id: string;
+				};
+				cookie?: never;
+			};
+			/** @description A cancellation token. */
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['UpdateContactRequest'];
+				};
+			};
+			responses: {
+				/** @description Contact updated successfully. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ContactResponse'];
+					};
+				};
+				/** @description If the request is invalid. */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the contact was not found. */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		post?: never;
+		/** Deletes a contact. */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The contact ID. */
+					id: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Contact deleted successfully. */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the contact was not found. */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/contacts/stats': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets aggregated pipeline statistics for the current user's contacts. */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the statistics. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ContactsStatsResponse'];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/contacts/{id}/audit': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets the audit trail for a specific contact. */
+		get: {
+			parameters: {
+				query?: {
+					/** @description The page number (1-based). Defaults to 1. */
+					page?: number;
+					/** @description The number of items per page. Defaults to 10. */
+					pageSize?: number;
+				};
+				header?: never;
+				path: {
+					/** @description The contact ID. */
+					id: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the contact audit trail. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the contact was not found. */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
 		delete?: never;
 		options?: never;
 		head?: never;
@@ -3006,14 +3066,102 @@ export interface components {
 			/** @description The new password to set for the account. */
 			newPassword: string;
 		};
-		/** @description Represents a request to create a new note. */
-		CreateNoteRequest: {
-			/** @description The title of the note. */
-			title?: string;
-			/** @description The content of the note. */
-			content?: string;
-			/** @description The category of the note. */
-			category?: components['schemas']['NoteCategory'];
+		/** @description Represents a contact in API responses. */
+		ContactResponse: {
+			/**
+			 * Format: uuid
+			 * @description The unique identifier of the contact.
+			 */
+			id?: string;
+			/** @description The contact name. */
+			name?: string;
+			/** @description The contact email. */
+			email?: null | string;
+			/** @description The company name. */
+			company?: null | string;
+			/** @description The phone number. */
+			phone?: null | string;
+			/** @description The pipeline status. */
+			status?: string;
+			/** @description The acquisition source. */
+			source?: string;
+			/**
+			 * Format: double
+			 * @description The estimated deal value.
+			 */
+			value?: null | number;
+			/** @description Free-form notes. */
+			notes?: null | string;
+			/** @description Whether the contact is a favorite. */
+			isFavorite?: boolean;
+			/**
+			 * Format: date-time
+			 * @description When the contact was created.
+			 */
+			createdAt?: string;
+			/**
+			 * Format: date-time
+			 * @description When the contact was last updated, or null if never updated.
+			 */
+			updatedAt?: null | string;
+		};
+		/** @enum {string} */
+		ContactSource: 'Website' | 'Referral' | 'Social' | 'Email' | 'Phone' | 'Other';
+		/** @enum {string} */
+		ContactStatus: 'Lead' | 'Prospect' | 'Customer' | 'Churned';
+		/** @description Represents aggregated pipeline statistics in API responses. */
+		ContactsStatsResponse: {
+			/**
+			 * Format: int32
+			 * @description Total number of contacts.
+			 */
+			totalCount?: number;
+			/**
+			 * Format: int32
+			 * @description Number of contacts with Customer status.
+			 */
+			customerCount?: number;
+			/**
+			 * Format: double
+			 * @description Sum of deal values for non-churned contacts.
+			 */
+			totalPipelineValue?: number;
+			/** @description Contact count per pipeline status. */
+			byStatus?: {
+				[key: string]: number;
+			};
+			/** @description Contact count per acquisition source. */
+			bySource?: {
+				[key: string]: number;
+			};
+			/** @description Total deal value per pipeline status. */
+			pipelineValue?: {
+				[key: string]: number;
+			};
+			/** @description The last 5 contacts ordered by creation date. */
+			recentContacts?: components['schemas']['ContactResponse'][];
+		};
+		/** @description Represents a request to create a new contact. */
+		CreateContactRequest: {
+			/** @description The contact name. */
+			name?: string;
+			/** @description The contact email. */
+			email?: null | string;
+			/** @description The company name. */
+			company?: null | string;
+			/** @description The phone number. */
+			phone?: null | string;
+			/** @description The pipeline status. */
+			status?: components['schemas']['ContactStatus'];
+			/** @description The acquisition source. */
+			source?: components['schemas']['ContactSource'];
+			/**
+			 * Format: double
+			 * @description The estimated deal value.
+			 */
+			value?: null | number;
+			/** @description Free-form notes. */
+			notes?: null | string;
 		};
 		/** @description Request to create a new custom role. */
 		CreateRoleRequest: {
@@ -3128,53 +3276,6 @@ export interface components {
 			 *     When false (default), session cookies are used and expire when the browser closes.
 			 */
 			rememberMe?: boolean;
-		};
-		/** @enum {string} */
-		NoteCategory: 'Personal' | 'Work' | 'Ideas';
-		/** @description Represents a note in API responses. */
-		NoteResponse: {
-			/**
-			 * Format: uuid
-			 * @description The unique identifier of the note.
-			 */
-			id?: string;
-			/** @description The title of the note. */
-			title?: string;
-			/** @description The content of the note. */
-			content?: string;
-			/** @description The category of the note. */
-			category?: string;
-			/** @description Whether the note is pinned. */
-			isPinned?: boolean;
-			/**
-			 * Format: date-time
-			 * @description When the note was created.
-			 */
-			createdAt?: string;
-			/**
-			 * Format: date-time
-			 * @description When the note was last updated, or null if never updated.
-			 */
-			updatedAt?: null | string;
-		};
-		/** @description Represents aggregated notes statistics in API responses. */
-		NotesStatsResponse: {
-			/**
-			 * Format: int32
-			 * @description Total number of notes.
-			 */
-			totalCount?: number;
-			/**
-			 * Format: int32
-			 * @description Number of pinned notes.
-			 */
-			pinnedCount?: number;
-			/** @description Note count per category. */
-			byCategory?: {
-				[key: string]: number;
-			};
-			/** @description The last 5 notes ordered by creation date. */
-			recentNotes?: components['schemas']['NoteResponse'][];
 		};
 		/** @description A group of permissions belonging to the same category. */
 		PermissionGroupResponse: {
@@ -3318,16 +3419,29 @@ export interface components {
 			/** @description The role to switch to (User, Admin, or SuperAdmin). */
 			role?: string;
 		};
-		/** @description Represents a request to update an existing note. */
-		UpdateNoteRequest: {
-			/** @description The new title of the note. */
-			title?: string;
-			/** @description The new content of the note. */
-			content?: string;
-			/** @description The new category of the note. */
-			category?: components['schemas']['NoteCategory'];
-			/** @description Whether the note should be pinned. */
-			isPinned?: boolean;
+		/** @description Represents a request to update an existing contact. */
+		UpdateContactRequest: {
+			/** @description The new contact name. */
+			name?: string;
+			/** @description The new contact email. */
+			email?: null | string;
+			/** @description The new company name. */
+			company?: null | string;
+			/** @description The new phone number. */
+			phone?: null | string;
+			/** @description The new pipeline status. */
+			status?: components['schemas']['ContactStatus'];
+			/** @description The new acquisition source. */
+			source?: components['schemas']['ContactSource'];
+			/**
+			 * Format: double
+			 * @description The new deal value.
+			 */
+			value?: null | number;
+			/** @description The new notes. */
+			notes?: null | string;
+			/** @description Whether the contact is a favorite. */
+			isFavorite?: boolean;
 		};
 		/** @description Request to update an existing role's name and/or description. */
 		UpdateRoleRequest: {

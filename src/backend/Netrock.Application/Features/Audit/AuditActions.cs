@@ -73,4 +73,13 @@ public static class AuditActions
 
     /// <summary>Admin updated role permissions.</summary>
     public const string AdminSetRolePermissions = "AdminSetRolePermissions";
+
+    /// <summary>User created a new contact.</summary>
+    public const string ContactCreate = "ContactCreate";
+
+    /// <summary>User updated an existing contact.</summary>
+    public const string ContactUpdate = "ContactUpdate";
+
+    /// <summary>User deleted a contact.</summary>
+    public const string ContactDelete = "ContactDelete";
 }

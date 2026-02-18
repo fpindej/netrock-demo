@@ -1,36 +1,63 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
-	import { StickyNote, Pin, Tag, BarChart3 } from '@lucide/svelte';
+	import { Users, DollarSign, UserCheck, BarChart3, Star } from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
-	const categoryLabels: Record<string, () => string> = {
-		Personal: m.notes_category_Personal,
-		Work: m.notes_category_Work,
-		Ideas: m.notes_category_Ideas
+	const statusLabels: Record<string, () => string> = {
+		Lead: m.contacts_status_Lead,
+		Prospect: m.contacts_status_Prospect,
+		Customer: m.contacts_status_Customer,
+		Churned: m.contacts_status_Churned
 	};
 
-	const categoryColors: Record<string, string> = {
-		Personal: 'bg-blue-500',
-		Work: 'bg-purple-500',
-		Ideas: 'bg-amber-500'
+	const statusColors: Record<string, string> = {
+		Lead: 'bg-blue-500',
+		Prospect: 'bg-amber-500',
+		Customer: 'bg-green-500',
+		Churned: 'bg-red-500'
 	};
 
-	let topCategory = $derived(() => {
-		if (!data.stats?.byCategory) return null;
-		const entries = Object.entries(data.stats.byCategory);
-		if (entries.length === 0) return null;
-		const sorted = entries.sort(([, a], [, b]) => b - a);
-		return sorted[0][1] > 0 ? sorted[0][0] : null;
+	const sourceLabels: Record<string, () => string> = {
+		Website: m.contacts_source_Website,
+		Referral: m.contacts_source_Referral,
+		Social: m.contacts_source_Social,
+		Email: m.contacts_source_Email,
+		Phone: m.contacts_source_Phone,
+		Other: m.contacts_source_Other
+	};
+
+	const sourceColors: Record<string, string> = {
+		Website: 'bg-blue-500',
+		Referral: 'bg-green-500',
+		Social: 'bg-purple-500',
+		Email: 'bg-amber-500',
+		Phone: 'bg-cyan-500',
+		Other: 'bg-gray-500'
+	};
+
+	let maxStatusCount = $derived(() => {
+		if (!data.stats?.byStatus) return 1;
+		return Math.max(1, ...Object.values(data.stats.byStatus));
 	});
 
-	let maxCategoryCount = $derived(() => {
-		if (!data.stats?.byCategory) return 1;
-		return Math.max(1, ...Object.values(data.stats.byCategory));
+	let maxSourceCount = $derived(() => {
+		if (!data.stats?.bySource) return 1;
+		return Math.max(1, ...Object.values(data.stats.bySource));
 	});
+
+	function formatValue(value: number | null | undefined) {
+		if (value == null) return '$0';
+		return new Intl.NumberFormat(undefined, {
+			style: 'currency',
+			currency: 'USD',
+			minimumFractionDigits: 0,
+			maximumFractionDigits: 0
+		}).format(value);
+	}
 
 	function formatDate(dateStr: string) {
 		return new Date(dateStr).toLocaleDateString(undefined, {
@@ -69,10 +96,10 @@
 			<Card.Root>
 				<Card.Content class="flex items-center gap-4 p-6">
 					<div class="rounded-lg bg-primary/10 p-3">
-						<StickyNote class="h-5 w-5 text-primary" />
+						<Users class="h-5 w-5 text-primary" />
 					</div>
 					<div>
-						<p class="text-sm text-muted-foreground">{m.analytics_totalNotes()}</p>
+						<p class="text-sm text-muted-foreground">{m.analytics_totalContacts()}</p>
 						<p class="text-2xl font-bold">{data.stats.totalCount}</p>
 					</div>
 				</Card.Content>
@@ -81,11 +108,11 @@
 			<Card.Root>
 				<Card.Content class="flex items-center gap-4 p-6">
 					<div class="rounded-lg bg-primary/10 p-3">
-						<Pin class="h-5 w-5 text-primary" />
+						<DollarSign class="h-5 w-5 text-primary" />
 					</div>
 					<div>
-						<p class="text-sm text-muted-foreground">{m.analytics_pinnedNotes()}</p>
-						<p class="text-2xl font-bold">{data.stats.pinnedCount}</p>
+						<p class="text-sm text-muted-foreground">{m.analytics_pipelineValue()}</p>
+						<p class="text-2xl font-bold">{formatValue(data.stats.totalPipelineValue)}</p>
 					</div>
 				</Card.Content>
 			</Card.Root>
@@ -93,40 +120,39 @@
 			<Card.Root>
 				<Card.Content class="flex items-center gap-4 p-6">
 					<div class="rounded-lg bg-primary/10 p-3">
-						<Tag class="h-5 w-5 text-primary" />
+						<UserCheck class="h-5 w-5 text-primary" />
 					</div>
 					<div>
-						<p class="text-sm text-muted-foreground">{m.analytics_topCategory()}</p>
-						<p class="text-2xl font-bold">
-							{#if topCategory()}
-								{categoryLabels[topCategory()!]?.() ?? topCategory()}
-							{:else}
-								{m.analytics_noCategory()}
-							{/if}
-						</p>
+						<p class="text-sm text-muted-foreground">{m.analytics_customers()}</p>
+						<p class="text-2xl font-bold">{data.stats.customerCount}</p>
 					</div>
 				</Card.Content>
 			</Card.Root>
 		</div>
 
-		<!-- Category breakdown -->
+		<!-- Pipeline by status -->
 		<Card.Root>
 			<Card.Header>
-				<Card.Title>{m.analytics_categoryBreakdown()}</Card.Title>
+				<Card.Title>{m.analytics_pipelineByStatus()}</Card.Title>
 			</Card.Header>
 			<Card.Content>
 				<div class="space-y-4">
-					{#each Object.entries(data.stats.byCategory ?? {}) as [cat, count] (cat)}
+					{#each Object.entries(data.stats.byStatus ?? {}) as [status, count] (status)}
 						<div class="space-y-1.5">
 							<div class="flex items-center justify-between text-sm">
-								<span class="font-medium">{categoryLabels[cat]?.() ?? cat}</span>
-								<span class="text-muted-foreground">{count}</span>
+								<span class="font-medium">{statusLabels[status]?.() ?? status}</span>
+								<div class="flex items-center gap-2">
+									<span class="text-muted-foreground">
+										{formatValue(data.stats.pipelineValue?.[status] ?? 0)}
+									</span>
+									<Badge variant="secondary" class="text-xs">{count}</Badge>
+								</div>
 							</div>
 							<div class="h-2.5 overflow-hidden rounded-full bg-muted">
 								<div
-									class="h-full rounded-full transition-all duration-500 {categoryColors[cat] ??
+									class="h-full rounded-full transition-all duration-500 {statusColors[status] ??
 										'bg-primary'}"
-									style="width: {maxCategoryCount() > 0 ? (count / maxCategoryCount()) * 100 : 0}%"
+									style="width: {maxStatusCount() > 0 ? (count / maxStatusCount()) * 100 : 0}%"
 								></div>
 							</div>
 						</div>
@@ -135,30 +161,73 @@
 			</Card.Content>
 		</Card.Root>
 
-		<!-- Recent notes -->
-		{#if data.stats.recentNotes && data.stats.recentNotes.length > 0}
+		<!-- Source breakdown -->
+		<Card.Root>
+			<Card.Header>
+				<Card.Title>{m.analytics_sourceBreakdown()}</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<div class="space-y-4">
+					{#each Object.entries(data.stats.bySource ?? {}).filter(([, count]) => count > 0) as [source, count] (source)}
+						<div class="space-y-1.5">
+							<div class="flex items-center justify-between text-sm">
+								<span class="font-medium">{sourceLabels[source]?.() ?? source}</span>
+								<span class="text-muted-foreground">{count}</span>
+							</div>
+							<div class="h-2.5 overflow-hidden rounded-full bg-muted">
+								<div
+									class="h-full rounded-full transition-all duration-500 {sourceColors[source] ??
+										'bg-primary'}"
+									style="width: {maxSourceCount() > 0 ? (count / maxSourceCount()) * 100 : 0}%"
+								></div>
+							</div>
+						</div>
+					{/each}
+				</div>
+			</Card.Content>
+		</Card.Root>
+
+		<!-- Recent contacts -->
+		{#if data.stats.recentContacts && data.stats.recentContacts.length > 0}
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>{m.analytics_recentNotes()}</Card.Title>
+					<Card.Title>{m.analytics_recentContacts()}</Card.Title>
 				</Card.Header>
 				<Card.Content class="p-0">
 					<div class="divide-y">
-						{#each data.stats.recentNotes as note (note.id)}
+						{#each data.stats.recentContacts as contact (contact.id)}
 							<div class="flex items-center justify-between px-6 py-3">
 								<div class="min-w-0 flex-1">
 									<div class="flex items-center gap-2">
-										{#if note.isPinned}
-											<Pin class="h-3 w-3 shrink-0 text-primary" />
+										{#if contact.isFavorite}
+											<Star class="h-3 w-3 shrink-0 fill-yellow-400 text-yellow-400" />
 										{/if}
-										<span class="truncate font-medium">{note.title}</span>
+										<span class="truncate font-medium">{contact.name}</span>
+										{#if contact.company}
+											<span class="hidden text-sm text-muted-foreground sm:inline">
+												{contact.company}
+											</span>
+										{/if}
 									</div>
 								</div>
 								<div class="flex items-center gap-3">
-									<Badge variant="secondary" class="shrink-0">
-										{categoryLabels[note.category ?? '']?.() ?? note.category}
+									<Badge
+										variant="secondary"
+										class="shrink-0 {statusColors[contact.status ?? '']
+											? statusColors[contact.status ?? ''].replace('bg-', 'bg-') +
+												'/20 ' +
+												statusColors[contact.status ?? ''].replace('bg-', 'text-')
+											: ''}"
+									>
+										{statusLabels[contact.status ?? '']?.() ?? contact.status}
 									</Badge>
+									{#if contact.value != null}
+										<span class="shrink-0 text-sm font-medium">
+											{formatValue(contact.value)}
+										</span>
+									{/if}
 									<span class="shrink-0 text-xs text-muted-foreground">
-										{formatDate(note.createdAt ?? '')}
+										{formatDate(contact.createdAt ?? '')}
 									</span>
 								</div>
 							</div>

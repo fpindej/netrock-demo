@@ -41,4 +41,20 @@ public interface IAuditService
         int pageNumber,
         int pageSize,
         CancellationToken ct = default);
+
+    /// <summary>
+    /// Gets a paginated list of audit events for a specific entity, ordered by most recent first.
+    /// </summary>
+    /// <param name="entityType">The type name of the target entity (e.g. "Contact").</param>
+    /// <param name="entityId">The ID of the target entity.</param>
+    /// <param name="pageNumber">The page number (1-based).</param>
+    /// <param name="pageSize">The number of items per page.</param>
+    /// <param name="ct">A cancellation token.</param>
+    /// <returns>A paginated list of audit events.</returns>
+    Task<AuditEventListOutput> GetEntityAuditEventsAsync(
+        string entityType,
+        Guid entityId,
+        int pageNumber,
+        int pageSize,
+        CancellationToken ct = default);
 }

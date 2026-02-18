@@ -5,13 +5,13 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ fetch, url }) => {
 	const client = createApiClient(fetch, url.origin);
 
-	const { data, response, error: apiError } = await client.GET('/api/v1/contacts/stats');
+	const { data, response, error: apiError } = await client.GET('/api/v1/contacts');
 
 	if (!response.ok) {
-		throw error(response.status, getErrorMessage(apiError, 'Failed to load analytics'));
+		throw error(response.status, getErrorMessage(apiError, 'Failed to load contacts'));
 	}
 
 	return {
-		stats: data
+		contacts: data ?? []
 	};
 };

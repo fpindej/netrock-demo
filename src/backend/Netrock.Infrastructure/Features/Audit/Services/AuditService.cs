@@ -76,4 +76,34 @@ internal class AuditService(
 
         return new AuditEventListOutput(events, totalCount, pageNumber, pageSize);
     }
+
+    /// <inheritdoc />
+    public async Task<AuditEventListOutput> GetEntityAuditEventsAsync(
+        string entityType,
+        Guid entityId,
+        int pageNumber,
+        int pageSize,
+        CancellationToken ct = default)
+    {
+        var query = dbContext.AuditEvents
+            .AsNoTracking()
+            .Where(e => e.TargetEntityType == entityType && e.TargetEntityId == entityId);
+
+        var totalCount = await query.CountAsync(ct);
+
+        var events = await query
+            .OrderByDescending(e => e.CreatedAt)
+            .Paginate(pageNumber, pageSize)
+            .Select(e => new AuditEventOutput(
+                e.Id,
+                e.UserId,
+                e.Action,
+                e.TargetEntityType,
+                e.TargetEntityId,
+                e.Metadata,
+                e.CreatedAt))
+            .ToListAsync(ct);
+
+        return new AuditEventListOutput(events, totalCount, pageNumber, pageSize);
+    }
 }

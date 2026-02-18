@@ -5,7 +5,7 @@
 	import { buttonVariants } from '$lib/components/ui/button';
 	import {
 		BookOpen,
-		StickyNote,
+		Users as UsersIcon,
 		BarChart3,
 		Users,
 		Shield,
@@ -35,9 +35,9 @@
 			icon: BookOpen
 		},
 		{
-			title: m.nav_notes,
-			href: resolve('/notes'),
-			icon: StickyNote
+			title: m.nav_contacts,
+			href: resolve('/contacts'),
+			icon: UsersIcon
 		},
 		{
 			title: m.nav_analytics,

@@ -7,7 +7,7 @@ using Netrock.Infrastructure.Features.Audit.Extensions;
 using Netrock.Infrastructure.Features.Captcha.Extensions;
 using Netrock.Infrastructure.Features.Email.Extensions;
 using Netrock.Infrastructure.Features.Jobs.Extensions;
-using Netrock.Infrastructure.Features.Notes.Extensions;
+using Netrock.Infrastructure.Features.Contacts.Extensions;
 using Netrock.Infrastructure.Persistence.Extensions;
 using Netrock.Infrastructure.Caching.Extensions;
 using Netrock.Infrastructure.Cookies.Extensions;
@@ -68,8 +68,8 @@ try
         Log.Debug("Adding captcha services");
         builder.Services.AddCaptchaServices();
 
-        Log.Debug("Adding notes services");
-        builder.Services.AddNotesServices();
+        Log.Debug("Adding contacts services");
+        builder.Services.AddContactsServices();
 
         Log.Debug("Adding demo options");
         builder.Services.Configure<DemoOptions>(builder.Configuration.GetSection(DemoOptions.SectionName));

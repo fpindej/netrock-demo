@@ -242,7 +242,7 @@
 		<tbody>
 			{#each contacts as contact (contact.id)}
 				<tr
-					class="border-b transition-colors hover:bg-muted/50 {selectedIds.has(contact.id!)
+					class="h-[65px] border-b transition-colors hover:bg-muted/50 {selectedIds.has(contact.id!)
 						? 'bg-muted/30'
 						: ''}"
 				>
@@ -269,9 +269,9 @@
 							</button>
 							<div class="min-w-0">
 								<span class="block truncate font-medium">{contact.name}</span>
-								{#if contact.email}
-									<p class="mt-0.5 truncate text-sm text-muted-foreground">{contact.email}</p>
-								{/if}
+								<p class="mt-0.5 truncate text-sm text-muted-foreground">
+									{contact.email ?? '\u00A0'}
+								</p>
 							</div>
 						</div>
 					</td>

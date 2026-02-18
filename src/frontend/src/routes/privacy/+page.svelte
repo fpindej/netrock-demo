@@ -119,7 +119,8 @@
 
 				<div class="text-center text-sm">
 					<button
-						onclick={() => history.back()}
+						onclick={() =>
+							history.length > 1 ? history.back() : (window.location.href = resolve('/'))}
 						class="inline-flex items-center gap-1 font-medium text-primary hover:underline"
 					>
 						<ArrowLeft class="h-4 w-4" />

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Header, Sidebar } from '$lib/components/layout';
 	import { EmailVerificationBanner } from '$lib/components/auth';
+	import { DemoPanel } from '$lib/components/demo';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { initSidebar, sidebarState } from '$lib/state';
@@ -39,3 +40,6 @@
 		</main>
 	</div>
 </div>
+{#if data.isDemoMode}
+	<DemoPanel user={data.user} />
+{/if}

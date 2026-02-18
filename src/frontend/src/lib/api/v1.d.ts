@@ -145,6 +145,359 @@ export interface paths {
 		};
 		trace?: never;
 	};
+	'/api/v1/notes': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets all notes for the current user. */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the user's notes. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['NoteResponse'][];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		put?: never;
+		/** Creates a new note. */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			/** @description A cancellation token. */
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['CreateNoteRequest'];
+				};
+			};
+			responses: {
+				/** @description Note created successfully. */
+				201: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['NoteResponse'];
+					};
+				};
+				/** @description If the request is invalid. */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/notes/{id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets a single note by ID. */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The note ID. */
+					id: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the note. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['NoteResponse'];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the note was not found. */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		/** Updates an existing note. */
+		put: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The note ID. */
+					id: string;
+				};
+				cookie?: never;
+			};
+			/** @description A cancellation token. */
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['UpdateNoteRequest'];
+				};
+			};
+			responses: {
+				/** @description Note updated successfully. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['NoteResponse'];
+					};
+				};
+				/** @description If the request is invalid. */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the note was not found. */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		post?: never;
+		/** Deletes a note. */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The note ID. */
+					id: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Note deleted successfully. */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the note was not found. */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/notes/stats': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets aggregated statistics for the current user's notes. */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the statistics. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['NotesStatsResponse'];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/demo/switch-role': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Switches the current user's role. Removes all existing roles and assigns the requested one.
+		 *     Rotates the security stamp so the frontend's next request triggers a token refresh.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			/** @description A cancellation token. */
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['SwitchRoleRequest'];
+				};
+			};
+			responses: {
+				/** @description Role switched successfully. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/** @description If the role is invalid. */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user is not authenticated. */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If demo mode is disabled. */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	'/api/auth/login': {
 		parameters: {
 			query?: never;
@@ -2512,6 +2865,15 @@ export interface components {
 			/** @description The new password to set for the account. */
 			newPassword: string;
 		};
+		/** @description Represents a request to create a new note. */
+		CreateNoteRequest: {
+			/** @description The title of the note. */
+			title?: string;
+			/** @description The content of the note. */
+			content?: string;
+			/** @description The category of the note. */
+			category?: components['schemas']['NoteCategory'];
+		};
 		/** @description Request to create a new custom role. */
 		CreateRoleRequest: {
 			/** @description The name of the new role. */
@@ -2596,6 +2958,53 @@ export interface components {
 			 *     When false (default), session cookies are used and expire when the browser closes.
 			 */
 			rememberMe?: boolean;
+		};
+		/** @enum {string} */
+		NoteCategory: 'Personal' | 'Work' | 'Ideas';
+		/** @description Represents a note in API responses. */
+		NoteResponse: {
+			/**
+			 * Format: uuid
+			 * @description The unique identifier of the note.
+			 */
+			id?: string;
+			/** @description The title of the note. */
+			title?: string;
+			/** @description The content of the note. */
+			content?: string;
+			/** @description The category of the note. */
+			category?: string;
+			/** @description Whether the note is pinned. */
+			isPinned?: boolean;
+			/**
+			 * Format: date-time
+			 * @description When the note was created.
+			 */
+			createdAt?: string;
+			/**
+			 * Format: date-time
+			 * @description When the note was last updated, or null if never updated.
+			 */
+			updatedAt?: null | string;
+		};
+		/** @description Represents aggregated notes statistics in API responses. */
+		NotesStatsResponse: {
+			/**
+			 * Format: int32
+			 * @description Total number of notes.
+			 */
+			totalCount?: number;
+			/**
+			 * Format: int32
+			 * @description Number of pinned notes.
+			 */
+			pinnedCount?: number;
+			/** @description Note count per category. */
+			byCategory?: {
+				[key: string]: number;
+			};
+			/** @description The last 5 notes ordered by creation date. */
+			recentNotes?: components['schemas']['NoteResponse'][];
 		};
 		/** @description A group of permissions belonging to the same category. */
 		PermissionGroupResponse: {
@@ -2733,6 +3142,22 @@ export interface components {
 		SetPermissionsRequest: {
 			/** @description The full set of permission values to assign to the role. */
 			permissions: string[];
+		};
+		/** @description Represents a request to switch the current user's role in demo mode. */
+		SwitchRoleRequest: {
+			/** @description The role to switch to (User, Admin, or SuperAdmin). */
+			role?: string;
+		};
+		/** @description Represents a request to update an existing note. */
+		UpdateNoteRequest: {
+			/** @description The new title of the note. */
+			title?: string;
+			/** @description The new content of the note. */
+			content?: string;
+			/** @description The new category of the note. */
+			category?: components['schemas']['NoteCategory'];
+			/** @description Whether the note should be pinned. */
+			isPinned?: boolean;
 		};
 		/** @description Request to update an existing role's name and/or description. */
 		UpdateRoleRequest: {

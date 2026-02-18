@@ -6,11 +6,13 @@ using Netrock.Infrastructure.Features.Admin.Extensions;
 using Netrock.Infrastructure.Features.Captcha.Extensions;
 using Netrock.Infrastructure.Features.Email.Extensions;
 using Netrock.Infrastructure.Features.Jobs.Extensions;
+using Netrock.Infrastructure.Features.Notes.Extensions;
 using Netrock.Infrastructure.Persistence.Extensions;
 using Netrock.Infrastructure.Caching.Extensions;
 using Netrock.Infrastructure.Cookies.Extensions;
 using Netrock.Infrastructure.Identity.Extensions;
 using Netrock.WebApi.Authorization;
+using Netrock.WebApi.Options;
 using Netrock.WebApi.Extensions;
 using Netrock.WebApi.Features.OpenApi.Extensions;
 using Netrock.WebApi.Middlewares;
@@ -61,6 +63,12 @@ try
 
         Log.Debug("Adding captcha services");
         builder.Services.AddCaptchaServices();
+
+        Log.Debug("Adding notes services");
+        builder.Services.AddNotesServices();
+
+        Log.Debug("Adding demo options");
+        builder.Services.Configure<DemoOptions>(builder.Configuration.GetSection(DemoOptions.SectionName));
 
         Log.Debug("Adding job scheduling");
         builder.Services.AddJobScheduling(builder.Configuration);

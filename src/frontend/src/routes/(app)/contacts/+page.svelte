@@ -52,7 +52,7 @@
 		{#if !isEmpty}
 			<div class="flex items-center gap-3">
 				{#if data.contacts?.totalCount != null}
-					<p class="text-sm text-muted-foreground">
+					<p class="hidden text-sm text-muted-foreground sm:block">
 						{data.contacts.totalCount} contacts
 					</p>
 				{/if}

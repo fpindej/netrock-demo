@@ -207,7 +207,7 @@
 					<div class="divide-y">
 						{#each data.stats.recentContacts as contact (contact.id)}
 							<button
-								class="flex w-full cursor-pointer items-center justify-between px-6 py-3 text-start transition-colors hover:bg-muted/50"
+								class="flex w-full cursor-pointer flex-col gap-1 px-6 py-3 text-start transition-colors hover:bg-muted/50 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
 								onclick={() => handleContactClick(contact)}
 							>
 								<div class="min-w-0 flex-1">
@@ -223,7 +223,7 @@
 										{/if}
 									</div>
 								</div>
-								<div class="flex items-center gap-3">
+								<div class="flex flex-wrap items-center gap-2 sm:gap-3">
 									<Badge
 										variant="secondary"
 										class="shrink-0 {statusColors[contact.status ?? '']

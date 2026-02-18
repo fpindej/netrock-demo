@@ -28,7 +28,7 @@ public class ContactsController(
     [ProducesResponseType(typeof(ListContactsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<ListContactsResponse>> GetContacts(
-        [FromQuery] PaginatedRequest request,
+        [FromQuery] ListContactsRequest request,
         CancellationToken cancellationToken)
     {
         var userId = userContext.AuthenticatedUserId;

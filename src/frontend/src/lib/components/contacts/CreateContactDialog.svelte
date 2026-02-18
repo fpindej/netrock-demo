@@ -120,7 +120,7 @@
 					<p class="text-xs text-destructive">{fieldErrors.name}</p>
 				{/if}
 			</div>
-			<div class="grid grid-cols-2 gap-4">
+			<div class="grid gap-4 sm:grid-cols-2">
 				<div class="grid gap-2">
 					<Label for="contact-email">{m.contacts_field_email()}</Label>
 					<Input
@@ -165,7 +165,7 @@
 					<p class="text-xs text-destructive">{fieldErrors.company}</p>
 				{/if}
 			</div>
-			<div class="grid grid-cols-2 gap-4">
+			<div class="grid gap-4 sm:grid-cols-2">
 				<div class="grid gap-2">
 					<Label>{m.contacts_field_status()}</Label>
 					<Select.Root type="single" value={status} onValueChange={(v) => (status = v)}>

@@ -211,7 +211,7 @@
 {/if}
 
 <!-- Desktop table -->
-<div class="hidden md:block">
+<div class="hidden lg:block">
 	<table class="w-full table-fixed">
 		<colgroup>
 			<col class="w-10" />
@@ -317,8 +317,8 @@
 	</table>
 </div>
 
-<!-- Mobile cards -->
-<div class="md:hidden">
+<!-- Mobile/tablet cards -->
+<div class="lg:hidden">
 	<!-- Mobile select-all header -->
 	<div class="flex items-center gap-2 border-b px-4 py-2">
 		<Checkbox

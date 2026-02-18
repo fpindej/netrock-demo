@@ -148,7 +148,7 @@ export function getAuditDescription(
 	return undefined;
 }
 
-interface AuditFieldChange {
+export interface AuditFieldChange {
 	from: string;
 	to: string;
 }
@@ -168,4 +168,55 @@ export function getAuditChanges(
 	}
 
 	return undefined;
+}
+
+const contactFieldLabels: Record<string, () => string> = {
+	name: m.contacts_field_name,
+	email: m.contacts_field_email,
+	company: m.contacts_field_company,
+	phone: m.contacts_field_phone,
+	status: m.contacts_field_status,
+	source: m.contacts_field_source,
+	value: m.contacts_field_value,
+	notes: m.contacts_field_notes,
+	isFavorite: m.contacts_edit_favoriteLabel
+};
+
+export function getContactFieldLabel(field: string): string {
+	return contactFieldLabels[field]?.() ?? field;
+}
+
+const booleanValues = new Set(['true', 'True', 'false', 'False']);
+
+export function formatChangeValue(field: string, val: string): string {
+	if (!val) return '–';
+
+	if (field === 'isFavorite' || booleanValues.has(val)) {
+		const b = val === 'true' || val === 'True';
+		return b ? m.audit_desc_favoriteOn() : m.audit_desc_favoriteOff();
+	}
+
+	if (field === 'status') {
+		const statusLabels: Record<string, () => string> = {
+			Lead: m.contacts_status_Lead,
+			Prospect: m.contacts_status_Prospect,
+			Customer: m.contacts_status_Customer,
+			Churned: m.contacts_status_Churned
+		};
+		return statusLabels[val]?.() ?? val;
+	}
+
+	if (field === 'source') {
+		const sourceLabels: Record<string, () => string> = {
+			Website: m.contacts_source_Website,
+			Referral: m.contacts_source_Referral,
+			Social: m.contacts_source_Social,
+			Email: m.contacts_source_Email,
+			Phone: m.contacts_source_Phone,
+			Other: m.contacts_source_Other
+		};
+		return sourceLabels[val]?.() ?? val;
+	}
+
+	return val;
 }

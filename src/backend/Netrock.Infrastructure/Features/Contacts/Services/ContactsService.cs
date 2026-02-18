@@ -31,9 +31,8 @@ internal sealed class ContactsService(NetrockDbContext dbContext, IAuditService 
             var s = search.Trim().ToLowerInvariant();
             query = query.Where(c =>
                 c.Name.ToLower().Contains(s) ||
-                c.Name.Similarity(s) > 0.3 ||
-                (c.Email != null && (c.Email.ToLower().Contains(s) || c.Email.Similarity(s) > 0.3)) ||
-                (c.Company != null && (c.Company.ToLower().Contains(s) || c.Company.Similarity(s) > 0.3)) ||
+                (c.Email != null && c.Email.ToLower().Contains(s)) ||
+                (c.Company != null && c.Company.ToLower().Contains(s)) ||
                 (c.Phone != null && c.Phone.ToLower().Contains(s)));
         }
 

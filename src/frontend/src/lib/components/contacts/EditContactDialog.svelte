@@ -17,6 +17,8 @@
 		getAuditActionVariant,
 		getAuditDescription,
 		getAuditChanges,
+		getContactFieldLabel,
+		formatChangeValue,
 		formatAuditDate
 	} from '$lib/utils/audit';
 	import { Timeline, TimelineItem, TimelineContent } from '$lib/components/ui/timeline';
@@ -308,10 +310,10 @@
 											<ul class="mt-1 space-y-0.5 text-xs text-muted-foreground">
 												{#each Object.entries(changes) as [field, change] (field)}
 													<li>
-														<span class="font-medium capitalize">{field}:</span>
-														{change.from || '–'}
+														<span class="font-medium">{getContactFieldLabel(field)}:</span>
+														{formatChangeValue(field, change.from) || '–'}
 														<span class="mx-0.5">&rarr;</span>
-														{change.to || '–'}
+														{formatChangeValue(field, change.to) || '–'}
 													</li>
 												{/each}
 											</ul>

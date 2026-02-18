@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Netrock.Application.Caching;
+using Netrock.Application.Caching.Constants;
 using Netrock.Application.Identity;
 using Netrock.Application.Identity.Constants;
 using Netrock.Infrastructure.Features.Authentication.Models;
@@ -17,7 +19,8 @@ namespace Netrock.WebApi.Features.Demo;
 public class DemoController(
     UserManager<ApplicationUser> userManager,
     IUserContext userContext,
-    IOptions<DemoOptions> demoOptions) : ApiController
+    IOptions<DemoOptions> demoOptions,
+    ICacheService cacheService) : ApiController
 {
     /// <summary>
     /// Switches the current user's role. Removes all existing roles and assigns the requested one.
@@ -68,6 +71,9 @@ public class DemoController(
         }
 
         await userManager.UpdateSecurityStampAsync(user);
+
+        await cacheService.RemoveAsync(CacheKeys.SecurityStamp(user.Id), cancellationToken);
+        await cacheService.RemoveAsync(CacheKeys.User(user.Id), cancellationToken);
 
         return Ok();
     }

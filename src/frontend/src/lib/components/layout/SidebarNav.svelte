@@ -47,7 +47,7 @@
 		},
 		{
 			title: m.nav_contact,
-			href: resolve('/contact'),
+			href: resolve('/contact-me'),
 			icon: Mail
 		}
 	];

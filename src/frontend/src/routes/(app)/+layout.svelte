@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Header, Sidebar } from '$lib/components/layout';
 	import { EmailVerificationBanner } from '$lib/components/auth';
+	import { RoleSwitcher } from '$lib/components/demo';
 	import { page } from '$app/state';
 	import { invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -40,7 +41,7 @@
 		{#if !data.user.emailConfirmed}
 			<EmailVerificationBanner />
 		{/if}
-		<main class="flex flex-1 flex-col gap-4 overflow-y-auto p-4 lg:gap-6 lg:p-6">
+		<main class="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pb-16 lg:gap-6 lg:p-6 lg:pb-16">
 			{#key page.url.pathname}
 				<div
 					class="motion-safe:duration-300 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4"
@@ -51,3 +52,5 @@
 		</main>
 	</div>
 </div>
+
+<RoleSwitcher user={data.user} />

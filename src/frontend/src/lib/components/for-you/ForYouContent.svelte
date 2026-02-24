@@ -8,7 +8,6 @@
 		Globe,
 		ArrowRight,
 		ArrowDown,
-		ArrowUp,
 		ArrowLeft as ArrowLeftIcon,
 		Building2,
 		Users,
@@ -206,9 +205,9 @@
 			</p>
 		</div>
 
-		<!-- Desktop: CSS Grid cross layout -->
+		<!-- Desktop: CSS Grid cross layout (5 rows: spoke / arrow / hub row / arrow / spoke) -->
 		<div
-			class="hidden sm:grid sm:grid-cols-[1fr_auto_1fr] sm:grid-rows-[auto_auto_auto] sm:items-center sm:justify-items-center sm:gap-4"
+			class="hidden sm:grid sm:grid-cols-[1fr_auto_1fr] sm:grid-rows-[auto_auto_auto_auto_auto] sm:items-center sm:justify-items-center sm:gap-x-4 sm:gap-y-1"
 		>
 			<!-- Row 1: Top spoke (SvelteKit) -->
 			<div class="col-start-2 row-start-1" use:reveal={150}>
@@ -221,13 +220,13 @@
 				)}
 			</div>
 
-			<!-- Row 1→2 arrow: up from hub to top spoke -->
-			<div class="col-start-2 row-start-1 self-end">
-				<ArrowUp class="arrow-flow-up h-6 w-6 text-muted-foreground/50" />
+			<!-- Row 2: Arrow between top spoke and hub -->
+			<div class="col-start-2 row-start-2">
+				<ArrowDown class="arrow-flow-down h-6 w-6 text-muted-foreground/50" />
 			</div>
 
-			<!-- Row 2: Left spoke + hub + right spoke -->
-			<div class="col-start-1 row-start-2 justify-self-end" use:reveal={300}>
+			<!-- Row 3: Left spoke + hub + right spoke -->
+			<div class="col-start-1 row-start-3 justify-self-end" use:reveal={300}>
 				{@render spokeBox(
 					Globe,
 					m.forYou_diagram_spoke_external(),
@@ -237,7 +236,7 @@
 				)}
 			</div>
 
-			<div class="col-start-2 row-start-2 flex items-center gap-4">
+			<div class="col-start-2 row-start-3 flex items-center gap-4">
 				<ArrowLeftIcon class="arrow-flow-left h-6 w-6 text-muted-foreground/50" />
 				<div use:reveal={0}>
 					{@render hubBox()}
@@ -245,7 +244,7 @@
 				<ArrowRight class="arrow-flow h-6 w-6 text-muted-foreground/50" />
 			</div>
 
-			<div class="col-start-3 row-start-2 justify-self-start" use:reveal={300}>
+			<div class="col-start-3 row-start-3 justify-self-start" use:reveal={300}>
 				{@render spokeBox(
 					Code,
 					m.forYou_diagram_spoke_custom(),
@@ -255,13 +254,13 @@
 				)}
 			</div>
 
-			<!-- Row 2→3 arrow: down from hub to bottom spoke -->
-			<div class="col-start-2 row-start-3 self-start">
+			<!-- Row 4: Arrow between hub and bottom spoke -->
+			<div class="col-start-2 row-start-4">
 				<ArrowDown class="arrow-flow-down h-6 w-6 text-muted-foreground/50" />
 			</div>
 
-			<!-- Row 3: Bottom spoke (Mobile) -->
-			<div class="col-start-2 row-start-3" use:reveal={150}>
+			<!-- Row 5: Bottom spoke (Mobile) -->
+			<div class="col-start-2 row-start-5" use:reveal={150}>
 				{@render spokeBox(
 					Smartphone,
 					m.forYou_diagram_spoke_mobile(),
@@ -449,18 +448,6 @@
 		}
 	}
 
-	@keyframes arrow-nudge-up {
-		0%,
-		100% {
-			transform: translateY(0);
-			opacity: 0.4;
-		}
-		50% {
-			transform: translateY(-3px);
-			opacity: 0.9;
-		}
-	}
-
 	@keyframes arrow-nudge-left {
 		0%,
 		100% {
@@ -481,10 +468,6 @@
 		animation: arrow-nudge-down 2s ease-in-out infinite;
 	}
 
-	:global(.arrow-flow-up) {
-		animation: arrow-nudge-up 2s ease-in-out infinite;
-	}
-
 	:global(.arrow-flow-left) {
 		animation: arrow-nudge-left 2s ease-in-out infinite;
 	}
@@ -496,7 +479,6 @@
 		}
 		:global(.arrow-flow),
 		:global(.arrow-flow-down),
-		:global(.arrow-flow-up),
 		:global(.arrow-flow-left) {
 			animation: none;
 		}

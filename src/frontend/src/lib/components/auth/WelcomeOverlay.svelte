@@ -3,13 +3,13 @@
 	import { fade } from 'svelte/transition';
 	import { resolve } from '$app/paths';
 	import { Button } from '$lib/components/ui/button';
-	import { LanguageSelector } from '$lib/components/layout';
+	import { LanguageSelector, ThemeToggle } from '$lib/components/layout';
 	import * as m from '$lib/paraglide/messages';
 	import {
 		ShieldCheck,
 		Users,
-		BarChart3,
-		LineChart,
+		Clock,
+		Rocket,
 		EyeOff,
 		Trash2,
 		ChevronLeft,
@@ -52,15 +52,15 @@
 			color: 'text-blue-500'
 		},
 		{
-			icon: BarChart3,
-			label: () => m.welcome_pillar_pipeline(),
-			desc: () => m.welcome_pillar_pipeline_desc(),
+			icon: Clock,
+			label: () => m.welcome_pillar_jobs(),
+			desc: () => m.welcome_pillar_jobs_desc(),
 			color: 'text-violet-500'
 		},
 		{
-			icon: LineChart,
-			label: () => m.welcome_pillar_analytics(),
-			desc: () => m.welcome_pillar_analytics_desc(),
+			icon: Rocket,
+			label: () => m.welcome_pillar_infra(),
+			desc: () => m.welcome_pillar_infra_desc(),
 			color: 'text-amber-500'
 		}
 	];
@@ -161,9 +161,10 @@
 			<div class="welcome-glow-center"></div>
 		</div>
 
-		<!-- Language selector (top-right, consistent with login page) -->
-		<div class="absolute end-4 top-4 z-10">
+		<!-- Language + theme selectors (top-right, matching login page) -->
+		<div class="absolute end-4 top-4 z-10 flex gap-2">
 			<LanguageSelector />
+			<ThemeToggle />
 		</div>
 
 		<!-- Slide content — absolute positioning lets old/new slides crossfade on top of each other -->

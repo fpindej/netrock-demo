@@ -2,7 +2,7 @@
 	import { demoState, type DemoRole } from '$lib/state';
 	import * as m from '$lib/paraglide/messages';
 	import type { User } from '$lib/types';
-	import { Eye, X, Shield, ShieldCheck, User as UserIcon } from '@lucide/svelte';
+	import { Eye, X, Shield, User as UserIcon } from '@lucide/svelte';
 
 	interface Props {
 		user: User | null | undefined;
@@ -14,8 +14,7 @@
 
 	const roles: { key: DemoRole; label: () => string; icon: typeof Shield }[] = [
 		{ key: 'User', label: m.demo_role_user, icon: UserIcon },
-		{ key: 'Admin', label: m.demo_role_admin, icon: Shield },
-		{ key: 'SuperAdmin', label: m.demo_role_superAdmin, icon: ShieldCheck }
+		{ key: 'Admin', label: m.demo_role_admin, icon: Shield }
 	];
 
 	let availableRoles = $derived(roles);

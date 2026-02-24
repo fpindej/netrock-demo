@@ -70,16 +70,20 @@ describe('hasPermission', () => {
 		expect(hasPermission(user, Permissions.Users.View)).toBe(false);
 	});
 
-	it('SuperAdmin implicitly has any permission', () => {
+	it('SuperAdmin viewing as Admin has Admin-level permissions', () => {
 		const user = makeUser({ roles: ['SuperAdmin'], permissions: [] });
+		// Default demo role is Admin — SuperAdmin sees masked Admin permissions
 		expect(hasPermission(user, Permissions.Users.Manage)).toBe(true);
-		expect(hasPermission(user, Permissions.Roles.Manage)).toBe(true);
-		expect(hasPermission(user, Permissions.Jobs.Manage)).toBe(true);
+		expect(hasPermission(user, Permissions.Roles.View)).toBe(true);
+		expect(hasPermission(user, Permissions.Jobs.View)).toBe(true);
 	});
 
-	it('SuperAdmin implicitly has permissions even for unknown permission strings', () => {
+	it('SuperAdmin viewing as Admin does not have permissions outside Admin scope', () => {
 		const user = makeUser({ roles: ['SuperAdmin'], permissions: [] });
-		expect(hasPermission(user, 'some.custom.permission')).toBe(true);
+		// Roles.Manage and Jobs.Manage are NOT in ADMIN_PERMISSIONS
+		expect(hasPermission(user, Permissions.Roles.Manage)).toBe(false);
+		expect(hasPermission(user, Permissions.Jobs.Manage)).toBe(false);
+		expect(hasPermission(user, 'some.custom.permission')).toBe(false);
 	});
 
 	it('returns false for null user', () => {
@@ -135,8 +139,9 @@ describe('hasAnyPermission', () => {
 		expect(hasAnyPermission(user, [])).toBe(false);
 	});
 
-	it('SuperAdmin implicitly satisfies any permission check', () => {
+	it('SuperAdmin viewing as Admin satisfies Admin-scoped permission checks', () => {
 		const user = makeUser({ roles: ['SuperAdmin'], permissions: [] });
+		// Users.Manage is in ADMIN_PERMISSIONS, so hasAny should return true
 		expect(hasAnyPermission(user, [Permissions.Users.Manage, Permissions.Roles.Manage])).toBe(true);
 	});
 

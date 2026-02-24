@@ -6,20 +6,24 @@
 
 import { browser } from '$app/environment';
 
-/** The three demo roles a user can preview. */
-export type DemoRole = 'User' | 'Admin' | 'SuperAdmin';
+/** The two demo roles a user can preview. */
+export type DemoRole = 'User' | 'Admin';
 
 const STORAGE_KEY = 'netrock-demo-role';
+const VALID_ROLES: ReadonlySet<string> = new Set<DemoRole>(['User', 'Admin']);
 
 function canUseLocalStorage(): boolean {
 	return browser && typeof globalThis.localStorage !== 'undefined';
 }
 
+function readStoredRole(): DemoRole | null {
+	if (!canUseLocalStorage()) return null;
+	const stored = localStorage.getItem(STORAGE_KEY);
+	return stored && VALID_ROLES.has(stored) ? (stored as DemoRole) : null;
+}
+
 function createDemoState() {
-	let viewingAs = $state<DemoRole>(
-		(canUseLocalStorage() ? (localStorage.getItem(STORAGE_KEY) as DemoRole | null) : null) ??
-			'SuperAdmin'
-	);
+	let viewingAs = $state<DemoRole>(readStoredRole() ?? 'Admin');
 
 	return {
 		/** The role the demo user is currently viewing the app as. */

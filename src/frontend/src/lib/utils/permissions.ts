@@ -38,13 +38,10 @@ const ADMIN_PERMISSIONS: string[] = [
 
 /**
  * Returns the effective permissions for a demo role.
- * SuperAdmin = all (returns null to signal "allow everything").
  * Admin = a curated subset. User = none.
  */
-function getDemoPermissions(role: DemoRole): string[] | null {
+function getDemoPermissions(role: DemoRole): string[] {
 	switch (role) {
-		case 'SuperAdmin':
-			return null; // null = no masking, all permissions
 		case 'Admin':
 			return ADMIN_PERMISSIONS;
 		case 'User':
@@ -62,8 +59,6 @@ export function hasPermission(user: User | null | undefined, permission: string)
 	// When demo role is active and user is actually SuperAdmin, mask permissions
 	if (isSuperAdmin(user)) {
 		const demoPerms = getDemoPermissions(demoState.viewingAs);
-		// null means no masking (SuperAdmin view) — allow everything
-		if (demoPerms === null) return true;
 		return demoPerms.includes(permission);
 	}
 

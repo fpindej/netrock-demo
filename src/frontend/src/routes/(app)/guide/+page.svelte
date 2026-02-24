@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { reveal } from '$lib/actions/reveal';
+	import { StatPill } from '$lib/components/common';
 	import { GuideTour } from '$lib/components/guide';
 	import { Button } from '$lib/components/ui/button';
 	import {
@@ -14,34 +16,6 @@
 	} from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
 	import type { Component } from 'svelte';
-	import type { Action } from 'svelte/action';
-
-	/** Scroll-triggered reveal animation. Applied via JS to avoid SSR flash. */
-	const reveal: Action<HTMLElement, number | undefined> = (node, delay = 0) => {
-		if (
-			typeof window !== 'undefined' &&
-			window.matchMedia('(prefers-reduced-motion: reduce)').matches
-		)
-			return;
-
-		node.style.opacity = '0';
-		node.style.transform = 'translateY(20px)';
-		node.style.transition = `opacity 0.6s ease-out ${delay}ms, transform 0.6s ease-out ${delay}ms`;
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				const entry = entries[0];
-				if (entry?.isIntersecting) {
-					node.style.opacity = '1';
-					node.style.transform = 'none';
-					observer.disconnect();
-				}
-			},
-			{ threshold: 0.1 }
-		);
-		observer.observe(node);
-		return { destroy: () => observer.disconnect() };
-	};
 
 	type FeatureCard = {
 		icon: Component<IconProps>;
@@ -136,10 +110,10 @@
 		</p>
 
 		<div class="hero-animate hero-delay-3 mt-8 flex flex-wrap justify-center gap-3">
-			{@render statPill(m.guide_stats_stack(), m.guide_stats_stackDesc())}
-			{@render statPill(m.guide_stats_auth(), m.guide_stats_authDesc())}
-			{@render statPill(m.guide_stats_admin(), m.guide_stats_adminDesc())}
-			{@render statPill(m.guide_stats_pipeline(), m.guide_stats_pipelineDesc())}
+			<StatPill label={m.guide_stats_stack()} description={m.guide_stats_stackDesc()} />
+			<StatPill label={m.guide_stats_auth()} description={m.guide_stats_authDesc()} />
+			<StatPill label={m.guide_stats_admin()} description={m.guide_stats_adminDesc()} />
+			<StatPill label={m.guide_stats_pipeline()} description={m.guide_stats_pipelineDesc()} />
 		</div>
 
 		<div class="hero-animate hero-delay-3 mt-6 flex justify-center">
@@ -231,15 +205,6 @@
 	</section>
 </div>
 
-{#snippet statPill(label: string, description: string)}
-	<div
-		class="flex min-w-[9rem] flex-col items-center rounded-xl border bg-card px-5 py-3 shadow-sm transition-shadow hover:shadow-md"
-	>
-		<span class="text-sm font-bold">{label}</span>
-		<span class="text-xs text-muted-foreground">{description}</span>
-	</div>
-{/snippet}
-
 <style>
 	@keyframes hero-fade-in {
 		from {
@@ -249,7 +214,7 @@
 	}
 
 	:global(.hero-animate) {
-		animation: hero-fade-in 0.7s ease-out both;
+		animation: hero-fade-in 0.6s ease-out both;
 	}
 	:global(.hero-delay-0) {
 		animation-delay: 0ms;

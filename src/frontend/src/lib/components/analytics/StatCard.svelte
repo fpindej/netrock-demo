@@ -12,7 +12,7 @@
 </script>
 
 <Card.Root>
-	<Card.Content class="flex items-center gap-4 p-6">
+	<Card.Content class="flex items-center gap-4 p-4 sm:p-6">
 		<div class="rounded-full bg-muted p-3">
 			<Icon class="h-5 w-5 text-muted-foreground" />
 		</div>

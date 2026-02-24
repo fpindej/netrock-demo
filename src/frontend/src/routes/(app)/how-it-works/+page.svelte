@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { reveal } from '$lib/actions/reveal';
+	import { StatPill } from '$lib/components/common';
 	import * as Card from '$lib/components/ui/card';
 	import {
 		Monitor,
@@ -28,34 +30,6 @@
 	} from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
 	import type { Component } from 'svelte';
-	import type { Action } from 'svelte/action';
-
-	/** Scroll-triggered reveal animation. Applied via JS to avoid SSR flash. */
-	const reveal: Action<HTMLElement, number | undefined> = (node, delay = 0) => {
-		if (
-			typeof window !== 'undefined' &&
-			window.matchMedia('(prefers-reduced-motion: reduce)').matches
-		)
-			return;
-
-		node.style.opacity = '0';
-		node.style.transform = 'translateY(20px)';
-		node.style.transition = `opacity 0.6s ease-out ${delay}ms, transform 0.6s ease-out ${delay}ms`;
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				const entry = entries[0];
-				if (entry?.isIntersecting) {
-					node.style.opacity = '1';
-					node.style.transform = 'none';
-					observer.disconnect();
-				}
-			},
-			{ threshold: 0.1 }
-		);
-		observer.observe(node);
-		return { destroy: () => observer.disconnect() };
-	};
 
 	type FeatureItem = {
 		icon: Component<IconProps>;
@@ -168,10 +142,19 @@
 
 		<!-- Stats pills -->
 		<div class="hero-animate hero-delay-3 mt-8 flex flex-wrap justify-center gap-3">
-			{@render statPill(m.howItWorks_stats_tests(), m.howItWorks_stats_testsDesc())}
-			{@render statPill(m.howItWorks_stats_features(), m.howItWorks_stats_featuresDesc())}
-			{@render statPill(m.howItWorks_stats_languages(), m.howItWorks_stats_languagesDesc())}
-			{@render statPill(m.howItWorks_stats_architecture(), m.howItWorks_stats_architectureDesc())}
+			<StatPill label={m.howItWorks_stats_tests()} description={m.howItWorks_stats_testsDesc()} />
+			<StatPill
+				label={m.howItWorks_stats_features()}
+				description={m.howItWorks_stats_featuresDesc()}
+			/>
+			<StatPill
+				label={m.howItWorks_stats_languages()}
+				description={m.howItWorks_stats_languagesDesc()}
+			/>
+			<StatPill
+				label={m.howItWorks_stats_architecture()}
+				description={m.howItWorks_stats_architectureDesc()}
+			/>
 		</div>
 	</section>
 
@@ -437,15 +420,6 @@
 
 <!-- ── Snippets ─────────────────────────────────────────────────────── -->
 
-{#snippet statPill(label: string, description: string)}
-	<div
-		class="flex min-w-[9rem] flex-col items-center rounded-xl border bg-card px-5 py-3 shadow-sm transition-shadow hover:shadow-md"
-	>
-		<span class="text-sm font-bold">{label}</span>
-		<span class="text-xs text-muted-foreground">{description}</span>
-	</div>
-{/snippet}
-
 {#snippet archBox(
 	Icon: Component<IconProps>,
 	name: string,
@@ -511,7 +485,7 @@
 	}
 
 	:global(.hero-animate) {
-		animation: hero-fade-in 0.7s ease-out both;
+		animation: hero-fade-in 0.6s ease-out both;
 	}
 	:global(.hero-delay-0) {
 		animation-delay: 0ms;

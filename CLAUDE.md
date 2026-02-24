@@ -41,7 +41,7 @@ Run before every commit. Fix all errors before committing. **Loop until green â€
 
 ```bash
 # Backend (run when src/backend/ changed)
-dotnet build src/backend/MyProject.slnx && dotnet test src/backend/MyProject.slnx -c Release
+dotnet build src/backend/Netrock.slnx && dotnet test src/backend/Netrock.slnx -c Release
 
 # Frontend (run when src/frontend/ changed)
 cd src/frontend && pnpm run test && pnpm run format && pnpm run lint && pnpm run check

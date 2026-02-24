@@ -258,8 +258,8 @@ docker volume rm $(docker volume ls -q | grep frontend_node_modules)
 **Fix:**
 
 ```bash
-dotnet restore src/backend/MyProject.slnx
-dotnet build src/backend/MyProject.slnx
+dotnet restore src/backend/Netrock.slnx
+dotnet build src/backend/Netrock.slnx
 ```
 
 ### Tests fail with "connection refused"
@@ -280,8 +280,8 @@ If you see "connection refused," something is incorrectly trying to reach Postgr
 
 ```bash
 dotnet ef migrations add <MigrationName> \
-  --project src/backend/MyProject.Infrastructure \
-  --startup-project src/backend/MyProject.WebApi \
+  --project src/backend/Netrock.Infrastructure \
+  --startup-project src/backend/Netrock.WebApi \
   --output-dir Persistence/Migrations
 ```
 

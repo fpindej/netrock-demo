@@ -11,11 +11,11 @@
 
 | File | Change | Reason |
 |------|--------|--------|
-| `src/backend/MyProject.Shared/ErrorMessages.cs` | Added `Admin.RoleAssignEscalation` constant | Consistent error message for the new guard |
-| `src/backend/MyProject.Infrastructure/Features/Admin/Services/AdminService.cs` | Added `EnforceRolePermissionEscalationAsync` private method; wired into `AssignRoleAsync` for rank-0 roles | Core fix — checks target role's permissions are a subset of caller's permissions |
-| `src/backend/MyProject.Application/Features/Admin/IAdminService.cs` | Updated `AssignRoleAsync` XML doc | Document the new escalation guard in the interface contract |
-| `src/backend/tests/MyProject.Component.Tests/Services/AdminServiceTests.cs` | Added 6 component tests | Cover all guard paths: unheld permissions, held permissions, multi-role aggregation, SuperAdmin bypass, system role skip, empty permissions |
-| `src/backend/tests/MyProject.Api.Tests/Controllers/AdminControllerTests.cs` | Added 1 API test | Verify 403 + ProblemDetails response for the escalation path |
+| `src/backend/Netrock.Shared/ErrorMessages.cs` | Added `Admin.RoleAssignEscalation` constant | Consistent error message for the new guard |
+| `src/backend/Netrock.Infrastructure/Features/Admin/Services/AdminService.cs` | Added `EnforceRolePermissionEscalationAsync` private method; wired into `AssignRoleAsync` for rank-0 roles | Core fix — checks target role's permissions are a subset of caller's permissions |
+| `src/backend/Netrock.Application/Features/Admin/IAdminService.cs` | Updated `AssignRoleAsync` XML doc | Document the new escalation guard in the interface contract |
+| `src/backend/tests/Netrock.Component.Tests/Services/AdminServiceTests.cs` | Added 6 component tests | Cover all guard paths: unheld permissions, held permissions, multi-role aggregation, SuperAdmin bypass, system role skip, empty permissions |
+| `src/backend/tests/Netrock.Api.Tests/Controllers/AdminControllerTests.cs` | Added 1 API test | Verify 403 + ProblemDetails response for the escalation path |
 
 ## Decisions & Reasoning
 

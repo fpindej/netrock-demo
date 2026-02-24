@@ -6,7 +6,7 @@
 
 | Feature | Implementation |
 |---|---|
-| **Clean Architecture** | Domain → Application → Infrastructure → WebApi, with [architecture tests](../src/backend/tests/MyProject.Architecture.Tests) enforcing dependency rules |
+| **Clean Architecture** | Domain → Application → Infrastructure → WebApi, with [architecture tests](../src/backend/tests/Netrock.Architecture.Tests) enforcing dependency rules |
 | **Authentication** | JWT in HttpOnly cookies, refresh token rotation with reuse detection, security stamp validation, remember-me persistent sessions |
 | **Authorization** | Permission-based with custom roles — atomic permissions (`users.view`, `roles.manage`, …) assigned per role, enforced via `[RequirePermission]` attribute |
 | **Role Hierarchy** | SuperAdmin > Admin > User — privilege escalation prevention, self-protection rules, system role guards |

@@ -20,8 +20,8 @@ Infer the feature, operation, HTTP method, route, shapes, and auth from context.
 
 **Verify and commit:**
 
-11. `dotnet build src/backend/MyProject.slnx` — fix errors, loop until green
-12. `dotnet test src/backend/MyProject.slnx -c Release` — fix failures, loop until green
+11. `dotnet build src/backend/Netrock.slnx` — fix errors, loop until green
+12. `dotnet test src/backend/Netrock.slnx -c Release` — fix failures, loop until green
 13. Commit: `feat({feature}): add {operation} endpoint`
 14. Regenerate frontend types: `cd src/frontend && pnpm run api:generate` — fix any type errors
 15. Commit type changes if applicable

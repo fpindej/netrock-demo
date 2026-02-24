@@ -11,15 +11,15 @@
 
 | File | Change | Reason |
 |------|--------|--------|
-| `src/backend/MyProject.Shared/ErrorMessages.cs` | Added `Roles.CannotGrantUnheldPermission` | Static error message for escalation denial |
-| `src/backend/MyProject.Shared/ErrorType.cs` | Added `Forbidden = 3` | Authorization denials should return 403, not 400 |
-| `src/backend/MyProject.WebApi/Shared/ProblemFactory.cs` | Added `Forbidden => 403` mapping | Wire new ErrorType to HTTP status code |
-| `src/backend/MyProject.Application/Features/Admin/IRoleManagementService.cs` | Added `callerUserId` param to `SetRolePermissionsAsync` | Service needs caller identity for escalation check |
-| `src/backend/MyProject.Infrastructure/Features/Admin/Services/RoleManagementService.cs` | Added `EnforcePermissionEscalationAsync` private method | Core fix: resolves caller permissions from DB, rejects if granting unheld permissions |
-| `src/backend/MyProject.WebApi/Features/Admin/AdminController.cs` | Passes `userContext.AuthenticatedUserId` to service | Follows existing pattern from all other admin mutations |
-| `src/backend/tests/MyProject.Unit.Tests/Shared/ErrorTypeTests.cs` | Updated enum count, added Forbidden value test | Prevent silent enum additions |
-| `src/backend/tests/MyProject.Api.Tests/Controllers/AdminControllerTests.cs` | Added 6 new tests (callerUserId verification, 403, 404, SuperAdmin, etc.) | Full HTTP-level coverage of all SetPermissions paths |
-| `src/backend/tests/MyProject.Component.Tests/Services/RoleManagementServiceTests.cs` | Added 5 new tests + 2 helpers, tightened existing | Every branch of `EnforcePermissionEscalationAsync` covered |
+| `src/backend/Netrock.Shared/ErrorMessages.cs` | Added `Roles.CannotGrantUnheldPermission` | Static error message for escalation denial |
+| `src/backend/Netrock.Shared/ErrorType.cs` | Added `Forbidden = 3` | Authorization denials should return 403, not 400 |
+| `src/backend/Netrock.WebApi/Shared/ProblemFactory.cs` | Added `Forbidden => 403` mapping | Wire new ErrorType to HTTP status code |
+| `src/backend/Netrock.Application/Features/Admin/IRoleManagementService.cs` | Added `callerUserId` param to `SetRolePermissionsAsync` | Service needs caller identity for escalation check |
+| `src/backend/Netrock.Infrastructure/Features/Admin/Services/RoleManagementService.cs` | Added `EnforcePermissionEscalationAsync` private method | Core fix: resolves caller permissions from DB, rejects if granting unheld permissions |
+| `src/backend/Netrock.WebApi/Features/Admin/AdminController.cs` | Passes `userContext.AuthenticatedUserId` to service | Follows existing pattern from all other admin mutations |
+| `src/backend/tests/Netrock.Unit.Tests/Shared/ErrorTypeTests.cs` | Updated enum count, added Forbidden value test | Prevent silent enum additions |
+| `src/backend/tests/Netrock.Api.Tests/Controllers/AdminControllerTests.cs` | Added 6 new tests (callerUserId verification, 403, 404, SuperAdmin, etc.) | Full HTTP-level coverage of all SetPermissions paths |
+| `src/backend/tests/Netrock.Component.Tests/Services/RoleManagementServiceTests.cs` | Added 5 new tests + 2 helpers, tightened existing | Every branch of `EnforcePermissionEscalationAsync` covered |
 
 ## Decisions & Reasoning
 

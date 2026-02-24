@@ -4,17 +4,17 @@
 
 ```
 src/backend/
-├── MyProject.Shared/              # Result, ErrorType, ErrorMessages (zero deps)
-├── MyProject.Domain/Entities/     # Business entities (BaseEntity)
-├── MyProject.Application/         # Interfaces, DTOs, service contracts
+├── Netrock.Shared/              # Result, ErrorType, ErrorMessages (zero deps)
+├── Netrock.Domain/Entities/     # Business entities (BaseEntity)
+├── Netrock.Application/         # Interfaces, DTOs, service contracts
 │   ├── Features/{Feature}/I{Feature}Service.cs
 │   ├── Features/{Feature}/Dtos/{Operation}Input.cs, {Entity}Output.cs
 │   ├── Identity/IUserService.cs, IUserContext.cs
 │   └── Identity/Constants/AppRoles.cs, AppPermissions.cs
-├── MyProject.Infrastructure/      # Implementations (all internal)
+├── Netrock.Infrastructure/      # Implementations (all internal)
 │   ├── Features/{Feature}/Services/, Configurations/, Extensions/
-│   └── Persistence/MyProjectDbContext.cs
-└── MyProject.WebApi/              # Entry point
+│   └── Persistence/NetrockDbContext.cs
+└── Netrock.WebApi/              # Entry point
     ├── Features/{Feature}/{Feature}Controller.cs, {Feature}Mapper.cs
     ├── Features/{Feature}/Dtos/{Operation}/{Operation}Request.cs + Validator
     ├── Authorization/             # RequirePermission, PermissionPolicyProvider
@@ -74,8 +74,8 @@ Configurations inherit `BaseEntityConfiguration<T>` (`public abstract`), overrid
 Migration command:
 ```bash
 dotnet ef migrations add {Name} \
-  --project src/backend/MyProject.Infrastructure \
-  --startup-project src/backend/MyProject.WebApi \
+  --project src/backend/Netrock.Infrastructure \
+  --startup-project src/backend/Netrock.WebApi \
   --output-dir Persistence/Migrations
 ```
 

@@ -31,7 +31,7 @@ Quick-reference for "when you change X, also update Y" and "where does X live?"
 | **Application interface** (change signature) | Infrastructure service implementation, controller calling the service |
 | **Application DTO** (add/rename/remove field) | Infrastructure service, WebApi mapper, WebApi request/response DTO, frontend types |
 | **Infrastructure EF config** (change mapping) | Run new migration |
-| **`MyProjectDbContext`** (add DbSet) | Run new migration |
+| **`NetrockDbContext`** (add DbSet) | Run new migration |
 | **Infrastructure service** (change behavior) | Verify controller still maps correctly, verify error messages still apply |
 | **Infrastructure Options class** | `appsettings.json`, `appsettings.Development.json` (excluded from production publish — see `StripDevConfig`), `deploy/envs/local/api.env`, `deploy/envs/production-example/api.env`, DI registration |
 | **DI extension** (new service registration) | `Program.cs` must call the extension |
@@ -83,7 +83,7 @@ Quick-reference for "when you change X, also update Y" and "where does X live?"
 | **`HostingExtensions.cs`** (change middleware behavior) | `Program.cs`, `AGENTS.md` Hosting Configuration section |
 | **`Dockerfile`** (backend — change build/publish steps) | `.dockerignore`, verify published files don't include dev/test config |
 | **`Dockerfile`** (frontend — change build steps) | `.dockerignore`, `.npmrc` (copied into image for install-affecting settings), `docker.yml` build args, `deploy/build.sh`/`deploy/build.ps1` build args. New `PUBLIC_*` SvelteKit env vars need `ARG`+`ENV` in Dockerfile (before `pnpm run build`), `--build-arg` in deploy scripts and `docker.yml` |
-| **`MyProject.WebApi.csproj`** (add appsettings file) | If non-production: add `CopyToPublishDirectory="Never"` and matching `rm -f` in `Dockerfile` |
+| **`Netrock.WebApi.csproj`** (add appsettings file) | If non-production: add `CopyToPublishDirectory="Never"` and matching `rm -f` in `Dockerfile` |
 | **Route constraint** (add/modify in `Routing/`) | `Program.cs` constraint registration, route templates using that constraint |
 | **`HealthCheckExtensions.cs`** (change endpoints/checks) | `deploy/docker-compose.yml` healthcheck URLs, frontend health proxy `+server.ts` |
 | **`ProblemDetailsAuthorizationHandler`** | `ProblemDetails` shape, `ErrorMessages.Auth` constants, `Program.cs` registration |
@@ -157,7 +157,7 @@ Files that are frequently referenced in impact tables above. For anything not li
 ### Backend Naming Patterns
 
 ```
-src/backend/MyProject.{Layer}/
+src/backend/Netrock.{Layer}/
   Shared:          Result.cs, ErrorType.cs, ErrorMessages.cs, PhoneNumberHelper.cs
   Domain:          Entities/{Entity}.cs
   Application:     Features/{Feature}/I{Feature}Service.cs
@@ -172,7 +172,7 @@ src/backend/MyProject.{Layer}/
   Infrastructure:  Features/{Feature}/Services/{Feature}Service.cs
                    Features/{Feature}/Configurations/{Entity}Configuration.cs
                    Features/{Feature}/Extensions/ServiceCollectionExtensions.cs
-                   Persistence/MyProjectDbContext.cs
+                   Persistence/NetrockDbContext.cs
   WebApi:          Features/{Feature}/{Feature}Controller.cs
                    Features/{Feature}/{Feature}Mapper.cs
                    Features/{Feature}/Dtos/{Operation}/{Operation}Request.cs
@@ -203,7 +203,7 @@ src/frontend/src/
 ### Job Scheduling Patterns
 
 ```
-src/backend/MyProject.Infrastructure/Features/Jobs/
+src/backend/Netrock.Infrastructure/Features/Jobs/
   IRecurringJobDefinition.cs                          Interface for recurring jobs
   RecurringJobs/{JobName}Job.cs                       Recurring job implementations
   Examples/ExampleFireAndForgetJob.cs                 Example one-time job (removable)
@@ -213,10 +213,10 @@ src/backend/MyProject.Infrastructure/Features/Jobs/
   Options/JobSchedulingOptions.cs                     Configuration (Enabled, WorkerCount)
   Extensions/ServiceCollectionExtensions.cs           DI registration
   Extensions/ApplicationBuilderExtensions.cs          Middleware + job registration + pause restore
-src/backend/MyProject.Application/Features/Jobs/
+src/backend/Netrock.Application/Features/Jobs/
   IJobManagementService.cs                            Admin API interface
   Dtos/RecurringJobOutput.cs, ...                     Job DTOs
-src/backend/MyProject.WebApi/Features/Admin/
+src/backend/Netrock.WebApi/Features/Admin/
   JobsController.cs                                   Admin job endpoints
   JobsMapper.cs                                       DTO mapping
   Dtos/Jobs/                                          Response DTOs
@@ -225,14 +225,14 @@ src/backend/MyProject.WebApi/Features/Admin/
 ### Email Template Patterns
 
 ```
-src/backend/MyProject.Application/Features/Email/
+src/backend/Netrock.Application/Features/Email/
   IEmailTemplateRenderer.cs                         Rendering interface (Render<TModel>)
   ITemplatedEmailSender.cs                          Safe render+send interface (SendSafeAsync)
   Models/EmailTemplateModels.cs                     Model records (one per template)
   EmailTemplateNames.cs                             Template name constants (kebab-case)
   IEmailService.cs                                  Sending interface
   EmailMessage.cs                                   Message envelope DTO
-src/backend/MyProject.Infrastructure/Features/Email/
+src/backend/Netrock.Infrastructure/Features/Email/
   Services/FluidEmailTemplateRenderer.cs            Fluid-based renderer (singleton, cached)
   Services/TemplatedEmailSender.cs                  Render+send wrapper (swallows failures)
   Services/NoOpEmailService.cs                      Dev/test no-op sender
@@ -248,19 +248,19 @@ src/backend/MyProject.Infrastructure/Features/Email/
 
 ```
 src/backend/tests/
-  MyProject.Unit.Tests/
+  Netrock.Unit.Tests/
     {Layer}/{ClassUnderTest}Tests.cs             Unit tests (pure logic)
-  MyProject.Component.Tests/
+  Netrock.Component.Tests/
     Fixtures/TestDbContextFactory.cs             InMemory DbContext factory
     Fixtures/IdentityMockHelpers.cs              UserManager/RoleManager mock setup
     Services/{Service}Tests.cs                   Service tests (mocked deps)
-  MyProject.Api.Tests/
+  Netrock.Api.Tests/
     Fixtures/CustomWebApplicationFactory.cs      WebApplicationFactory config
     Fixtures/TestAuthHandler.cs                  Fake auth handler
     Contracts/ResponseContracts.cs               Frozen response shapes for contract testing
     Controllers/{Controller}Tests.cs             HTTP integration tests
     Validators/{Validator}Tests.cs               FluentValidation tests
-  MyProject.Architecture.Tests/
+  Netrock.Architecture.Tests/
     DependencyTests.cs                           Layer dependency rules
     NamingConventionTests.cs                     Class naming enforcement
     AccessModifierTests.cs                       Visibility rules
@@ -270,15 +270,15 @@ src/backend/tests/
 
 | File | Why it matters |
 |---|---|
-| `src/backend/MyProject.WebApi/Program.cs` | DI wiring, middleware pipeline |
-| `src/backend/MyProject.Infrastructure/Persistence/MyProjectDbContext.cs` | DbSets, migrations |
-| `src/backend/MyProject.Shared/ErrorMessages.cs` | All static error strings |
-| `src/backend/MyProject.Application/Identity/Constants/AppRoles.cs` | Role definitions |
-| `src/backend/MyProject.Application/Identity/Constants/AppPermissions.cs` | Permission definitions (reflection-discovered) |
-| `src/backend/MyProject.Application/Caching/Constants/CacheKeys.cs` | Cache key constants (used across services) |
-| `src/backend/MyProject.Application/Features/Email/EmailTemplateNames.cs` | Email template name constants |
+| `src/backend/Netrock.WebApi/Program.cs` | DI wiring, middleware pipeline |
+| `src/backend/Netrock.Infrastructure/Persistence/NetrockDbContext.cs` | DbSets, migrations |
+| `src/backend/Netrock.Shared/ErrorMessages.cs` | All static error strings |
+| `src/backend/Netrock.Application/Identity/Constants/AppRoles.cs` | Role definitions |
+| `src/backend/Netrock.Application/Identity/Constants/AppPermissions.cs` | Permission definitions (reflection-discovered) |
+| `src/backend/Netrock.Application/Caching/Constants/CacheKeys.cs` | Cache key constants (used across services) |
+| `src/backend/Netrock.Application/Features/Email/EmailTemplateNames.cs` | Email template name constants |
 | `src/frontend/src/lib/utils/permissions.ts` | Frontend permission constants + helpers |
-| `src/backend/MyProject.WebApi/Shared/RateLimitPolicies.cs` | Rate limit policy name constants |
+| `src/backend/Netrock.WebApi/Shared/RateLimitPolicies.cs` | Rate limit policy name constants |
 | `src/backend/Directory.Packages.props` | NuGet versions (never in .csproj) |
 | `src/frontend/src/lib/components/layout/SidebarNav.svelte` | Navigation entries |
 | `src/frontend/src/lib/api/v1.d.ts` | Generated types (never hand-edit) |
@@ -293,5 +293,5 @@ src/backend/tests/
 | `deploy/up.sh` / `deploy/up.ps1` | Environment launcher (local/production) |
 | `deploy/config.json` | Deploy configuration (registries, versioning) |
 | `src/frontend/.env.test` | CI + test environment defaults (loaded by `ci.yml`) |
-| `src/backend/MyProject.WebApi/appsettings.Testing.json` | Test environment config (disables Redis, Hangfire, CORS) |
-| `src/backend/tests/MyProject.Api.Tests/Fixtures/CustomWebApplicationFactory.cs` | Test host configuration for API tests |
+| `src/backend/Netrock.WebApi/appsettings.Testing.json` | Test environment config (disables Redis, Hangfire, CORS) |
+| `src/backend/tests/Netrock.Api.Tests/Fixtures/CustomWebApplicationFactory.cs` | Test host configuration for API tests |

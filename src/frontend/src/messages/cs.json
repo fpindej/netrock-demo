@@ -783,7 +783,7 @@
 
 	"welcome_skip": "Přeskočit",
 	"welcome_splash_title": "Vítejte v NETrock",
-	"welcome_splash_subtitle": "Produkční full-stack šablona — od nuly k produkci bez zbytečného čekání.",
+	"welcome_splash_subtitle": "Kompletní základ pro vaši další webovou aplikaci — ať už stavíte firemní systém, nebo spouštíte vlastní produkt.",
 	"welcome_features_title": "Vše, co potřebujete, je vestavěné",
 	"welcome_pillar_auth": "Autentizace",
 	"welcome_pillar_auth_desc": "JWT tokeny, rotace refresh tokenů, ověření e-mailu, reset hesla",
@@ -800,10 +800,10 @@
 	"welcome_privacy_anonymized": "Plně anonymizováno — demo data jsou izolovaná a nejsou propojena s žádnou externí identitou",
 	"welcome_privacy_cleared": "Pravidelně mazáno — všechna demo data jsou automaticky odstraňována v pravidelných intervalech",
 	"welcome_privacy_learnMore": "Zjistěte více o naší ochraně soukromí",
-	"welcome_cta_title": "Připraveni prozkoumat?",
-	"welcome_cta_subtitle": "Vytvořte si účet během pár sekund a vyzkoušejte vše naživo.",
+	"welcome_cta_title": "Vyzkoušejte vše naživo",
+	"welcome_cta_subtitle": "Vytvořte si účet zdarma a prozkoumejte každou funkci — pak si šablonu vezměte a upravte podle sebe.",
 	"welcome_cta_register": "Vytvořit účet",
 	"welcome_cta_signIn": "Přihlásit se",
-	"welcome_cta_note": "Je to zdarma a trvá to 30 sekund.",
+	"welcome_cta_note": "Bez platební karty. Bez závazků. Jen prozkoumejte.",
 	"welcome_replay": "Prohlídka"
 }

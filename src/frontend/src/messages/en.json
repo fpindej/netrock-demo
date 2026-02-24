@@ -783,7 +783,7 @@
 
 	"welcome_skip": "Skip",
 	"welcome_splash_title": "Welcome to NETrock",
-	"welcome_splash_subtitle": "A production-ready full-stack template — built to get you from zero to launch.",
+	"welcome_splash_subtitle": "A complete foundation for your next web app — whether you're building a business system or launching your own product.",
 	"welcome_features_title": "Everything You Need, Built In",
 	"welcome_pillar_auth": "Authentication",
 	"welcome_pillar_auth_desc": "JWT tokens, refresh rotation, email verification, password reset",
@@ -800,10 +800,10 @@
 	"welcome_privacy_anonymized": "Fully anonymized — demo data is isolated and not linked to any external identity",
 	"welcome_privacy_cleared": "Periodically cleared — all demo data is automatically deleted on a regular schedule",
 	"welcome_privacy_learnMore": "Learn more about our privacy policy",
-	"welcome_cta_title": "Ready to Explore?",
-	"welcome_cta_subtitle": "Create an account in seconds and see everything in action.",
+	"welcome_cta_title": "See It All in Action",
+	"welcome_cta_subtitle": "Create a free account and explore every feature — then take the template and make it yours.",
 	"welcome_cta_register": "Create Account",
 	"welcome_cta_signIn": "Sign In Instead",
-	"welcome_cta_note": "It's free and takes 30 seconds.",
+	"welcome_cta_note": "No credit card. No commitment. Just explore.",
 	"welcome_replay": "Tour"
 }

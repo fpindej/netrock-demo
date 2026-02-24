@@ -1,5 +1,4 @@
 <script lang="ts">
-	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import {
 		Server,
@@ -16,9 +15,10 @@
 		UserCircle,
 		GraduationCap,
 		Handshake,
-		Layers,
-		Webhook,
 		Rocket,
+		Github,
+		ExternalLink,
+		BookOpen,
 		type IconProps
 	} from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
@@ -109,40 +109,6 @@
 			gradientFrom: 'from-pink-500'
 		}
 	];
-
-	type PathCard = {
-		icon: Component<IconProps>;
-		title: () => string;
-		description: () => string;
-		iconClass: string;
-	};
-
-	const paths: PathCard[] = [
-		{
-			icon: Layers,
-			title: m.forYou_paths_extend_title,
-			description: m.forYou_paths_extend_description,
-			iconClass: 'bg-blue-500/10 text-blue-500'
-		},
-		{
-			icon: Code,
-			title: m.forYou_paths_custom_title,
-			description: m.forYou_paths_custom_description,
-			iconClass: 'bg-violet-500/10 text-violet-500'
-		},
-		{
-			icon: Smartphone,
-			title: m.forYou_paths_mobile_title,
-			description: m.forYou_paths_mobile_description,
-			iconClass: 'bg-amber-500/10 text-amber-500'
-		},
-		{
-			icon: Webhook,
-			title: m.forYou_paths_external_title,
-			description: m.forYou_paths_external_description,
-			iconClass: 'bg-pink-500/10 text-pink-500'
-		}
-	];
 </script>
 
 <div class="space-y-12 pb-8">
@@ -171,6 +137,59 @@
 			{@render statPill(m.forYou_hero_stat2(), m.forYou_hero_stat2Desc())}
 			{@render statPill(m.forYou_hero_stat3(), m.forYou_hero_stat3Desc())}
 			{@render statPill(m.forYou_hero_stat4(), m.forYou_hero_stat4Desc())}
+		</div>
+	</section>
+
+	<div class="h-px w-full bg-border"></div>
+
+	<!-- ── Persona Cards ────────────────────────────────────────────── -->
+	<section>
+		<div class="mb-8 text-center" use:reveal>
+			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
+				{m.forYou_personas_title()}
+			</h2>
+			<p class="mt-2 text-sm text-muted-foreground sm:text-base">
+				{m.forYou_personas_description()}
+			</p>
+		</div>
+
+		<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+			{#each personas as persona, i (persona.title())}
+				<div
+					class="group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:bg-accent/50"
+					use:reveal={i * 80}
+				>
+					<div
+						class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r {persona.gradientFrom} to-transparent"
+					></div>
+					<div class="flex flex-1 flex-col gap-4 p-5">
+						<div class="flex items-center gap-3">
+							<div
+								class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg {persona.bgColor}"
+							>
+								<persona.icon class="h-5 w-5 {persona.color}" />
+							</div>
+							<h3 class="text-sm font-semibold">{persona.title()}</h3>
+						</div>
+
+						<div>
+							<p class="text-xs font-semibold tracking-wider text-muted-foreground/70 uppercase">
+								{m.forYou_personas_painPointLabel()}
+							</p>
+							<p class="mt-1 text-sm text-muted-foreground">{persona.pain()}</p>
+						</div>
+
+						<div class="h-px w-full bg-border"></div>
+
+						<div>
+							<p class="text-xs font-semibold tracking-wider text-muted-foreground/70 uppercase">
+								{m.forYou_personas_solutionLabel()}
+							</p>
+							<p class="mt-1 text-sm text-muted-foreground">{persona.value()}</p>
+						</div>
+					</div>
+				</div>
+			{/each}
 		</div>
 	</section>
 
@@ -303,93 +322,6 @@
 
 	<div class="h-px w-full bg-border"></div>
 
-	<!-- ── Persona Cards ────────────────────────────────────────────── -->
-	<section>
-		<div class="mb-8 text-center" use:reveal>
-			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
-				{m.forYou_personas_title()}
-			</h2>
-			<p class="mt-2 text-sm text-muted-foreground sm:text-base">
-				{m.forYou_personas_description()}
-			</p>
-		</div>
-
-		<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-			{#each personas as persona, i (persona.title())}
-				<div
-					class="group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:bg-accent/50"
-					use:reveal={i * 80}
-				>
-					<div
-						class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r {persona.gradientFrom} to-transparent"
-					></div>
-					<div class="flex flex-1 flex-col gap-4 p-5">
-						<div class="flex items-center gap-3">
-							<div
-								class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg {persona.bgColor}"
-							>
-								<persona.icon class="h-5 w-5 {persona.color}" />
-							</div>
-							<h3 class="text-sm font-semibold">{persona.title()}</h3>
-						</div>
-
-						<div>
-							<p class="text-xs font-semibold tracking-wider text-muted-foreground/70 uppercase">
-								{m.forYou_personas_painPointLabel()}
-							</p>
-							<p class="mt-1 text-sm text-muted-foreground">{persona.pain()}</p>
-						</div>
-
-						<div class="h-px w-full bg-border"></div>
-
-						<div>
-							<p class="text-xs font-semibold tracking-wider text-muted-foreground/70 uppercase">
-								{m.forYou_personas_solutionLabel()}
-							</p>
-							<p class="mt-1 text-sm text-muted-foreground">{persona.value()}</p>
-						</div>
-					</div>
-				</div>
-			{/each}
-		</div>
-	</section>
-
-	<div class="h-px w-full bg-border"></div>
-
-	<!-- ── Extensibility Paths ──────────────────────────────────────── -->
-	<section>
-		<div class="mb-8 text-center" use:reveal>
-			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
-				{m.forYou_paths_title()}
-			</h2>
-			<p class="mt-2 text-sm text-muted-foreground sm:text-base">
-				{m.forYou_paths_description()}
-			</p>
-		</div>
-
-		<div class="grid gap-4 sm:grid-cols-2">
-			{#each paths as path, i (path.title())}
-				<div class="h-full" use:reveal={i * 100}>
-					<Card.Root class="h-full">
-						<Card.Header>
-							<div class="flex items-center gap-3">
-								<div class="flex h-10 w-10 items-center justify-center rounded-lg {path.iconClass}">
-									<path.icon class="h-5 w-5" />
-								</div>
-								<Card.Title class="text-base">{path.title()}</Card.Title>
-							</div>
-						</Card.Header>
-						<Card.Content>
-							<p class="text-sm text-muted-foreground">{path.description()}</p>
-						</Card.Content>
-					</Card.Root>
-				</div>
-			{/each}
-		</div>
-	</section>
-
-	<div class="h-px w-full bg-border"></div>
-
 	<!-- ── CTA ──────────────────────────────────────────────────────── -->
 	<section use:reveal>
 		<div
@@ -405,10 +337,25 @@
 				{m.forYou_cta_subtitle()}
 			</p>
 			<div class="mt-5 flex flex-col items-center gap-3">
-				<Button href="/login">{m.forYou_cta_button()}</Button>
-				<Button variant="link" size="sm" href="/how-it-works" class="h-auto gap-1 p-0 text-xs">
-					{m.forYou_cta_learnMore()}
-					<ArrowRight class="h-3.5 w-3.5" />
+				<Button href="https://github.com/fpindej/netrock" target="_blank" rel="noopener noreferrer">
+					<Github class="me-2 h-4 w-4" />
+					{m.forYou_cta_button()}
+					<ExternalLink class="ms-2 h-3.5 w-3.5" />
+				</Button>
+				<Button variant="outline" size="sm" href="/login">
+					{m.forYou_cta_explore()}
+				</Button>
+				<Button
+					variant="link"
+					size="sm"
+					href="https://deepwiki.org/fpindej/netrock"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="h-auto gap-1 p-0 text-xs"
+				>
+					<BookOpen class="h-3.5 w-3.5" />
+					{m.forYou_cta_docs()}
+					<ExternalLink class="h-3 w-3" />
 				</Button>
 			</div>
 		</div>

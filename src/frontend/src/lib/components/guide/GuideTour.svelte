@@ -68,6 +68,15 @@
 						]
 					: []),
 				{
+					element: '[data-tour="nav-for-you"]',
+					popover: {
+						title: m.tour_forYou_title(),
+						description: m.tour_forYou_description(),
+						side,
+						align: 'center' as const
+					}
+				},
+				{
 					element: '[data-tour="nav-guide"]',
 					popover: {
 						title: m.tour_guide_title(),

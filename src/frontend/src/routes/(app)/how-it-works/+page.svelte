@@ -199,8 +199,8 @@
 					'text-blue-500'
 				)}
 			</div>
-			<ArrowRight class="arrow-pulse hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
-			<ArrowDown class="arrow-pulse h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
+			<ArrowRight class="arrow-flow hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
+			<ArrowDown class="arrow-flow-down h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
 			<div use:reveal={150}>
 				{@render archBox(
 					Server,
@@ -210,8 +210,8 @@
 					'text-green-500'
 				)}
 			</div>
-			<ArrowRight class="arrow-pulse hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
-			<ArrowDown class="arrow-pulse h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
+			<ArrowRight class="arrow-flow hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
+			<ArrowDown class="arrow-flow-down h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
 			<div use:reveal={300}>
 				{@render archBox(
 					Database,
@@ -281,8 +281,8 @@
 
 		<div class="grid gap-6 sm:grid-cols-3">
 			<!-- Frontend -->
-			<div use:reveal={0}>
-				<Card.Root class="relative overflow-hidden">
+			<div class="h-full" use:reveal={0}>
+				<Card.Root class="relative h-full overflow-hidden">
 					<div
 						class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500"
 					></div>
@@ -304,8 +304,8 @@
 			</div>
 
 			<!-- Backend -->
-			<div use:reveal={120}>
-				<Card.Root class="relative overflow-hidden">
+			<div class="h-full" use:reveal={120}>
+				<Card.Root class="relative h-full overflow-hidden">
 					<div
 						class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-green-500 to-emerald-500"
 					></div>
@@ -327,8 +327,8 @@
 			</div>
 
 			<!-- Infrastructure -->
-			<div use:reveal={240}>
-				<Card.Root class="relative overflow-hidden">
+			<div class="h-full" use:reveal={240}>
+				<Card.Root class="relative h-full overflow-hidden">
 					<div
 						class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-500 to-orange-500"
 					></div>
@@ -366,7 +366,7 @@
 		</div>
 
 		<div class="grid gap-4 sm:grid-cols-2">
-			<div use:reveal={0}>
+			<div class="h-full" use:reveal={0}>
 				{@render qualityCard(
 					Bot,
 					m.howItWorks_quality_ai_title(),
@@ -374,7 +374,7 @@
 					'bg-violet-500/10 text-violet-500'
 				)}
 			</div>
-			<div use:reveal={100}>
+			<div class="h-full" use:reveal={100}>
 				{@render qualityCard(
 					TestTube,
 					m.howItWorks_quality_testing_title(),
@@ -382,7 +382,7 @@
 					'bg-emerald-500/10 text-emerald-500'
 				)}
 			</div>
-			<div use:reveal={200}>
+			<div class="h-full" use:reveal={200}>
 				{@render qualityCard(
 					FileCode2,
 					m.howItWorks_quality_conventions_title(),
@@ -390,7 +390,7 @@
 					'bg-blue-500/10 text-blue-500'
 				)}
 			</div>
-			<div use:reveal={300}>
+			<div class="h-full" use:reveal={300}>
 				{@render qualityCard(
 					ShieldCheck,
 					m.howItWorks_quality_security_title(),
@@ -486,7 +486,7 @@
 	description: string,
 	iconClass: string
 )}
-	<Card.Root>
+	<Card.Root class="h-full">
 		<Card.Header>
 			<div class="flex items-center gap-3">
 				<div class="flex h-10 w-10 items-center justify-center rounded-lg {iconClass}">
@@ -526,19 +526,37 @@
 		animation-delay: 350ms;
 	}
 
-	/* Gentle arrow pulse between architecture boxes */
-	@keyframes arrow-pulse {
+	/* Directional nudge for architecture flow arrows */
+	@keyframes arrow-nudge {
 		0%,
 		100% {
-			opacity: 0.3;
+			transform: translateX(0);
+			opacity: 0.4;
 		}
 		50% {
-			opacity: 0.8;
+			transform: translateX(3px);
+			opacity: 0.9;
 		}
 	}
 
-	:global(.arrow-pulse) {
-		animation: arrow-pulse 2.5s ease-in-out infinite;
+	@keyframes arrow-nudge-down {
+		0%,
+		100% {
+			transform: translateY(0);
+			opacity: 0.4;
+		}
+		50% {
+			transform: translateY(3px);
+			opacity: 0.9;
+		}
+	}
+
+	:global(.arrow-flow) {
+		animation: arrow-nudge 2s ease-in-out infinite;
+	}
+
+	:global(.arrow-flow-down) {
+		animation: arrow-nudge-down 2s ease-in-out infinite;
 	}
 
 	/* Respect reduced motion */
@@ -546,7 +564,8 @@
 		:global(.hero-animate) {
 			animation: none;
 		}
-		:global(.arrow-pulse) {
+		:global(.arrow-flow),
+		:global(.arrow-flow-down) {
 			animation: none;
 		}
 	}

@@ -663,5 +663,25 @@
 
 	"privacy_backToLogin": "Back to login",
 	"register_privacyNotice_prefix": "By registering, you agree to our",
-	"register_privacyNotice_linkText": "Privacy Notice"
+	"register_privacyNotice_linkText": "Privacy Notice",
+
+	"tour_startButton": "Start Interactive Tour",
+	"tour_next": "Next",
+	"tour_prev": "Previous",
+	"tour_done": "Done",
+	"tour_progress": "{current} of {total}",
+	"tour_welcome_title": "Welcome to NETrock",
+	"tour_welcome_description": "NETrock is a production-ready full-stack template — .NET API with SvelteKit frontend. Let's take a quick tour of what's inside.",
+	"tour_guide_title": "Interactive Guide",
+	"tour_guide_description": "You're here! This page explains each feature step by step with links to try them out.",
+	"tour_contacts_title": "CRM Pipeline",
+	"tour_contacts_description": "Manage contacts, track deal values, search & filter, multi-select with bulk operations, and generate sample data.",
+	"tour_analytics_title": "Analytics Dashboard",
+	"tour_analytics_description": "Visualize your pipeline — deal values by status, source distribution charts, and recent contact activity.",
+	"tour_admin_title": "Admin Panel",
+	"tour_admin_description": "Full administration suite — user management, role assignment with granular permissions, and scheduled background jobs.",
+	"tour_tools_title": "Personalization",
+	"tour_tools_description": "Switch between languages, toggle light/dark theme, and access your account settings from here.",
+	"tour_roleSwitcher_title": "Role Switcher",
+	"tour_roleSwitcher_description": "Preview the app as different user roles. The UI adapts permissions in real-time — try switching between User and Admin."
 }

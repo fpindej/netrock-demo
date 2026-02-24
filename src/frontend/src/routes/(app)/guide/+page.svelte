@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { GuideStep } from '$lib/components/guide';
+	import { GuideStep, GuideTour } from '$lib/components/guide';
 	import { Rocket, ShieldCheck, CircleUser, Users, BarChart3, Settings } from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
 </script>
@@ -10,9 +10,12 @@
 </svelte:head>
 
 <div class="space-y-6">
-	<div>
-		<h3 class="text-lg font-medium">{m.guide_title()}</h3>
-		<p class="text-sm text-muted-foreground">{m.guide_description()}</p>
+	<div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+		<div>
+			<h3 class="text-lg font-medium">{m.guide_title()}</h3>
+			<p class="text-sm text-muted-foreground">{m.guide_description()}</p>
+		</div>
+		<GuideTour />
 	</div>
 	<div class="h-px w-full bg-border"></div>
 	<div class="space-y-4">

@@ -52,6 +52,7 @@
 	{/if}
 
 	<div
+		data-tour="role-switcher"
 		class="fixed z-50"
 		style="bottom: max(1.25rem, env(safe-area-inset-bottom)); inset-inline-end: 1.25rem;"
 	>

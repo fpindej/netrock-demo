@@ -27,34 +27,39 @@
 
 	let { collapsed = false, onNavigate, user }: Props = $props();
 
-	type NavItem = { title: () => string; href: string; icon: Component<IconProps> };
+	type NavItem = { title: () => string; href: string; icon: Component<IconProps>; tour?: string };
 	type AdminNavItem = NavItem & { permission: string };
 
 	let items: NavItem[] = [
 		{
 			title: m.nav_guide,
 			href: resolve('/guide'),
-			icon: BookOpen
+			icon: BookOpen,
+			tour: 'nav-guide'
 		},
 		{
 			title: m.nav_contacts,
 			href: resolve('/contacts'),
-			icon: Users2
+			icon: Users2,
+			tour: 'nav-contacts'
 		},
 		{
 			title: m.nav_analytics,
 			href: resolve('/analytics'),
-			icon: BarChart3
+			icon: BarChart3,
+			tour: 'nav-analytics'
 		},
 		{
 			title: m.nav_contactMe,
 			href: resolve('/contact'),
-			icon: Mail
+			icon: Mail,
+			tour: 'nav-contact'
 		},
 		{
 			title: m.nav_privacy,
 			href: resolve('/privacy'),
-			icon: ShieldCheck
+			icon: ShieldCheck,
+			tour: 'nav-privacy'
 		}
 	];
 
@@ -100,6 +105,7 @@
 				{#snippet child({ props })}
 					<a
 						href={item.href}
+						data-tour={item.tour}
 						class={cn(
 							buttonVariants({
 								variant: active ? 'default' : 'ghost',
@@ -125,6 +131,7 @@
 	{:else}
 		<a
 			href={item.href}
+			data-tour={item.tour}
 			class={cn(
 				buttonVariants({
 					variant: active ? 'default' : 'ghost',
@@ -149,14 +156,20 @@
 	{/each}
 
 	{#if visibleAdminItems.length > 0}
-		<div class="my-2 h-px w-full bg-border"></div>
-		{#if !collapsed}
-			<span class="mb-1 px-3 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-				{m.nav_admin()}
-			</span>
-		{/if}
-		{#each visibleAdminItems as item (item.href)}
-			{@render navItem(item)}
-		{/each}
+		<div data-tour="nav-admin">
+			<div class="my-2 h-px w-full bg-border"></div>
+			{#if !collapsed}
+				<span
+					class="mb-1 px-3 text-xs font-semibold tracking-wider text-muted-foreground uppercase"
+				>
+					{m.nav_admin()}
+				</span>
+			{/if}
+			<div class="grid gap-1">
+				{#each visibleAdminItems as item (item.href)}
+					{@render navItem(item)}
+				{/each}
+			</div>
+		</div>
 	{/if}
 </nav>

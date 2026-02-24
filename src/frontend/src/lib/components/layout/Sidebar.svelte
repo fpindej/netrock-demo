@@ -25,7 +25,10 @@
 >
 	<div class="flex-1 overflow-auto py-4">
 		<div class="px-3 py-2">
-			<div class={cn('mb-4 flex items-center', collapsed ? 'justify-center px-0' : 'px-2')}>
+			<div
+				data-tour="sidebar-brand"
+				class={cn('mb-4 flex items-center', collapsed ? 'justify-center px-0' : 'px-2')}
+			>
 				<a
 					href={resolve('/')}
 					class={cn('flex items-center gap-2 font-semibold', collapsed ? 'text-base' : 'text-lg')}
@@ -41,7 +44,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="border-t p-3">
+	<div data-tour="sidebar-tools" class="border-t p-3">
 		<div class={cn('flex items-center gap-1', collapsed ? 'flex-col' : 'flex-row justify-between')}>
 			{#if collapsed}
 				<!-- Collapsed: stack vertically -->

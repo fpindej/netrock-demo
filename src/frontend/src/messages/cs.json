@@ -663,5 +663,25 @@
 
 	"privacy_backToLogin": "Zpět na přihlášení",
 	"register_privacyNotice_prefix": "Registrací souhlasíte s naším",
-	"register_privacyNotice_linkText": "Oznámením o ochraně soukromí"
+	"register_privacyNotice_linkText": "Oznámením o ochraně soukromí",
+
+	"tour_startButton": "Spustit interaktivní prohlídku",
+	"tour_next": "Další",
+	"tour_prev": "Předchozí",
+	"tour_done": "Hotovo",
+	"tour_progress": "{current} z {total}",
+	"tour_welcome_title": "Vítejte v NETrock",
+	"tour_welcome_description": "NETrock je produkční full-stack šablona — .NET API se SvelteKit frontendem. Pojďme se podívat, co všechno nabízí.",
+	"tour_guide_title": "Interaktivní průvodce",
+	"tour_guide_description": "Jste tady! Tato stránka vysvětluje každou funkci krok za krokem s odkazy k vyzkoušení.",
+	"tour_contacts_title": "CRM Pipeline",
+	"tour_contacts_description": "Správa kontaktů, sledování hodnot obchodů, vyhledávání a filtrování, hromadný výběr a generování ukázkových dat.",
+	"tour_analytics_title": "Analytický dashboard",
+	"tour_analytics_description": "Vizualizace pipeline — hodnoty obchodů podle stavu, grafy rozložení zdrojů a nedávná aktivita kontaktů.",
+	"tour_admin_title": "Admin panel",
+	"tour_admin_description": "Kompletní administrace — správa uživatelů, přiřazování rolí s granulárními oprávněními a naplánované úlohy na pozadí.",
+	"tour_tools_title": "Přizpůsobení",
+	"tour_tools_description": "Přepínání mezi jazyky, přepnutí světlého/tmavého motivu a přístup k nastavení účtu.",
+	"tour_roleSwitcher_title": "Přepínač rolí",
+	"tour_roleSwitcher_description": "Náhled aplikace jako různé uživatelské role. Rozhraní přizpůsobuje oprávnění v reálném čase — zkuste přepnout mezi User a Admin."
 }

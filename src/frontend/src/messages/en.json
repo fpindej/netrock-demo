@@ -471,6 +471,7 @@
 	"serverError_failedToLoadRoles": "Failed to load roles",
 	"serverError_failedToLoadRole": "Failed to load role",
 
+	"serverError_failedToLoadAnalytics": "Failed to load analytics",
 	"serverError_failedToLoadJobs": "Failed to load jobs",
 	"serverError_failedToLoadJobDetails": "Failed to load job details",
 
@@ -594,5 +595,57 @@
 	"demo_viewedAs": "Viewed as:",
 	"demo_role_user": "User",
 	"demo_role_admin": "Admin",
-	"demo_role_superAdmin": "SuperAdmin"
+	"demo_role_superAdmin": "SuperAdmin",
+
+	"nav_privacy": "Privacy",
+
+	"meta_privacy_title": "Privacy Notice",
+	"meta_privacy_description": "How we handle your data.",
+
+	"privacy_title": "Privacy Notice",
+	"privacy_description": "How NETrock handles and protects your data.",
+	"privacy_lastUpdated": "Last updated: {date}",
+
+	"privacy_section_dataCollected_title": "Data We Collect",
+	"privacy_section_dataCollected_description": "When you create an account, we collect the following personal information:",
+	"privacy_section_dataCollected_item_email": "Email address (used for authentication and communication)",
+	"privacy_section_dataCollected_item_name": "First and last name (used for your profile)",
+	"privacy_section_dataCollected_item_phone": "Phone number (optional, stored in your profile)",
+	"privacy_section_dataCollected_item_avatar": "Profile avatar (optional, uploaded by you)",
+	"privacy_section_dataCollected_item_bio": "Bio (optional, stored in your profile)",
+
+	"privacy_section_dataUsage_title": "How We Use Your Data",
+	"privacy_section_dataUsage_description": "This is a demo application. Your data is used exclusively for demonstration purposes:",
+	"privacy_section_dataUsage_item_auth": "Authentication and session management",
+	"privacy_section_dataUsage_item_profile": "Displaying your profile within the application",
+	"privacy_section_dataUsage_item_demo": "Demonstrating the features of the NETrock template",
+	"privacy_section_dataUsage_item_noSale": "We do not sell, share, or monetize your data in any way",
+
+	"privacy_section_storage_title": "Data Storage",
+	"privacy_section_storage_description": "Your data is stored securely using industry-standard practices:",
+	"privacy_section_storage_item_database": "PostgreSQL database with encryption at rest",
+	"privacy_section_storage_item_passwords": "Passwords are hashed using industry-standard algorithms and are never stored in plain text",
+	"privacy_section_storage_item_hosting": "Application is hosted on secure infrastructure with HTTPS enforced",
+
+	"privacy_section_cookies_title": "Cookies and Sessions",
+	"privacy_section_cookies_description": "We use the following cookies to keep you signed in and secure:",
+	"privacy_section_cookies_item_jwt": "JWT authentication token (identifies your session)",
+	"privacy_section_cookies_item_refresh": "Refresh token (extends your session securely)",
+	"privacy_section_cookies_item_preferences": "Language and theme preferences (stored locally in your browser)",
+	"privacy_section_cookies_item_noTracking": "We do not use any tracking or analytics cookies",
+
+	"privacy_section_thirdParty_title": "Third-Party Services",
+	"privacy_section_thirdParty_description": "The application integrates with the following external services:",
+	"privacy_section_thirdParty_item_resend": "Resend — used for sending transactional emails (verification, password reset)",
+	"privacy_section_thirdParty_item_turnstile": "Cloudflare Turnstile — used for bot protection during registration (no personal data is shared)",
+
+	"privacy_section_retention_title": "Data Retention",
+	"privacy_section_retention_description": "As this is a demo application, please keep the following in mind:",
+	"privacy_section_retention_item_periodic": "Demo data may be periodically cleared without notice",
+	"privacy_section_retention_item_delete": "You can delete your account and all associated data at any time from the Settings page",
+	"privacy_section_retention_item_noPermanent": "We do not guarantee permanent storage of any data",
+
+	"privacy_section_contact_title": "Contact",
+	"privacy_section_contact_description": "If you have any questions about how your data is handled, feel free to reach out:",
+	"privacy_section_contact_email": "Email: {email}"
 }

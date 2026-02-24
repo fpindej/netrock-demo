@@ -471,6 +471,7 @@
 	"serverError_failedToLoadRoles": "Nepodařilo se načíst role",
 	"serverError_failedToLoadRole": "Nepodařilo se načíst roli",
 
+	"serverError_failedToLoadAnalytics": "Nepodařilo se načíst analytiku",
 	"serverError_failedToLoadJobs": "Nepodařilo se načíst úlohy",
 	"serverError_failedToLoadJobDetails": "Nepodařilo se načíst detail úlohy",
 
@@ -594,5 +595,57 @@
 	"demo_viewedAs": "Zobrazeno jako:",
 	"demo_role_user": "User",
 	"demo_role_admin": "Admin",
-	"demo_role_superAdmin": "SuperAdmin"
+	"demo_role_superAdmin": "SuperAdmin",
+
+	"nav_privacy": "Ochrana soukromí",
+
+	"meta_privacy_title": "Ochrana soukromí",
+	"meta_privacy_description": "Jak nakládáme s vašimi daty.",
+
+	"privacy_title": "Ochrana soukromí",
+	"privacy_description": "Jak NETrock nakládá s vašimi daty a chrání je.",
+	"privacy_lastUpdated": "Poslední aktualizace: {date}",
+
+	"privacy_section_dataCollected_title": "Jaká data sbíráme",
+	"privacy_section_dataCollected_description": "Při vytvoření účtu shromažďujeme následující osobní údaje:",
+	"privacy_section_dataCollected_item_email": "E-mailová adresa (pro autentizaci a komunikaci)",
+	"privacy_section_dataCollected_item_name": "Jméno a příjmení (pro váš profil)",
+	"privacy_section_dataCollected_item_phone": "Telefonní číslo (volitelné, uloženo ve vašem profilu)",
+	"privacy_section_dataCollected_item_avatar": "Profilový avatar (volitelný, nahraný vámi)",
+	"privacy_section_dataCollected_item_bio": "Bio (volitelné, uloženo ve vašem profilu)",
+
+	"privacy_section_dataUsage_title": "Jak vaše data používáme",
+	"privacy_section_dataUsage_description": "Toto je demo aplikace. Vaše data jsou používána výhradně pro demonstrační účely:",
+	"privacy_section_dataUsage_item_auth": "Autentizace a správa relací",
+	"privacy_section_dataUsage_item_profile": "Zobrazení vašeho profilu v rámci aplikace",
+	"privacy_section_dataUsage_item_demo": "Demonstrace funkcí šablony NETrock",
+	"privacy_section_dataUsage_item_noSale": "Vaše data nijak neprodáváme, nesdílíme ani nemonetizujeme",
+
+	"privacy_section_storage_title": "Ukládání dat",
+	"privacy_section_storage_description": "Vaše data jsou bezpečně uložena s využitím standardních postupů:",
+	"privacy_section_storage_item_database": "Databáze PostgreSQL s šifrováním v klidu",
+	"privacy_section_storage_item_passwords": "Hesla jsou hashována standardními algoritmy a nikdy se neukládají v čitelné podobě",
+	"privacy_section_storage_item_hosting": "Aplikace je hostována na zabezpečené infrastruktuře s vynuceným HTTPS",
+
+	"privacy_section_cookies_title": "Cookies a relace",
+	"privacy_section_cookies_description": "Používáme následující cookies pro přihlášení a zabezpečení:",
+	"privacy_section_cookies_item_jwt": "JWT autentizační token (identifikuje vaši relaci)",
+	"privacy_section_cookies_item_refresh": "Refresh token (bezpečně prodlužuje vaši relaci)",
+	"privacy_section_cookies_item_preferences": "Preference jazyka a motivu (uloženy lokálně ve vašem prohlížeči)",
+	"privacy_section_cookies_item_noTracking": "Nepoužíváme žádné sledovací ani analytické cookies",
+
+	"privacy_section_thirdParty_title": "Služby třetích stran",
+	"privacy_section_thirdParty_description": "Aplikace integruje následující externí služby:",
+	"privacy_section_thirdParty_item_resend": "Resend — pro odesílání transakčních e-mailů (ověření, reset hesla)",
+	"privacy_section_thirdParty_item_turnstile": "Cloudflare Turnstile — ochrana proti botům při registraci (žádné osobní údaje se nesdílejí)",
+
+	"privacy_section_retention_title": "Uchovávání dat",
+	"privacy_section_retention_description": "Jelikož se jedná o demo aplikaci, mějte prosím na paměti:",
+	"privacy_section_retention_item_periodic": "Demo data mohou být pravidelně mazána bez předchozího upozornění",
+	"privacy_section_retention_item_delete": "Svůj účet a všechna přidružená data můžete kdykoli smazat v Nastavení",
+	"privacy_section_retention_item_noPermanent": "Negarantujeme trvalé uložení jakýchkoli dat",
+
+	"privacy_section_contact_title": "Kontakt",
+	"privacy_section_contact_description": "Máte-li dotazy ohledně nakládání s vašimi daty, neváhejte se ozvat:",
+	"privacy_section_contact_email": "E-mail: {email}"
 }

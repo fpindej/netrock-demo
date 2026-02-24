@@ -227,6 +227,12 @@ internal class ContactService(
             .GroupBy(c => c.Source)
             .ToDictionary(g => g.Key.ToString(), g => g.Count());
 
+        var recentContacts = contacts
+            .OrderByDescending(c => c.CreatedAt)
+            .Take(5)
+            .Select(MapToOutput)
+            .ToList();
+
         return new ContactStatsOutput(
             totalContacts,
             totalValue,
@@ -235,7 +241,8 @@ internal class ContactService(
             customerCount,
             churningCount,
             averageValue,
-            sourceBreakdown
+            sourceBreakdown,
+            recentContacts
         );
     }
 

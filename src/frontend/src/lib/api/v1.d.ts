@@ -3191,6 +3191,27 @@ export interface components {
 			sourceBreakdown?: {
 				[key: string]: number;
 			};
+			/** @description The most recent contacts, ordered by creation date descending. */
+			recentContacts?: {
+				/** Format: uuid */
+				id?: string;
+				firstName?: string;
+				lastName?: string;
+				email?: string;
+				company?: null | string;
+				status?: string;
+				source?: string;
+				/** Format: decimal */
+				value?: number;
+				notes?: null | string;
+				phone?: null | string;
+				/** Format: uuid */
+				ownerId?: string;
+				/** Format: date-time */
+				createdAt?: string;
+				/** Format: date-time */
+				updatedAt?: null | string;
+			}[];
 		};
 	};
 	responses: never;

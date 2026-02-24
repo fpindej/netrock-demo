@@ -47,4 +47,9 @@ public class ContactStatsResponse
     /// </summary>
     public IReadOnlyDictionary<string, int> SourceBreakdown { [UsedImplicitly] get; init; } =
         new Dictionary<string, int>();
+
+    /// <summary>
+    /// The most recent contacts, ordered by creation date descending.
+    /// </summary>
+    public IReadOnlyList<ContactResponse> RecentContacts { [UsedImplicitly] get; init; } = [];
 }

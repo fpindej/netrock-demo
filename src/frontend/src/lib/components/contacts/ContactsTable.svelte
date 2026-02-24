@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ContactStatusBadge } from '$lib/components/contacts';
+	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Button } from '$lib/components/ui/button';
 	import { Pencil, Trash2, Users } from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
@@ -9,9 +10,15 @@
 		contacts: ContactResponse[];
 		onEdit: (contact: ContactResponse) => void;
 		onDelete: (contact: ContactResponse) => void;
+		selectedIds: Set<string>;
+		onToggle: (id: string) => void;
+		onToggleAll: () => void;
 	}
 
-	let { contacts, onEdit, onDelete }: Props = $props();
+	let { contacts, onEdit, onDelete, selectedIds, onToggle, onToggleAll }: Props = $props();
+
+	let allChecked = $derived(contacts.length > 0 && contacts.every((c) => selectedIds.has(c.id)));
+	let someChecked = $derived(contacts.some((c) => selectedIds.has(c.id)) && !allChecked);
 
 	const sourceLabels: Record<string, () => string> = {
 		Web: () => m.contacts_source_web(),
@@ -47,7 +54,12 @@
 	<!-- Mobile: card list -->
 	<div class="divide-y md:hidden">
 		{#each contacts as contact (contact.id)}
-			<div class="flex items-center justify-between gap-3 p-4">
+			<div class="flex items-center gap-3 p-4">
+				<Checkbox
+					checked={selectedIds.has(contact.id)}
+					onCheckedChange={() => onToggle(contact.id)}
+					aria-label="Select {contact.firstName} {contact.lastName}"
+				/>
 				<div class="min-w-0 flex-1">
 					<div class="flex items-center gap-2">
 						<p class="truncate text-sm font-medium">
@@ -92,6 +104,14 @@
 		<table class="w-full text-sm">
 			<thead>
 				<tr class="border-b bg-muted/50 text-start">
+					<th class="w-12 px-4 py-3">
+						<Checkbox
+							checked={allChecked}
+							indeterminate={someChecked}
+							onCheckedChange={onToggleAll}
+							aria-label="Select all"
+						/>
+					</th>
 					<th class="px-4 py-3 text-start text-xs font-medium tracking-wide text-muted-foreground">
 						{m.contacts_column_name()}
 					</th>
@@ -119,6 +139,13 @@
 			<tbody>
 				{#each contacts as contact (contact.id)}
 					<tr class="border-b transition-colors hover:bg-muted/50">
+						<td class="px-4 py-3">
+							<Checkbox
+								checked={selectedIds.has(contact.id)}
+								onCheckedChange={() => onToggle(contact.id)}
+								aria-label="Select {contact.firstName} {contact.lastName}"
+							/>
+						</td>
 						<td class="px-4 py-3">
 							<div>
 								<p class="font-medium">

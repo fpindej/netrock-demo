@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
-	import { SvelteURLSearchParams } from 'svelte/reactivity';
+	import { SvelteSet, SvelteURLSearchParams } from 'svelte/reactivity';
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -12,7 +12,7 @@
 		CreateContactDialog
 	} from '$lib/components/contacts';
 	import { Pagination } from '$lib/components/admin';
-	import { UserPlus, Loader2 } from '@lucide/svelte';
+	import { UserPlus, Loader2, Trash2 } from '@lucide/svelte';
 	import { toast } from '$lib/components/ui/sonner';
 	import * as m from '$lib/paraglide/messages';
 	import type { PageData } from './$types';
@@ -32,6 +32,11 @@
 	let deletingContact = $state<ContactResponse | null>(null);
 	let isDeleting = $state(false);
 	let isGenerating = $state(false);
+
+	let selectedIds = new SvelteSet<string>();
+	let selectAllAcrossPages = $state(false);
+	let bulkDeleteDialogOpen = $state(false);
+	let isBulkDeleting = $state(false);
 
 	let isEmpty = $derived((data.contacts?.items?.length ?? 0) === 0 && !data.search);
 
@@ -53,6 +58,47 @@
 				);
 		}
 	});
+
+	let pageSize = $derived(data.contacts?.pageSize ?? 10);
+	let totalCount = $derived(data.contacts?.totalCount ?? 0);
+	let allOnPageSelected = $derived(
+		sortedContacts.length > 0 && sortedContacts.every((c) => selectedIds.has(c.id))
+	);
+	let selectionCount = $derived(selectAllAcrossPages ? totalCount : selectedIds.size);
+
+	function handleToggle(id: string) {
+		if (selectedIds.has(id)) {
+			selectedIds.delete(id);
+		} else {
+			selectedIds.add(id);
+		}
+		selectAllAcrossPages = false;
+	}
+
+	function handleToggleAll() {
+		if (allOnPageSelected) {
+			for (const c of sortedContacts) {
+				selectedIds.delete(c.id);
+			}
+			selectAllAcrossPages = false;
+		} else {
+			for (const c of sortedContacts) {
+				selectedIds.add(c.id);
+			}
+		}
+	}
+
+	function handleSelectAllAcrossPages() {
+		for (const c of sortedContacts) {
+			selectedIds.add(c.id);
+		}
+		selectAllAcrossPages = true;
+	}
+
+	function clearSelection() {
+		selectedIds.clear();
+		selectAllAcrossPages = false;
+	}
 
 	function handleSearch(value: string) {
 		searchInput = value;
@@ -111,13 +157,69 @@
 		}
 	}
 
-	async function handleGenerate() {
+	async function handleBulkDelete() {
+		isBulkDeleting = true;
+
+		if (selectAllAcrossPages) {
+			let currentPage = 1;
+			let hasMore = true;
+
+			while (hasMore) {
+				const listResponse = await fetch(`/api/v1/contacts?page=${currentPage}&pageSize=50`);
+				if (!listResponse.ok) {
+					toast.error(m.contacts_deleteError());
+					isBulkDeleting = false;
+					return;
+				}
+				const listData = await listResponse.json();
+				const items: ContactResponse[] = listData.items ?? [];
+
+				const results = await Promise.all(
+					items.map((c) => fetch(`/api/v1/contacts/${c.id}`, { method: 'DELETE' }))
+				);
+
+				if (results.some((r) => !r.ok)) {
+					toast.error(m.contacts_deleteError());
+					isBulkDeleting = false;
+					bulkDeleteDialogOpen = false;
+					clearSelection();
+					await invalidateAll();
+					return;
+				}
+
+				hasMore = listData.hasNextPage;
+				currentPage++;
+			}
+		} else {
+			const ids = Array.from(selectedIds);
+			const results = await Promise.all(
+				ids.map((id) => fetch(`/api/v1/contacts/${id}`, { method: 'DELETE' }))
+			);
+
+			if (results.some((r) => !r.ok)) {
+				toast.error(m.contacts_deleteError());
+				isBulkDeleting = false;
+				bulkDeleteDialogOpen = false;
+				clearSelection();
+				await invalidateAll();
+				return;
+			}
+		}
+
+		isBulkDeleting = false;
+		toast.success(m.contacts_bulkDeleted());
+		bulkDeleteDialogOpen = false;
+		clearSelection();
+		await invalidateAll();
+	}
+
+	async function handleGenerate(count: number = 10) {
 		isGenerating = true;
 
 		const response = await fetch('/api/v1/contacts/generate', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ count: 10 })
+			body: JSON.stringify({ count })
 		});
 
 		isGenerating = false;
@@ -171,12 +273,41 @@
 			totalCount={data.contacts?.totalCount ?? 0}
 		/>
 
+		{#if selectedIds.size > 0}
+			<div class="flex flex-col gap-2">
+				<div class="flex items-center justify-between rounded-lg border bg-muted/50 px-4 py-2">
+					<span class="text-sm font-medium">
+						{m.contacts_selected({ count: selectionCount })}
+					</span>
+					<Button variant="destructive" size="sm" onclick={() => (bulkDeleteDialogOpen = true)}>
+						<Trash2 class="me-2 h-4 w-4" />
+						{m.contacts_deleteSelected()}
+					</Button>
+				</div>
+				{#if allOnPageSelected && !selectAllAcrossPages && totalCount > pageSize}
+					<div class="rounded-lg border bg-muted/30 px-4 py-2 text-center text-sm">
+						{m.contacts_selectAllOnPage({ count: sortedContacts.length })}
+						<button
+							type="button"
+							class="ms-1 font-medium text-primary underline-offset-4 hover:underline"
+							onclick={handleSelectAllAcrossPages}
+						>
+							{m.contacts_selectAll({ count: totalCount })}
+						</button>
+					</div>
+				{/if}
+			</div>
+		{/if}
+
 		<Card.Root>
 			<Card.Content class="p-0">
 				<ContactsTable
 					contacts={sortedContacts}
 					onEdit={handleEdit}
 					onDelete={handleDeletePrompt}
+					{selectedIds}
+					onToggle={handleToggle}
+					onToggleAll={handleToggleAll}
 				/>
 			</Card.Content>
 		</Card.Root>
@@ -213,6 +344,28 @@
 					<Loader2 class="me-2 h-4 w-4 animate-spin" />
 				{/if}
 				{m.common_delete()}
+			</Button>
+		</Dialog.Footer>
+	</Dialog.Content>
+</Dialog.Root>
+
+<Dialog.Root bind:open={bulkDeleteDialogOpen}>
+	<Dialog.Content>
+		<Dialog.Header>
+			<Dialog.Title>{m.contacts_bulkDeleteConfirm_title({ count: selectionCount })}</Dialog.Title>
+			<Dialog.Description>
+				{m.contacts_bulkDeleteConfirm_description({ count: selectionCount })}
+			</Dialog.Description>
+		</Dialog.Header>
+		<Dialog.Footer class="flex-col-reverse sm:flex-row">
+			<Button variant="outline" onclick={() => (bulkDeleteDialogOpen = false)}>
+				{m.common_cancel()}
+			</Button>
+			<Button variant="destructive" onclick={handleBulkDelete} disabled={isBulkDeleting}>
+				{#if isBulkDeleting}
+					<Loader2 class="me-2 h-4 w-4 animate-spin" />
+				{/if}
+				{m.contacts_deleteSelected()}
 			</Button>
 		</Dialog.Footer>
 	</Dialog.Content>

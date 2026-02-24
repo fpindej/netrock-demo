@@ -51,7 +51,8 @@ internal static class ContactMapper
         CustomerCount = output.CustomerCount,
         ChurningCount = output.ChurningCount,
         AverageValue = output.AverageValue,
-        SourceBreakdown = output.SourceBreakdown
+        SourceBreakdown = output.SourceBreakdown,
+        RecentContacts = output.RecentContacts.Select(c => c.ToResponse()).ToList()
     };
 
     /// <summary>

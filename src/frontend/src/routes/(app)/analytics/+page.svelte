@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
-	import { StatCard, HorizontalBarChart } from '$lib/components/analytics';
+	import { StatCard, HorizontalBarChart, RecentContactsList } from '$lib/components/analytics';
 	import { Users2, DollarSign, Target } from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
 	import type { PageData } from './$types';
@@ -74,6 +74,17 @@
 		Other: () => m.contacts_source_other()
 	};
 
+	let recentContacts = $derived.by(() => {
+		const contacts = stats?.recentContacts ?? [];
+		return contacts.map((c) => ({
+			name: `${c.firstName ?? ''} ${c.lastName ?? ''}`.trim(),
+			company: c.company ?? null,
+			status: c.status ?? '',
+			value: c.value ?? 0,
+			date: c.createdAt ?? ''
+		}));
+	});
+
 	let sourceItems = $derived.by(() => {
 		const breakdown = stats?.sourceBreakdown ?? {};
 		const entries = Object.entries(breakdown);
@@ -131,6 +142,15 @@
 			</Card.Header>
 			<Card.Content>
 				<HorizontalBarChart items={sourceItems} />
+			</Card.Content>
+		</Card.Root>
+
+		<Card.Root>
+			<Card.Header>
+				<Card.Title>{m.analytics_recentContacts()}</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<RecentContactsList contacts={recentContacts} />
 			</Card.Content>
 		</Card.Root>
 	{:else}

@@ -26,6 +26,8 @@
         <PackageReference Include="AWSSDK.S3" />
         <PackageReference Include="SkiaSharp" />
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" />
+        <PackageReference Include="Bogus" />
+        <PackageReference Include="Resend" />
     </ItemGroup>
 
     <ItemGroup>

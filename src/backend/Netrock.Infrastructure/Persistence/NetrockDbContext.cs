@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Netrock.Domain.Entities;
 using Netrock.Infrastructure.Features.Audit.Models;
 using Netrock.Infrastructure.Features.Authentication.Models;
 using Netrock.Infrastructure.Features.Jobs.Models;
@@ -33,6 +34,11 @@ internal class NetrockDbContext(DbContextOptions<NetrockDbContext> options)
     /// Gets or sets the audit events table for the append-only audit log.
     /// </summary>
     public DbSet<AuditEvent> AuditEvents { get; set; }
+
+    /// <summary>
+    /// Gets the contacts table for CRM pipeline management.
+    /// </summary>
+    public DbSet<Contact> Contacts => Set<Contact>();
 
     /// <summary>
     /// Configures the model by applying all <see cref="IEntityTypeConfiguration{TEntity}"/> from this assembly,

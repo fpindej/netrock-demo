@@ -8,6 +8,7 @@ using Netrock.Infrastructure.Features.Admin.Extensions;
 using Netrock.Infrastructure.Features.Audit.Extensions;
 using Netrock.Infrastructure.Features.Avatar.Extensions;
 using Netrock.Infrastructure.Features.Captcha.Extensions;
+using Netrock.Infrastructure.Features.Contacts.Extensions;
 using Netrock.Infrastructure.Features.FileStorage.Extensions;
 using Netrock.Infrastructure.Features.Email.Extensions;
 using Netrock.Infrastructure.Features.Jobs.Extensions;
@@ -73,6 +74,9 @@ try
 
         Log.Debug("Adding captcha services");
         builder.Services.AddCaptchaServices();
+
+        Log.Debug("Adding contact services");
+        builder.Services.AddContactServices();
 
         Log.Debug("Adding job scheduling");
         builder.Services.AddJobScheduling(builder.Configuration);

@@ -106,7 +106,9 @@
 			{m.forYou_hero_subtitle()}
 		</p>
 
-		<div class="hero-animate hero-delay-3 mt-8 flex flex-wrap justify-center gap-3">
+		<div
+			class="hero-animate hero-delay-3 mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center"
+		>
 			<StatPill label={m.forYou_hero_stat1()} description={m.forYou_hero_stat1Desc()} />
 			<StatPill label={m.forYou_hero_stat2()} description={m.forYou_hero_stat2Desc()} />
 			<StatPill label={m.forYou_hero_stat3()} description={m.forYou_hero_stat3Desc()} />

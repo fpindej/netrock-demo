@@ -10,6 +10,7 @@
 
 	let isRegisterOpen = $state(false);
 	let showWelcome = $state(false);
+	let checked = $state(false);
 
 	function completeWelcome() {
 		showWelcome = false;
@@ -38,6 +39,7 @@
 		} catch {
 			// localStorage unavailable — don't show overlay
 		}
+		checked = true;
 
 		if (!data.reason) return;
 
@@ -62,10 +64,13 @@
 	<meta name="description" content={m.meta_login_description()} />
 </svelte:head>
 
-<div inert={showWelcome || undefined}>
-	<LoginForm apiUrl={data.apiUrl} turnstileSiteKey={data.turnstileSiteKey} bind:isRegisterOpen />
-</div>
+<!-- Hide until localStorage check completes to prevent login-form flash -->
+<div class:invisible={!checked}>
+	<div inert={showWelcome || undefined}>
+		<LoginForm apiUrl={data.apiUrl} turnstileSiteKey={data.turnstileSiteKey} bind:isRegisterOpen />
+	</div>
 
-{#if showWelcome}
-	<WelcomeOverlay onComplete={completeWelcome} onRegister={handleRegister} />
-{/if}
+	{#if showWelcome}
+		<WelcomeOverlay onComplete={completeWelcome} onRegister={handleRegister} />
+	{/if}
+</div>

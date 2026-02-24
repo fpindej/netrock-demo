@@ -10,8 +10,6 @@
 		Globe,
 		ArrowRight,
 		ArrowDown,
-		ArrowUp,
-		ArrowLeft as ArrowLeftIcon,
 		Building2,
 		Users,
 		UserCircle,
@@ -24,6 +22,7 @@
 		type IconProps
 	} from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
+	import { onDestroy } from 'svelte';
 	import type { Component } from 'svelte';
 
 	type PersonaCard = {
@@ -35,6 +34,108 @@
 		bgColor: string;
 		gradientFrom: string;
 	};
+
+	type Consumer = {
+		icon: Component<IconProps>;
+		name: () => string;
+		desc: () => string;
+		borderClass: string;
+		iconColor: string;
+	};
+
+	const consumers: Consumer[] = [
+		{
+			icon: Monitor,
+			name: m.forYou_diagram_spoke_svelte,
+			desc: m.forYou_diagram_spoke_svelteDesc,
+			borderClass: 'border-blue-500/30 bg-blue-500/5',
+			iconColor: 'text-blue-500'
+		},
+		{
+			icon: Code,
+			name: m.forYou_diagram_spoke_custom,
+			desc: m.forYou_diagram_spoke_customDesc,
+			borderClass: 'border-violet-500/30 bg-violet-500/5',
+			iconColor: 'text-violet-500'
+		},
+		{
+			icon: Smartphone,
+			name: m.forYou_diagram_spoke_mobile,
+			desc: m.forYou_diagram_spoke_mobileDesc,
+			borderClass: 'border-amber-500/30 bg-amber-500/5',
+			iconColor: 'text-amber-500'
+		},
+		{
+			icon: Globe,
+			name: m.forYou_diagram_spoke_external,
+			desc: m.forYou_diagram_spoke_externalDesc,
+			borderClass: 'border-pink-500/30 bg-pink-500/5',
+			iconColor: 'text-pink-500'
+		}
+	];
+
+	let currentIndex = $state(0);
+	let paused = $state(false);
+	let direction = $state<'next' | 'prev'>('next');
+
+	let intervalId: ReturnType<typeof setInterval> | undefined;
+
+	function startAutoAdvance() {
+		stopAutoAdvance();
+		intervalId = setInterval(() => {
+			if (!paused) {
+				direction = 'next';
+				currentIndex = (currentIndex + 1) % consumers.length;
+			}
+		}, 3000);
+	}
+
+	function stopAutoAdvance() {
+		if (intervalId !== undefined) {
+			clearInterval(intervalId);
+			intervalId = undefined;
+		}
+	}
+
+	$effect(() => {
+		startAutoAdvance();
+		return stopAutoAdvance;
+	});
+
+	onDestroy(stopAutoAdvance);
+
+	function goTo(index: number) {
+		direction = index > currentIndex ? 'next' : 'prev';
+		currentIndex = index;
+		startAutoAdvance();
+	}
+
+	// Swipe handling
+	let pointerStartX = 0;
+	let pointerStartY = 0;
+	let swiping = false;
+
+	function onPointerDown(e: PointerEvent) {
+		pointerStartX = e.clientX;
+		pointerStartY = e.clientY;
+		swiping = true;
+	}
+
+	function onPointerUp(e: PointerEvent) {
+		if (!swiping) return;
+		swiping = false;
+		const dx = e.clientX - pointerStartX;
+		const dy = e.clientY - pointerStartY;
+		if (Math.abs(dx) < 30 || Math.abs(dy) > Math.abs(dx)) return;
+		if (dx < 0) {
+			direction = 'next';
+			currentIndex = (currentIndex + 1) % consumers.length;
+		} else {
+			direction = 'prev';
+			currentIndex = (currentIndex - 1 + consumers.length) % consumers.length;
+		}
+		startAutoAdvance();
+	}
 
 	const personas: PersonaCard[] = [
 		{
@@ -182,116 +283,71 @@
 			</p>
 		</div>
 
-		<!-- Desktop: CSS Grid cross layout (5 rows: spoke / arrow / hub row / arrow / spoke) -->
+		<!-- API → Consumer carousel -->
 		<div
-			class="hidden sm:grid sm:grid-cols-[1fr_auto_1fr] sm:grid-rows-[auto_auto_auto_auto_auto] sm:items-center sm:justify-items-center sm:gap-x-4 sm:gap-y-1"
+			class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-6"
+			use:reveal={0}
 		>
-			<!-- Row 1: Top spoke (SvelteKit) -->
-			<div class="col-start-2 row-start-1" use:reveal={150}>
-				{@render spokeBox(
-					Monitor,
-					m.forYou_diagram_spoke_svelte(),
-					m.forYou_diagram_spoke_svelteDesc(),
-					'border-blue-500/30 bg-blue-500/5',
-					'text-blue-500'
-				)}
+			<!-- .NET API box -->
+			<div
+				class="flex w-full max-w-64 flex-col items-center rounded-xl border-2 border-green-500/40 bg-green-500/5 p-6 text-center shadow-sm shadow-green-500/10 sm:w-48 sm:max-w-none"
+			>
+				<Server class="h-10 w-10 text-green-500" />
+				<span class="mt-2 text-sm font-bold">{m.forYou_diagram_hub()}</span>
+				<span class="text-xs text-muted-foreground">{m.forYou_diagram_hubDesc()}</span>
 			</div>
 
-			<!-- Row 2: Arrow between hub and top spoke -->
-			<div class="col-start-2 row-start-2">
-				<ArrowUp class="arrow-flow-up h-6 w-6 text-muted-foreground/50" />
-			</div>
+			<!-- Arrow -->
+			<ArrowRight class="arrow-flow hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
+			<ArrowDown class="arrow-flow-down h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
 
-			<!-- Row 3: Left spoke + hub + right spoke -->
-			<div class="col-start-1 row-start-3 justify-self-end" use:reveal={300}>
-				{@render spokeBox(
-					Globe,
-					m.forYou_diagram_spoke_external(),
-					m.forYou_diagram_spoke_externalDesc(),
-					'border-pink-500/30 bg-pink-500/5',
-					'text-pink-500'
-				)}
-			</div>
-
-			<div class="col-start-2 row-start-3 flex items-center gap-4">
-				<ArrowLeftIcon class="arrow-flow-left h-6 w-6 text-muted-foreground/50" />
-				<div use:reveal={0}>
-					{@render hubBox()}
+			<!-- Consumer carousel -->
+			<div
+				class="relative w-full max-w-64 sm:w-48 sm:max-w-none"
+				role="region"
+				aria-roledescription="carousel"
+				aria-label={m.forYou_diagram_title()}
+				onpointerdown={onPointerDown}
+				onpointerup={onPointerUp}
+				onpointerenter={() => (paused = true)}
+				onpointerleave={() => {
+					paused = false;
+					swiping = false;
+				}}
+			>
+				<div class="overflow-hidden">
+					{#each consumers as consumer, i (consumer.name())}
+						{#if i === currentIndex}
+							<div
+								class="carousel-slide"
+								class:carousel-enter-next={direction === 'next'}
+								class:carousel-enter-prev={direction === 'prev'}
+							>
+								{@render consumerBox(
+									consumer.icon,
+									consumer.name(),
+									consumer.desc(),
+									consumer.borderClass,
+									consumer.iconColor
+								)}
+							</div>
+						{/if}
+					{/each}
 				</div>
-				<ArrowRight class="arrow-flow h-6 w-6 text-muted-foreground/50" />
-			</div>
 
-			<div class="col-start-3 row-start-3 justify-self-start" use:reveal={300}>
-				{@render spokeBox(
-					Code,
-					m.forYou_diagram_spoke_custom(),
-					m.forYou_diagram_spoke_customDesc(),
-					'border-violet-500/30 bg-violet-500/5',
-					'text-violet-500'
-				)}
-			</div>
-
-			<!-- Row 4: Arrow between hub and bottom spoke -->
-			<div class="col-start-2 row-start-4">
-				<ArrowDown class="arrow-flow-down h-6 w-6 text-muted-foreground/50" />
-			</div>
-
-			<!-- Row 5: Bottom spoke (Mobile) -->
-			<div class="col-start-2 row-start-5" use:reveal={150}>
-				{@render spokeBox(
-					Smartphone,
-					m.forYou_diagram_spoke_mobile(),
-					m.forYou_diagram_spoke_mobileDesc(),
-					'border-amber-500/30 bg-amber-500/5',
-					'text-amber-500'
-				)}
-			</div>
-		</div>
-
-		<!-- Mobile: Vertical stack -->
-		<div class="flex flex-col items-center gap-3 sm:hidden">
-			<div use:reveal={0}>
-				{@render hubBox()}
-			</div>
-			<ArrowDown class="arrow-flow-down h-6 w-6 text-muted-foreground/50" />
-			<div use:reveal={100}>
-				{@render spokeBox(
-					Monitor,
-					m.forYou_diagram_spoke_svelte(),
-					m.forYou_diagram_spoke_svelteDesc(),
-					'border-blue-500/30 bg-blue-500/5',
-					'text-blue-500'
-				)}
-			</div>
-			<ArrowDown class="arrow-flow-down h-6 w-6 text-muted-foreground/50" />
-			<div use:reveal={200}>
-				{@render spokeBox(
-					Code,
-					m.forYou_diagram_spoke_custom(),
-					m.forYou_diagram_spoke_customDesc(),
-					'border-violet-500/30 bg-violet-500/5',
-					'text-violet-500'
-				)}
-			</div>
-			<ArrowDown class="arrow-flow-down h-6 w-6 text-muted-foreground/50" />
-			<div use:reveal={300}>
-				{@render spokeBox(
-					Smartphone,
-					m.forYou_diagram_spoke_mobile(),
-					m.forYou_diagram_spoke_mobileDesc(),
-					'border-amber-500/30 bg-amber-500/5',
-					'text-amber-500'
-				)}
-			</div>
-			<ArrowDown class="arrow-flow-down h-6 w-6 text-muted-foreground/50" />
-			<div use:reveal={400}>
-				{@render spokeBox(
-					Globe,
-					m.forYou_diagram_spoke_external(),
-					m.forYou_diagram_spoke_externalDesc(),
-					'border-pink-500/30 bg-pink-500/5',
-					'text-pink-500'
-				)}
+				<!-- Dot indicators -->
+				<div class="mt-3 flex justify-center gap-1.5">
+					{#each consumers as consumer, i (consumer.name())}
+						<button
+							type="button"
+							class="h-2 w-2 rounded-full transition-colors {i === currentIndex
+								? 'bg-foreground'
+								: 'bg-foreground/20 hover:bg-foreground/40'}"
+							aria-label="Go to slide {i + 1}"
+							onclick={() => goTo(i)}
+						></button>
+					{/each}
+				</div>
 			</div>
 		</div>
 	</section>
@@ -340,26 +396,14 @@
 
 <!-- ── Snippets ─────────────────────────────────────────────────────── -->
 
-{#snippet hubBox()}
-	<div
-		class="flex w-full flex-col items-center rounded-xl border-2 border-green-500/40 bg-green-500/5 p-6 text-center shadow-sm shadow-green-500/10 sm:w-48"
-	>
-		<Server class="h-10 w-10 text-green-500" />
-		<span class="mt-2 text-sm font-bold">{m.forYou_diagram_hub()}</span>
-		<span class="text-xs text-muted-foreground">{m.forYou_diagram_hubDesc()}</span>
-	</div>
-{/snippet}
-
-{#snippet spokeBox(
+{#snippet consumerBox(
 	Icon: Component<IconProps>,
 	name: string,
 	desc: string,
 	borderClass: string,
 	iconColor: string
 )}
-	<div
-		class="flex w-full flex-col items-center justify-center rounded-xl border-2 p-5 text-center sm:min-h-[9rem] sm:w-48 {borderClass}"
-	>
+	<div class="flex w-full flex-col items-center rounded-xl border-2 p-5 text-center {borderClass}">
 		<Icon class="h-8 w-8 {iconColor}" />
 		<span class="mt-2 text-sm font-bold">{name}</span>
 		<span class="text-xs text-muted-foreground">{desc}</span>
@@ -404,18 +448,6 @@
 		}
 	}
 
-	@keyframes arrow-nudge-up {
-		0%,
-		100% {
-			transform: translateY(0);
-			opacity: 0.4;
-		}
-		50% {
-			transform: translateY(-3px);
-			opacity: 0.9;
-		}
-	}
-
 	@keyframes arrow-nudge-down {
 		0%,
 		100% {
@@ -428,32 +460,49 @@
 		}
 	}
 
-	@keyframes arrow-nudge-left {
-		0%,
-		100% {
-			transform: translateX(0);
-			opacity: 0.4;
-		}
-		50% {
-			transform: translateX(-3px);
-			opacity: 0.9;
-		}
-	}
-
 	:global(.arrow-flow) {
 		animation: arrow-nudge 2s ease-in-out infinite;
-	}
-
-	:global(.arrow-flow-up) {
-		animation: arrow-nudge-up 2s ease-in-out infinite;
 	}
 
 	:global(.arrow-flow-down) {
 		animation: arrow-nudge-down 2s ease-in-out infinite;
 	}
 
-	:global(.arrow-flow-left) {
-		animation: arrow-nudge-left 2s ease-in-out infinite;
+	/* Carousel slide transitions */
+	@keyframes carousel-in-next {
+		from {
+			opacity: 0;
+			transform: translateX(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	@keyframes carousel-in-prev {
+		from {
+			opacity: 0;
+			transform: translateX(-20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	.carousel-slide {
+		animation-duration: 0.3s;
+		animation-timing-function: ease-out;
+		animation-fill-mode: both;
+	}
+
+	.carousel-enter-next {
+		animation-name: carousel-in-next;
+	}
+
+	.carousel-enter-prev {
+		animation-name: carousel-in-prev;
 	}
 
 	/* Respect reduced motion */
@@ -462,9 +511,10 @@
 			animation: none;
 		}
 		:global(.arrow-flow),
-		:global(.arrow-flow-up),
-		:global(.arrow-flow-down),
-		:global(.arrow-flow-left) {
+		:global(.arrow-flow-down) {
+			animation: none;
+		}
+		.carousel-slide {
 			animation: none;
 		}
 	}

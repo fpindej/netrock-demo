@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fade, fly } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import { resolve } from '$app/paths';
 	import { Button } from '$lib/components/ui/button';
 	import { LanguageSelector } from '$lib/components/layout';
@@ -166,13 +166,13 @@
 			<LanguageSelector />
 		</div>
 
-		<!-- Slide content -->
+		<!-- Slide content — absolute positioning lets old/new slides crossfade on top of each other -->
 		<div class="relative z-10 flex w-full max-w-lg flex-1 items-center justify-center px-6">
 			{#key currentSlide}
 				<div
-					class="flex w-full flex-col items-center text-center"
-					in:fly={{ y: 30, duration: fadeDuration(400), delay: reducedMotion ? 0 : 100 }}
-					out:fade={{ duration: fadeDuration(250) }}
+					class="absolute inset-0 flex flex-col items-center justify-center px-6 text-center"
+					in:fade={{ duration: fadeDuration(450), delay: reducedMotion ? 0 : 200 }}
+					out:fade={{ duration: fadeDuration(350) }}
 				>
 					{#if currentSlide === 0}
 						<!-- Slide 0: Welcome Splash -->

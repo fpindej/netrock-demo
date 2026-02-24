@@ -4,12 +4,12 @@
 	import { cn, hasPermission, Permissions } from '$lib/utils';
 	import { buttonVariants } from '$lib/components/ui/button';
 	import {
+		Sparkles,
 		BookOpen,
 		Layers,
 		Users2,
 		BarChart3,
 		Mail,
-		ShieldCheck,
 		Users,
 		Shield,
 		Clock,
@@ -32,6 +32,12 @@
 	type AdminNavItem = NavItem & { permission: string };
 
 	let items: NavItem[] = [
+		{
+			title: m.nav_forYou,
+			href: resolve('/for-you'),
+			icon: Sparkles,
+			tour: 'nav-for-you'
+		},
 		{
 			title: m.nav_guide,
 			href: resolve('/guide'),
@@ -61,12 +67,6 @@
 			href: resolve('/contact-us'),
 			icon: Mail,
 			tour: 'nav-contact-us'
-		},
-		{
-			title: m.nav_privacy,
-			href: resolve('/privacy'),
-			icon: ShieldCheck,
-			tour: 'nav-privacy'
 		}
 	];
 

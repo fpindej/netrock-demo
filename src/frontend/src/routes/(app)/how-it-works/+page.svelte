@@ -174,7 +174,7 @@
 		</div>
 
 		<!-- Main flow: Frontend → API → Database -->
-		<div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-6">
+		<div class="flex flex-col items-center gap-4 md:flex-row md:justify-center md:gap-6">
 			<div use:reveal={0}>
 				{@render archBox(
 					Monitor,
@@ -184,8 +184,8 @@
 					'text-blue-500'
 				)}
 			</div>
-			<ArrowRight class="arrow-flow hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
-			<ArrowDown class="arrow-flow-down h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
+			<ArrowRight class="arrow-flow hidden h-6 w-6 shrink-0 text-muted-foreground/50 md:block" />
+			<ArrowDown class="arrow-flow-down h-6 w-6 shrink-0 text-muted-foreground/50 md:hidden" />
 			<div use:reveal={150}>
 				{@render archBox(
 					Server,
@@ -195,8 +195,8 @@
 					'text-green-500'
 				)}
 			</div>
-			<ArrowRight class="arrow-flow hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
-			<ArrowDown class="arrow-flow-down h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
+			<ArrowRight class="arrow-flow hidden h-6 w-6 shrink-0 text-muted-foreground/50 md:block" />
+			<ArrowDown class="arrow-flow-down h-6 w-6 shrink-0 text-muted-foreground/50 md:hidden" />
 			<div use:reveal={300}>
 				{@render archBox(
 					Database,
@@ -430,7 +430,7 @@
 	iconColor: string
 )}
 	<div
-		class="flex w-full flex-col items-center rounded-xl border-2 p-5 text-center sm:w-44 {borderClass}"
+		class="flex w-full max-w-64 flex-col items-center rounded-xl border-2 p-5 text-center md:w-44 md:max-w-none {borderClass}"
 	>
 		<Icon class="h-8 w-8 {iconColor}" />
 		<span class="mt-2 text-sm font-bold">{name}</span>

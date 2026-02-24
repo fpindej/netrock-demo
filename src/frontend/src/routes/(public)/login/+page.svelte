@@ -31,6 +31,10 @@
 		setTimeout(() => (isRegisterOpen = true), 550);
 	}
 
+	function replayWelcome() {
+		showWelcome = true;
+	}
+
 	onMount(async () => {
 		try {
 			if (!localStorage.getItem('netrock-welcomed')) {
@@ -67,7 +71,12 @@
 <!-- Hide until localStorage check completes to prevent login-form flash -->
 <div class:invisible={!checked}>
 	<div inert={showWelcome || undefined}>
-		<LoginForm apiUrl={data.apiUrl} turnstileSiteKey={data.turnstileSiteKey} bind:isRegisterOpen />
+		<LoginForm
+			apiUrl={data.apiUrl}
+			turnstileSiteKey={data.turnstileSiteKey}
+			bind:isRegisterOpen
+			onReplayWelcome={replayWelcome}
+		/>
 	</div>
 
 	{#if showWelcome}

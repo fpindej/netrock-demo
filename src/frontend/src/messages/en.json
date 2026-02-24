@@ -804,5 +804,6 @@
 	"welcome_cta_subtitle": "Create an account in seconds and see everything in action.",
 	"welcome_cta_register": "Create Account",
 	"welcome_cta_signIn": "Sign In Instead",
-	"welcome_cta_note": "It's free and takes 30 seconds."
+	"welcome_cta_note": "It's free and takes 30 seconds.",
+	"welcome_replay": "Tour"
 }

@@ -8,6 +8,15 @@
  */
 import { describe, expect, it, vi } from 'vitest';
 import { isRedirect } from '@sveltejs/kit';
+
+// Server-side test — override the global browser: true mock
+vi.mock('$app/environment', () => ({
+	browser: false,
+	dev: false,
+	building: false,
+	version: 'test'
+}));
+
 import { load } from './+layout.server';
 
 type LoadEvent = Parameters<typeof load>[0];

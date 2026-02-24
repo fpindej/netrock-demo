@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import type { User } from '$lib/types';
 import { hasAnyPermission, hasPermission, isSuperAdmin, Permissions } from './permissions';
+import { demoState } from '$lib/state';
 
 /** Creates a minimal User object for testing. */
 function makeUser(overrides: Partial<User> = {}): User {
@@ -52,97 +53,87 @@ describe('isSuperAdmin', () => {
 	});
 });
 
-// ── hasPermission ───────────────────────────────────────────────────
+// ── hasPermission (demo masking — browser: true from global test setup) ──
 
 describe('hasPermission', () => {
-	it('returns true when user has the exact permission', () => {
-		const user = makeUser({ permissions: [Permissions.Users.View] });
-		expect(hasPermission(user, Permissions.Users.View)).toBe(true);
+	beforeEach(() => {
+		demoState.viewingAs = 'Admin';
 	});
 
-	it('returns false when user lacks the permission', () => {
-		const user = makeUser({ permissions: [Permissions.Users.View] });
-		expect(hasPermission(user, Permissions.Users.Manage)).toBe(false);
-	});
-
-	it('returns false when user has no permissions', () => {
-		const user = makeUser({ permissions: [] });
-		expect(hasPermission(user, Permissions.Users.View)).toBe(false);
-	});
-
-	it('SuperAdmin viewing as Admin has Admin-level permissions', () => {
-		const user = makeUser({ roles: ['SuperAdmin'], permissions: [] });
-		// Default demo role is Admin — SuperAdmin sees masked Admin permissions
-		expect(hasPermission(user, Permissions.Users.Manage)).toBe(true);
-		expect(hasPermission(user, Permissions.Roles.View)).toBe(true);
-		expect(hasPermission(user, Permissions.Jobs.View)).toBe(true);
-	});
-
-	it('SuperAdmin viewing as Admin does not have permissions outside Admin scope', () => {
-		const user = makeUser({ roles: ['SuperAdmin'], permissions: [] });
-		// Roles.Manage and Jobs.Manage are NOT in ADMIN_PERMISSIONS
-		expect(hasPermission(user, Permissions.Roles.Manage)).toBe(false);
-		expect(hasPermission(user, Permissions.Jobs.Manage)).toBe(false);
-		expect(hasPermission(user, 'some.custom.permission')).toBe(false);
-	});
-
-	it('returns false for null user', () => {
+	it('returns false for null user regardless of demo role', () => {
 		expect(hasPermission(null, Permissions.Users.View)).toBe(false);
 	});
 
-	it('returns false for undefined user', () => {
+	it('returns false for undefined user regardless of demo role', () => {
 		expect(hasPermission(undefined, Permissions.Users.View)).toBe(false);
 	});
 
-	it('returns false when permissions property is undefined', () => {
-		const user = makeUser();
-		delete user.permissions;
-		expect(hasPermission(user, Permissions.Users.View)).toBe(false);
-	});
-
-	it('non-SuperAdmin with explicit permission returns true', () => {
-		const user = makeUser({
-			roles: ['Admin'],
-			permissions: [Permissions.Users.View, Permissions.Users.Manage]
+	describe('viewing as Admin', () => {
+		beforeEach(() => {
+			demoState.viewingAs = 'Admin';
 		});
-		expect(hasPermission(user, Permissions.Users.Manage)).toBe(true);
+
+		it('grants Admin-scoped permissions to any user', () => {
+			const user = makeUser({ roles: ['User'], permissions: [] });
+			expect(hasPermission(user, Permissions.Users.View)).toBe(true);
+			expect(hasPermission(user, Permissions.Users.Manage)).toBe(true);
+			expect(hasPermission(user, Permissions.Users.AssignRoles)).toBe(true);
+			expect(hasPermission(user, Permissions.Users.ViewPii)).toBe(true);
+			expect(hasPermission(user, Permissions.Roles.View)).toBe(true);
+			expect(hasPermission(user, Permissions.Jobs.View)).toBe(true);
+		});
+
+		it('does not grant permissions outside Admin scope', () => {
+			const user = makeUser();
+			expect(hasPermission(user, Permissions.Roles.Manage)).toBe(false);
+			expect(hasPermission(user, Permissions.Jobs.Manage)).toBe(false);
+			expect(hasPermission(user, 'some.custom.permission')).toBe(false);
+		});
+
+		it('ignores the actual user permissions array', () => {
+			const user = makeUser({ permissions: [Permissions.Roles.Manage] });
+			expect(hasPermission(user, Permissions.Roles.Manage)).toBe(false);
+		});
 	});
 
-	it('does not grant permissions from a different permission string', () => {
-		const user = makeUser({ permissions: ['users.view'] });
-		expect(hasPermission(user, 'users.view_pii')).toBe(false);
+	describe('viewing as User', () => {
+		beforeEach(() => {
+			demoState.viewingAs = 'User';
+		});
+
+		it('grants no permissions regardless of actual user role', () => {
+			const user = makeUser({
+				roles: ['SuperAdmin'],
+				permissions: [Permissions.Users.View, Permissions.Users.Manage]
+			});
+			expect(hasPermission(user, Permissions.Users.View)).toBe(false);
+			expect(hasPermission(user, Permissions.Users.Manage)).toBe(false);
+			expect(hasPermission(user, Permissions.Roles.View)).toBe(false);
+			expect(hasPermission(user, Permissions.Jobs.View)).toBe(false);
+		});
 	});
 });
 
 // ── hasAnyPermission ────────────────────────────────────────────────
 
 describe('hasAnyPermission', () => {
-	it('returns true when user has one of the requested permissions', () => {
-		const user = makeUser({ permissions: [Permissions.Users.View] });
-		expect(hasAnyPermission(user, [Permissions.Users.View, Permissions.Users.Manage])).toBe(true);
+	beforeEach(() => {
+		demoState.viewingAs = 'Admin';
 	});
 
-	it('returns true when user has all of the requested permissions', () => {
-		const user = makeUser({
-			permissions: [Permissions.Users.View, Permissions.Users.Manage]
-		});
-		expect(hasAnyPermission(user, [Permissions.Users.View, Permissions.Users.Manage])).toBe(true);
+	it('returns true when any requested permission is in Admin scope', () => {
+		const user = makeUser();
+		expect(hasAnyPermission(user, [Permissions.Users.View, Permissions.Roles.Manage])).toBe(true);
 	});
 
-	it('returns false when user has none of the requested permissions', () => {
-		const user = makeUser({ permissions: [Permissions.Jobs.View] });
-		expect(hasAnyPermission(user, [Permissions.Users.View, Permissions.Users.Manage])).toBe(false);
+	it('returns false when no requested permission is in Admin scope', () => {
+		const user = makeUser();
+		expect(hasAnyPermission(user, [Permissions.Roles.Manage, Permissions.Jobs.Manage])).toBe(false);
 	});
 
 	it('returns false for empty permissions list', () => {
-		const user = makeUser({ permissions: [Permissions.Users.View] });
+		const user = makeUser();
 		expect(hasAnyPermission(user, [])).toBe(false);
-	});
-
-	it('SuperAdmin viewing as Admin satisfies Admin-scoped permission checks', () => {
-		const user = makeUser({ roles: ['SuperAdmin'], permissions: [] });
-		// Users.Manage is in ADMIN_PERMISSIONS, so hasAny should return true
-		expect(hasAnyPermission(user, [Permissions.Users.Manage, Permissions.Roles.Manage])).toBe(true);
 	});
 
 	it('returns false for null user', () => {
@@ -155,6 +146,12 @@ describe('hasAnyPermission', () => {
 
 	it('returns false for null user even with empty permissions list', () => {
 		expect(hasAnyPermission(null, [])).toBe(false);
+	});
+
+	it('viewing as User denies all permissions', () => {
+		demoState.viewingAs = 'User';
+		const user = makeUser();
+		expect(hasAnyPermission(user, [Permissions.Users.View, Permissions.Users.Manage])).toBe(false);
 	});
 });
 

@@ -58,9 +58,9 @@
 		},
 		{
 			title: m.nav_contactMe,
-			href: resolve('/contact'),
+			href: resolve('/contact-us'),
 			icon: Mail,
-			tour: 'nav-contact'
+			tour: 'nav-contact-us'
 		},
 		{
 			title: m.nav_privacy,

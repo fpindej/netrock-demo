@@ -674,6 +674,8 @@
 	"tour_welcome_description": "NETrock is a production-ready full-stack template — .NET API with SvelteKit frontend. Let's take a quick tour of what's inside.",
 	"tour_guide_title": "Interactive Guide",
 	"tour_guide_description": "You're here! This page explains each feature step by step with links to try them out.",
+	"tour_howItWorks_title": "How It Works",
+	"tour_howItWorks_description": "See the full architecture, tech stack, quality practices, and every feature included in the NETrock template.",
 	"tour_contacts_title": "CRM Pipeline",
 	"tour_contacts_description": "Manage contacts, track deal values, search & filter, multi-select with bulk operations, and generate sample data.",
 	"tour_analytics_title": "Analytics Dashboard",

@@ -10,8 +10,35 @@
 			import('driver.js/dist/driver.css')
 		]);
 
-		setSidebarCollapsed(false);
+		const isMobile = window.innerWidth < 768;
+		let sheetTrigger: HTMLButtonElement | null = null;
+
+		function isSheetOpen(): boolean {
+			return sheetTrigger?.getAttribute('aria-expanded') === 'true';
+		}
+
+		function openMobileSheet() {
+			if (isMobile && sheetTrigger && !isSheetOpen()) {
+				sheetTrigger.click();
+			}
+		}
+
+		function closeMobileSheet() {
+			if (isMobile && sheetTrigger && isSheetOpen()) {
+				sheetTrigger.click();
+			}
+		}
+
+		if (isMobile) {
+			sheetTrigger = document.querySelector('header button') as HTMLButtonElement | null;
+			openMobileSheet();
+		} else {
+			setSidebarCollapsed(false);
+		}
+
 		await new Promise((r) => setTimeout(r, 350));
+
+		const side = isMobile ? ('bottom' as const) : ('right' as const);
 
 		const driverObj = driver({
 			showProgress: true,
@@ -23,23 +50,39 @@
 			prevBtnText: m.tour_prev(),
 			doneBtnText: m.tour_done(),
 			progressText: m.tour_progress({ current: '{{current}}', total: '{{total}}' }),
+			onDestroyed: () => {
+				closeMobileSheet();
+			},
 			steps: [
-				{
-					element: '[data-tour="sidebar-brand"]',
-					popover: {
-						title: m.tour_welcome_title(),
-						description: m.tour_welcome_description(),
-						side: 'right',
-						align: 'center'
-					}
-				},
+				...(!isMobile
+					? [
+							{
+								element: '[data-tour="sidebar-brand"]',
+								popover: {
+									title: m.tour_welcome_title(),
+									description: m.tour_welcome_description(),
+									side: 'right' as const,
+									align: 'center' as const
+								}
+							}
+						]
+					: []),
 				{
 					element: '[data-tour="nav-guide"]',
 					popover: {
 						title: m.tour_guide_title(),
 						description: m.tour_guide_description(),
-						side: 'right',
-						align: 'center'
+						side,
+						align: 'center' as const
+					}
+				},
+				{
+					element: '[data-tour="nav-how-it-works"]',
+					popover: {
+						title: m.tour_howItWorks_title(),
+						description: m.tour_howItWorks_description(),
+						side,
+						align: 'center' as const
 					}
 				},
 				{
@@ -47,8 +90,8 @@
 					popover: {
 						title: m.tour_contacts_title(),
 						description: m.tour_contacts_description(),
-						side: 'right',
-						align: 'center'
+						side,
+						align: 'center' as const
 					}
 				},
 				{
@@ -56,8 +99,8 @@
 					popover: {
 						title: m.tour_analytics_title(),
 						description: m.tour_analytics_description(),
-						side: 'right',
-						align: 'center'
+						side,
+						align: 'center' as const
 					}
 				},
 				{
@@ -65,26 +108,41 @@
 					popover: {
 						title: m.tour_admin_title(),
 						description: m.tour_admin_description(),
-						side: 'right',
-						align: 'center'
+						side,
+						align: 'center' as const
 					}
 				},
-				{
-					element: '[data-tour="sidebar-tools"]',
-					popover: {
-						title: m.tour_tools_title(),
-						description: m.tour_tools_description(),
-						side: 'right',
-						align: 'center'
-					}
-				},
+				...(!isMobile
+					? [
+							{
+								element: '[data-tour="sidebar-tools"]',
+								popover: {
+									title: m.tour_tools_title(),
+									description: m.tour_tools_description(),
+									side: 'right' as const,
+									align: 'center' as const
+								}
+							}
+						]
+					: []),
 				{
 					element: '[data-tour="role-switcher"]',
 					popover: {
 						title: m.tour_roleSwitcher_title(),
 						description: m.tour_roleSwitcher_description(),
-						side: 'top',
-						align: 'end'
+						side: 'top' as const,
+						align: 'end' as const,
+						onPrevClick: () => {
+							if (isMobile) {
+								openMobileSheet();
+								setTimeout(() => driverObj.movePrevious(), 350);
+							} else {
+								driverObj.movePrevious();
+							}
+						}
+					},
+					onHighlightStarted: () => {
+						closeMobileSheet();
 					}
 				}
 			]

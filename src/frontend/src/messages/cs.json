@@ -707,7 +707,7 @@
 	"tour_tools_title": "Přizpůsobení",
 	"tour_tools_description": "Přepnutí jazyků, tmavý/světlý motiv, správa účtu - detaily, které dodávají lesk.",
 	"tour_roleSwitcher_title": "Přepínač rolí",
-	"tour_roleSwitcher_description": "SuperAdmin je vlastník platformy s plným přístupem. Admin spravuje uživatele a role v rámci organizace. User má základní přístup. Vlastní role zpřístupňují konkrétní funkce, aniž by zahlcovaly uživatele, kteří využívají jen část systému. Zkuste přepnout - rozhraní se přizpůsobí okamžitě.",
+	"tour_roleSwitcher_description": "Přepínejte mezi rolemi User a Admin a sledujte, jak se rozhraní přizpůsobí. Admin spravuje uživatele a role v rámci organizace. User má základní přístup. Vlastní role zpřístupňují konkrétní funkce, aniž by zahlcovaly uživatele, kteří využívají jen část systému. SuperAdmin (vlastník platformy) není v demu dostupný kvůli ochraně osobních údajů a zachování reálných bezpečnostních hranic.",
 
 	"nav_howItWorks": "Jak to funguje",
 	"meta_howItWorks_title": "Jak to funguje",

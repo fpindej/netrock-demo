@@ -38,25 +38,12 @@ const ADMIN_PERMISSIONS: string[] = [
 	Permissions.Jobs.Manage
 ];
 
-/** Permissions granted to the SuperAdmin demo role (all except ViewPii). */
-const SUPERADMIN_PERMISSIONS: string[] = [
-	Permissions.Users.View,
-	Permissions.Users.Manage,
-	Permissions.Users.AssignRoles,
-	Permissions.Roles.View,
-	Permissions.Roles.Manage,
-	Permissions.Jobs.View,
-	Permissions.Jobs.Manage
-];
-
 /**
  * Returns the effective permissions for a demo role.
- * SuperAdmin = all except ViewPii. Admin = a curated subset. User = none.
+ * Admin = a curated subset (no PII access). User = none.
  */
 function getDemoPermissions(role: DemoRole): string[] {
 	switch (role) {
-		case 'SuperAdmin':
-			return SUPERADMIN_PERMISSIONS;
 		case 'Admin':
 			return ADMIN_PERMISSIONS;
 		case 'User':

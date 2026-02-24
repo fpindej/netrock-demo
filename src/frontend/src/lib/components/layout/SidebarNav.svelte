@@ -33,16 +33,16 @@
 
 	let items: NavItem[] = [
 		{
-			title: m.nav_forYou,
-			href: resolve('/for-you'),
-			icon: Sparkles,
-			tour: 'nav-for-you'
-		},
-		{
 			title: m.nav_guide,
 			href: resolve('/guide'),
 			icon: BookOpen,
 			tour: 'nav-guide'
+		},
+		{
+			title: m.nav_forYou,
+			href: resolve('/for-you'),
+			icon: Sparkles,
+			tour: 'nav-for-you'
 		},
 		{
 			title: m.nav_howItWorks,

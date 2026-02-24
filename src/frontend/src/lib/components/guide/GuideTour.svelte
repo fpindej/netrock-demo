@@ -1,12 +1,14 @@
 <script lang="ts">
-	import 'driver.js/dist/driver.css';
 	import { Play } from '@lucide/svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { setSidebarCollapsed } from '$lib/state';
 	import * as m from '$lib/paraglide/messages';
 
 	async function startTour() {
-		const { driver } = await import('driver.js');
+		const [{ driver }] = await Promise.all([
+			import('driver.js'),
+			import('driver.js/dist/driver.css')
+		]);
 
 		setSidebarCollapsed(false);
 		await new Promise((r) => setTimeout(r, 350));

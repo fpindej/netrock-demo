@@ -20,9 +20,10 @@
 	interface Props {
 		apiUrl?: string;
 		turnstileSiteKey: string;
+		isRegisterOpen?: boolean;
 	}
 
-	let { apiUrl, turnstileSiteKey }: Props = $props();
+	let { apiUrl, turnstileSiteKey, isRegisterOpen = $bindable(false) }: Props = $props();
 
 	let email = $state('');
 	let password = $state('');
@@ -32,7 +33,6 @@
 	let isRedirecting = $state(false);
 	const shake = createShake();
 	const cooldown = createCooldown();
-	let isRegisterOpen = $state(false);
 
 	const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 

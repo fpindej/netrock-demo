@@ -2,18 +2,45 @@
 	import { onMount, tick } from 'svelte';
 	import { replaceState } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { LoginForm } from '$lib/components/auth';
+	import { LoginForm, WelcomeOverlay } from '$lib/components/auth';
 	import { toast } from '$lib/components/ui/sonner';
 	import * as m from '$lib/paraglide/messages';
 
 	let { data } = $props();
 
+	let isRegisterOpen = $state(false);
+	let showWelcome = $state(false);
+
+	function completeWelcome() {
+		showWelcome = false;
+		try {
+			localStorage.setItem('netrock-welcomed', '1');
+		} catch {
+			// localStorage unavailable — silently ignore
+		}
+	}
+
+	function handleRegister() {
+		try {
+			localStorage.setItem('netrock-welcomed', '1');
+		} catch {
+			// localStorage unavailable
+		}
+		showWelcome = false;
+		setTimeout(() => (isRegisterOpen = true), 550);
+	}
+
 	onMount(async () => {
+		try {
+			if (!localStorage.getItem('netrock-welcomed')) {
+				showWelcome = true;
+			}
+		} catch {
+			// localStorage unavailable — don't show overlay
+		}
+
 		if (!data.reason) return;
 
-		// Defer one tick so the Toaster portal (rendered in the root layout)
-		// is fully initialised after hydration. Without this, toasts fired
-		// during the very first mount cycle of a hard navigation are lost.
 		await tick();
 
 		if (data.reason === 'session_expired') {
@@ -26,7 +53,6 @@
 			});
 		}
 
-		// Clean URL so bookmarking or refreshing won't re-show the toast
 		replaceState(resolve('/login'), {});
 	});
 </script>
@@ -36,4 +62,10 @@
 	<meta name="description" content={m.meta_login_description()} />
 </svelte:head>
 
-<LoginForm apiUrl={data.apiUrl} turnstileSiteKey={data.turnstileSiteKey} />
+<div inert={showWelcome || undefined}>
+	<LoginForm apiUrl={data.apiUrl} turnstileSiteKey={data.turnstileSiteKey} bind:isRegisterOpen />
+</div>
+
+{#if showWelcome}
+	<WelcomeOverlay onComplete={completeWelcome} onRegister={handleRegister} />
+{/if}

@@ -53,7 +53,7 @@
 	<meta name="description" content={m.meta_adminUsers_description()} />
 </svelte:head>
 
-<div class="space-y-6">
+<div data-tour="admin-content" class="space-y-6">
 	<div>
 		<h3 class="text-lg font-medium">{m.admin_users_title()}</h3>
 		<p class="text-sm text-muted-foreground">{m.admin_users_description()}</p>

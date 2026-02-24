@@ -105,7 +105,7 @@
 	<meta name="description" content={m.meta_analytics_description()} />
 </svelte:head>
 
-<div class="space-y-6">
+<div data-tour="analytics-content" class="space-y-6">
 	<div>
 		<h3 class="text-lg font-medium">{m.analytics_title()}</h3>
 		<p class="text-sm text-muted-foreground">{m.analytics_description()}</p>

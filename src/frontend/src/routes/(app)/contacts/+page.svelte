@@ -247,7 +247,7 @@
 </svelte:head>
 
 {#if isEmpty}
-	<div class="space-y-6">
+	<div data-tour="contacts-content" class="space-y-6">
 		<div>
 			<h3 class="text-lg font-medium">{m.contacts_title()}</h3>
 			<p class="text-sm text-muted-foreground">{m.contacts_description()}</p>
@@ -260,7 +260,7 @@
 		/>
 	</div>
 {:else}
-	<div class="space-y-6">
+	<div data-tour="contacts-content" class="space-y-6">
 		<div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 			<div>
 				<h3 class="text-lg font-medium">{m.contacts_title()}</h3>

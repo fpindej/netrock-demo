@@ -220,7 +220,7 @@
 	<div class="h-px w-full bg-border"></div>
 
 	<!-- ── Persona Cards ────────────────────────────────────────────── -->
-	<section>
+	<section data-tour="for-you-personas">
 		<div class="mb-8 text-center" use:reveal>
 			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
 				{m.forYou_personas_title()}
@@ -273,7 +273,7 @@
 	<div class="h-px w-full bg-border"></div>
 
 	<!-- ── Hub-and-Spoke Diagram ────────────────────────────────────── -->
-	<section>
+	<section data-tour="for-you-diagram">
 		<div class="mb-8 text-center" use:reveal>
 			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
 				{m.forYou_diagram_title()}

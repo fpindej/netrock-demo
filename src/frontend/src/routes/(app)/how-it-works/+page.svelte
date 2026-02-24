@@ -163,7 +163,7 @@
 	<div class="h-px w-full bg-border"></div>
 
 	<!-- ── Architecture ─────────────────────────────────────────────── -->
-	<section>
+	<section data-tour="how-it-works-architecture">
 		<div class="mb-8 text-center" use:reveal>
 			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
 				{m.howItWorks_architecture_title()}
@@ -254,7 +254,7 @@
 	<div class="h-px w-full bg-border"></div>
 
 	<!-- ── Tech Stack ───────────────────────────────────────────────── -->
-	<section>
+	<section data-tour="how-it-works-tech-stack">
 		<div class="mb-8 text-center" use:reveal>
 			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
 				{m.howItWorks_techStack_title()}

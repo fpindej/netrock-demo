@@ -167,6 +167,15 @@ internal class ContactService(
         CancellationToken cancellationToken = default)
     {
         var userId = userContext.AuthenticatedUserId;
+
+        var existingCount = await dbContext.Contacts
+            .CountAsync(c => c.OwnerId == userId, cancellationToken);
+
+        if (existingCount > 0)
+        {
+            return Result<int>.Failure(ErrorMessages.Contacts.SampleContactsAlreadyGenerated);
+        }
+
         var effectiveCount = Math.Min(count, MaxSampleContacts);
 
         if (effectiveCount <= 0)

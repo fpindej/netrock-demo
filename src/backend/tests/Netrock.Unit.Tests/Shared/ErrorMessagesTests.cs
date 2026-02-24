@@ -6,7 +6,7 @@ namespace Netrock.Unit.Tests.Shared;
 public class ErrorMessagesTests
 {
     private static readonly string[] ExpectedNestedClasses =
-        ["Auth", "User", "Admin", "Roles", "Pagination", "Server", "Jobs", "Security", "Entity"];
+        ["Auth", "User", "Admin", "Roles", "Pagination", "Server", "Jobs", "Security", "Contacts", "Entity"];
 
     [Fact]
     public void AllNestedClasses_ShouldExist()

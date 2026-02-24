@@ -147,6 +147,14 @@ public static class ErrorMessages
     }
 
     /// <summary>
+    /// Contact management error messages.
+    /// </summary>
+    public static class Contacts
+    {
+        public const string SampleContactsAlreadyGenerated = "Sample contacts have already been generated. Delete existing contacts first.";
+    }
+
+    /// <summary>
     /// Generic entity operation error messages (repository layer).
     /// </summary>
     public static class Entity

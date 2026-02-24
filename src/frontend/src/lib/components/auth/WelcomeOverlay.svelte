@@ -19,14 +19,16 @@
 	interface Props {
 		onComplete: () => void;
 		onRegister: () => void;
+		initialSlide?: number;
 	}
 
-	let { onComplete, onRegister }: Props = $props();
+	let { onComplete, onRegister, initialSlide = 0 }: Props = $props();
 
 	const TOTAL_SLIDES = 5;
 	const SWIPE_THRESHOLD = 50;
+	const SLIDE_KEY = 'netrock-welcome-slide';
 
-	let currentSlide = $state(0);
+	let currentSlide = $state(initialSlide);
 	let visible = $state(true);
 	let skipVisible = $state(false);
 	let reducedMotion = $state(false);
@@ -71,6 +73,17 @@
 		{ icon: Trash2, msg: () => m.welcome_privacy_cleared() }
 	];
 
+	// Persist current slide so language-change reloads can resume
+	$effect(() => {
+		if (visible) {
+			try {
+				sessionStorage.setItem(SLIDE_KEY, String(currentSlide));
+			} catch {
+				// sessionStorage unavailable
+			}
+		}
+	});
+
 	function fadeDuration(ms: number) {
 		return reducedMotion ? 0 : ms;
 	}
@@ -83,13 +96,23 @@
 		if (currentSlide > 0) currentSlide--;
 	}
 
+	function clearSlideState() {
+		try {
+			sessionStorage.removeItem(SLIDE_KEY);
+		} catch {
+			// sessionStorage unavailable
+		}
+	}
+
 	function dismiss() {
 		visible = false;
+		clearSlideState();
 		setTimeout(() => onComplete(), fadeDuration(500) + 50);
 	}
 
 	function handleRegister() {
 		visible = false;
+		clearSlideState();
 		setTimeout(() => onRegister(), fadeDuration(500) + 50);
 	}
 
@@ -100,7 +123,6 @@
 	}
 
 	function handlePointerDown(e: PointerEvent) {
-		// Only handle primary button (left click / single touch)
 		if (e.button !== 0) return;
 		pointerStartX = e.clientX;
 		pointerStartY = e.clientY;
@@ -114,7 +136,6 @@
 		const dx = e.clientX - pointerStartX;
 		const dy = e.clientY - pointerStartY;
 
-		// Only register horizontal swipe if it's more horizontal than vertical
 		if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
 			if (dx < 0) nextSlide();
 			else prevSlide();
@@ -132,7 +153,9 @@
 		const onChange = (e: MediaQueryListEvent) => (reducedMotion = e.matches);
 		mq.addEventListener('change', onChange);
 
-		const skipTimer = setTimeout(() => (skipVisible = true), 1500);
+		// Show skip immediately if resuming mid-tour (after language change)
+		const skipDelay = initialSlide > 0 ? 0 : 1500;
+		const skipTimer = setTimeout(() => (skipVisible = true), skipDelay);
 
 		return () => {
 			mq.removeEventListener('change', onChange);
@@ -145,9 +168,10 @@
 
 {#if visible}
 	<div
-		class="fixed inset-0 z-50 flex touch-pan-y flex-col items-center justify-center overflow-hidden bg-background"
+		class="welcome-overlay fixed inset-0 z-50 flex touch-pan-y flex-col items-center justify-center overflow-hidden bg-background"
 		transition:fade={{ duration: fadeDuration(500) }}
 		role="dialog"
+		tabindex="-1"
 		aria-modal="true"
 		aria-label={m.welcome_splash_title()}
 		onpointerdown={handlePointerDown}
@@ -162,7 +186,7 @@
 		</div>
 
 		<!-- Language + theme selectors (top-right, matching login page) -->
-		<div class="absolute end-4 top-4 z-10 flex gap-2">
+		<div class="welcome-safe-top absolute end-4 top-4 z-10 flex gap-2">
 			<LanguageSelector />
 			<ThemeToggle />
 		</div>
@@ -273,7 +297,7 @@
 		</div>
 
 		<!-- Bottom navigation -->
-		<div class="relative z-10 flex items-center gap-4 pb-8">
+		<div class="welcome-safe-bottom relative z-10 flex items-center gap-4 pb-8">
 			<button
 				type="button"
 				class="rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground disabled:pointer-events-none disabled:opacity-0"
@@ -316,7 +340,7 @@
 		{#if skipVisible && currentSlide < TOTAL_SLIDES - 1}
 			<button
 				type="button"
-				class="absolute end-4 bottom-6 z-10 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
+				class="welcome-safe-skip absolute end-4 bottom-6 z-10 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
 				onclick={dismiss}
 				in:fade={{ duration: fadeDuration(300) }}
 			>
@@ -327,6 +351,30 @@
 {/if}
 
 <style>
+	/* Use dvh for the overlay so it respects Safari's dynamic toolbar */
+	.welcome-overlay {
+		height: 100vh;
+	}
+
+	@supports (height: 100dvh) {
+		.welcome-overlay {
+			height: 100dvh;
+		}
+	}
+
+	/* Safe-area offsets for positioned elements on notched devices */
+	.welcome-safe-top {
+		top: max(1rem, env(safe-area-inset-top, 0px));
+	}
+
+	.welcome-safe-bottom {
+		padding-bottom: max(2rem, calc(env(safe-area-inset-bottom, 0px) + 0.5rem));
+	}
+
+	.welcome-safe-skip {
+		bottom: max(1.5rem, calc(env(safe-area-inset-bottom, 0px) + 0.25rem));
+	}
+
 	.welcome-glow-center {
 		position: absolute;
 		top: 50%;

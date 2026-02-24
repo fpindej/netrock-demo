@@ -10,6 +10,7 @@
 
 	let isRegisterOpen = $state(false);
 	let showWelcome = $state(false);
+	let welcomeSlide = $state(0);
 	let checked = $state(false);
 
 	function completeWelcome() {
@@ -32,16 +33,22 @@
 	}
 
 	function replayWelcome() {
+		welcomeSlide = 0;
 		showWelcome = true;
 	}
 
 	onMount(async () => {
 		try {
-			if (!localStorage.getItem('netrock-welcomed')) {
+			// Resume mid-tour if language was changed (sessionStorage survives reloads)
+			const savedSlide = sessionStorage.getItem('netrock-welcome-slide');
+			if (savedSlide !== null) {
+				welcomeSlide = Number(savedSlide);
+				showWelcome = true;
+			} else if (!localStorage.getItem('netrock-welcomed')) {
 				showWelcome = true;
 			}
 		} catch {
-			// localStorage unavailable — don't show overlay
+			// storage unavailable — don't show overlay
 		}
 		checked = true;
 
@@ -80,6 +87,10 @@
 	</div>
 
 	{#if showWelcome}
-		<WelcomeOverlay onComplete={completeWelcome} onRegister={handleRegister} />
+		<WelcomeOverlay
+			onComplete={completeWelcome}
+			onRegister={handleRegister}
+			initialSlide={welcomeSlide}
+		/>
 	{/if}
 </div>

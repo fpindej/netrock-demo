@@ -92,7 +92,7 @@
 	});
 </script>
 
-<div class="flex min-h-screen flex-col justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+<div class="flex min-h-dvh flex-col justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
 	<div class="sm:mx-auto sm:w-full sm:max-w-md">
 		<Card.Root class="text-center shadow-lg">
 			<Card.Header>

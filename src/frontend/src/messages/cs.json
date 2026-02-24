@@ -565,6 +565,18 @@
 	"contacts_updateError": "Nepodařilo se aktualizovat kontakt",
 	"contacts_deleteError": "Nepodařilo se smazat kontakt",
 
+	"contacts_selected": "{count} vybráno",
+	"contacts_deleteSelected": "Smazat vybrané",
+	"contacts_selectAllOnPage": "Všech {count} na této stránce vybráno.",
+	"contacts_selectAll": "Vybrat všech {count} kontaktů",
+	"contacts_bulkDeleteConfirm_title": "Smazat {count} kontaktů?",
+	"contacts_bulkDeleteConfirm_description": "Toto trvale smaže {count} kontaktů. Tuto akci nelze vrátit zpět.",
+	"contacts_generate_5": "Vygenerovat 5 ukázkových kontaktů",
+	"contacts_generate_10": "Vygenerovat 10 ukázkových kontaktů",
+	"contacts_generate_20": "Vygenerovat 20 ukázkových kontaktů",
+	"contacts_generate_50": "Vygenerovat 50 ukázkových kontaktů",
+	"contacts_bulkDeleted": "Kontakty smazány",
+
 	"analytics_title": "Analytika pipeline",
 	"analytics_description": "Přehledy z vaší obchodní pipeline.",
 	"analytics_totalContacts": "Celkem kontaktů",
@@ -647,5 +659,9 @@
 
 	"privacy_section_contact_title": "Kontakt",
 	"privacy_section_contact_description": "Máte-li dotazy ohledně nakládání s vašimi daty, neváhejte se ozvat:",
-	"privacy_section_contact_email": "E-mail: {email}"
+	"privacy_section_contact_email": "E-mail: {email}",
+
+	"privacy_backToLogin": "Zpět na přihlášení",
+	"register_privacyNotice_prefix": "Registrací souhlasíte s naším",
+	"register_privacyNotice_linkText": "Oznámením o ochraně soukromí"
 }

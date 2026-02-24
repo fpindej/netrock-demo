@@ -565,6 +565,18 @@
 	"contacts_updateError": "Failed to update contact",
 	"contacts_deleteError": "Failed to delete contact",
 
+	"contacts_selected": "{count} selected",
+	"contacts_deleteSelected": "Delete selected",
+	"contacts_selectAllOnPage": "All {count} on this page selected.",
+	"contacts_selectAll": "Select all {count} contacts",
+	"contacts_bulkDeleteConfirm_title": "Delete {count} contacts?",
+	"contacts_bulkDeleteConfirm_description": "This will permanently delete {count} contacts. This action cannot be undone.",
+	"contacts_generate_5": "Generate 5 sample contacts",
+	"contacts_generate_10": "Generate 10 sample contacts",
+	"contacts_generate_20": "Generate 20 sample contacts",
+	"contacts_generate_50": "Generate 50 sample contacts",
+	"contacts_bulkDeleted": "Contacts deleted",
+
 	"analytics_title": "Pipeline Analytics",
 	"analytics_description": "Insights from your business pipeline.",
 	"analytics_totalContacts": "Total contacts",
@@ -647,5 +659,9 @@
 
 	"privacy_section_contact_title": "Contact",
 	"privacy_section_contact_description": "If you have any questions about how your data is handled, feel free to reach out:",
-	"privacy_section_contact_email": "Email: {email}"
+	"privacy_section_contact_email": "Email: {email}",
+
+	"privacy_backToLogin": "Back to login",
+	"register_privacyNotice_prefix": "By registering, you agree to our",
+	"register_privacyNotice_linkText": "Privacy Notice"
 }

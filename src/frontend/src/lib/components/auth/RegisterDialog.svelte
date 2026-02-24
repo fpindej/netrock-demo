@@ -5,6 +5,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import { PhoneInput } from '$lib/components/ui/phone-input';
 	import { browserClient, getErrorMessage, handleMutationError } from '$lib/api';
+	import { resolve } from '$app/paths';
 	import * as m from '$lib/paraglide/messages';
 	import { toast } from '$lib/components/ui/sonner';
 	import { Loader2 } from '@lucide/svelte';
@@ -264,6 +265,17 @@
 					<p class="text-xs text-destructive">{fieldErrors.confirmPassword}</p>
 				{/if}
 			</div>
+			<p class="text-xs text-muted-foreground">
+				{m.register_privacyNotice_prefix()}
+				<a
+					href={resolve('/privacy')}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="font-medium text-primary hover:underline"
+				>
+					{m.register_privacyNotice_linkText()}</a
+				>.
+			</p>
 			<TurnstileWidget
 				siteKey={turnstileSiteKey}
 				onVerified={(t) => (captchaToken = t)}

@@ -28,6 +28,34 @@
 	} from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
 	import type { Component } from 'svelte';
+	import type { Action } from 'svelte/action';
+
+	/** Scroll-triggered reveal animation. Applied via JS to avoid SSR flash. */
+	const reveal: Action<HTMLElement, number | undefined> = (node, delay = 0) => {
+		if (
+			typeof window !== 'undefined' &&
+			window.matchMedia('(prefers-reduced-motion: reduce)').matches
+		)
+			return;
+
+		node.style.opacity = '0';
+		node.style.transform = 'translateY(20px)';
+		node.style.transition = `opacity 0.6s ease-out ${delay}ms, transform 0.6s ease-out ${delay}ms`;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				const entry = entries[0];
+				if (entry?.isIntersecting) {
+					node.style.opacity = '1';
+					node.style.transform = 'none';
+					observer.disconnect();
+				}
+			},
+			{ threshold: 0.1 }
+		);
+		observer.observe(node);
+		return { destroy: () => observer.disconnect() };
+	};
 
 	type FeatureItem = {
 		icon: Component<IconProps>;
@@ -121,23 +149,25 @@
 	<!-- ── Hero ──────────────────────────────────────────────────────── -->
 	<section class="text-center">
 		<span
-			class="inline-block rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-primary"
+			class="hero-animate hero-delay-0 inline-block rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-primary"
 		>
 			{m.howItWorks_hero_badge()}
 		</span>
 
 		<h1
-			class="mt-4 bg-gradient-to-r from-foreground via-foreground/80 to-foreground/60 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl"
+			class="hero-animate hero-delay-1 mt-4 bg-gradient-to-r from-foreground via-foreground/80 to-foreground/60 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl"
 		>
 			{m.howItWorks_hero_title()}
 		</h1>
 
-		<p class="mx-auto mt-4 max-w-2xl text-base text-muted-foreground sm:text-lg">
+		<p
+			class="hero-animate hero-delay-2 mx-auto mt-4 max-w-2xl text-base text-muted-foreground sm:text-lg"
+		>
 			{m.howItWorks_hero_subtitle()}
 		</p>
 
 		<!-- Stats pills -->
-		<div class="mt-8 flex flex-wrap justify-center gap-3">
+		<div class="hero-animate hero-delay-3 mt-8 flex flex-wrap justify-center gap-3">
 			{@render statPill(m.howItWorks_stats_tests(), m.howItWorks_stats_testsDesc())}
 			{@render statPill(m.howItWorks_stats_features(), m.howItWorks_stats_featuresDesc())}
 			{@render statPill(m.howItWorks_stats_languages(), m.howItWorks_stats_languagesDesc())}
@@ -149,7 +179,7 @@
 
 	<!-- ── Architecture ─────────────────────────────────────────────── -->
 	<section>
-		<div class="mb-8 text-center">
+		<div class="mb-8 text-center" use:reveal>
 			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
 				{m.howItWorks_architecture_title()}
 			</h2>
@@ -160,62 +190,79 @@
 
 		<!-- Main flow: Frontend → API → Database -->
 		<div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-6">
-			{@render archBox(
-				Monitor,
-				m.howItWorks_architecture_frontend(),
-				m.howItWorks_architecture_frontendDesc(),
-				'border-blue-500/30 bg-blue-500/5',
-				'text-blue-500'
-			)}
-			<ArrowRight class="hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
-			<ArrowDown class="h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
-			{@render archBox(
-				Server,
-				m.howItWorks_architecture_api(),
-				m.howItWorks_architecture_apiDesc(),
-				'border-green-500/30 bg-green-500/5',
-				'text-green-500'
-			)}
-			<ArrowRight class="hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
-			<ArrowDown class="h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
-			{@render archBox(
-				Database,
-				m.howItWorks_architecture_db(),
-				m.howItWorks_architecture_dbDesc(),
-				'border-amber-500/30 bg-amber-500/5',
-				'text-amber-500'
-			)}
+			<div use:reveal={0}>
+				{@render archBox(
+					Monitor,
+					m.howItWorks_architecture_frontend(),
+					m.howItWorks_architecture_frontendDesc(),
+					'border-blue-500/30 bg-blue-500/5',
+					'text-blue-500'
+				)}
+			</div>
+			<ArrowRight class="arrow-pulse hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
+			<ArrowDown class="arrow-pulse h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
+			<div use:reveal={150}>
+				{@render archBox(
+					Server,
+					m.howItWorks_architecture_api(),
+					m.howItWorks_architecture_apiDesc(),
+					'border-green-500/30 bg-green-500/5',
+					'text-green-500'
+				)}
+			</div>
+			<ArrowRight class="arrow-pulse hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
+			<ArrowDown class="arrow-pulse h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
+			<div use:reveal={300}>
+				{@render archBox(
+					Database,
+					m.howItWorks_architecture_db(),
+					m.howItWorks_architecture_dbDesc(),
+					'border-amber-500/30 bg-amber-500/5',
+					'text-amber-500'
+				)}
+			</div>
 		</div>
 
 		<!-- Supporting services -->
-		<p class="mt-8 text-center text-xs font-medium tracking-wider text-muted-foreground uppercase">
+		<p
+			class="mt-8 text-center text-xs font-medium tracking-wider text-muted-foreground uppercase"
+			use:reveal={400}
+		>
 			{m.howItWorks_architecture_supporting()}
 		</p>
 		<div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-			{@render supportBox(
-				Zap,
-				m.howItWorks_architecture_redis(),
-				m.howItWorks_architecture_redisDesc(),
-				'text-red-500'
-			)}
-			{@render supportBox(
-				Eye,
-				m.howItWorks_architecture_seq(),
-				m.howItWorks_architecture_seqDesc(),
-				'text-purple-500'
-			)}
-			{@render supportBox(
-				HardDrive,
-				m.howItWorks_architecture_minio(),
-				m.howItWorks_architecture_minioDesc(),
-				'text-teal-500'
-			)}
-			{@render supportBox(
-				Clock,
-				m.howItWorks_architecture_hangfire(),
-				m.howItWorks_architecture_hangfireDesc(),
-				'text-orange-500'
-			)}
+			<div use:reveal={450}>
+				{@render supportBox(
+					Zap,
+					m.howItWorks_architecture_redis(),
+					m.howItWorks_architecture_redisDesc(),
+					'text-red-500'
+				)}
+			</div>
+			<div use:reveal={525}>
+				{@render supportBox(
+					Eye,
+					m.howItWorks_architecture_seq(),
+					m.howItWorks_architecture_seqDesc(),
+					'text-purple-500'
+				)}
+			</div>
+			<div use:reveal={600}>
+				{@render supportBox(
+					HardDrive,
+					m.howItWorks_architecture_minio(),
+					m.howItWorks_architecture_minioDesc(),
+					'text-teal-500'
+				)}
+			</div>
+			<div use:reveal={675}>
+				{@render supportBox(
+					Clock,
+					m.howItWorks_architecture_hangfire(),
+					m.howItWorks_architecture_hangfireDesc(),
+					'text-orange-500'
+				)}
+			</div>
 		</div>
 	</section>
 
@@ -223,7 +270,7 @@
 
 	<!-- ── Tech Stack ───────────────────────────────────────────────── -->
 	<section>
-		<div class="mb-8 text-center">
+		<div class="mb-8 text-center" use:reveal>
 			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
 				{m.howItWorks_techStack_title()}
 			</h2>
@@ -234,65 +281,74 @@
 
 		<div class="grid gap-6 sm:grid-cols-3">
 			<!-- Frontend -->
-			<Card.Root class="relative overflow-hidden">
-				<div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500"></div>
-				<Card.Header>
-					<Card.Title class="text-blue-500">{m.howItWorks_techStack_frontend()}</Card.Title>
-				</Card.Header>
-				<Card.Content>
-					<ul class="space-y-2.5 text-sm">
-						{@render techItem('SvelteKit 2', 'Meta-framework + SSR')}
-						{@render techItem('Svelte 5', 'Runes reactivity system')}
-						{@render techItem('TypeScript 5', 'Strict mode, no any')}
-						{@render techItem('Tailwind CSS 4', 'Utility-first styling')}
-						{@render techItem('Paraglide', 'Compile-time i18n')}
-						{@render techItem('openapi-fetch', 'Type-safe API client')}
-						{@render techItem('Vitest', 'Unit & component tests')}
-					</ul>
-				</Card.Content>
-			</Card.Root>
+			<div use:reveal={0}>
+				<Card.Root class="relative overflow-hidden">
+					<div
+						class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500"
+					></div>
+					<Card.Header>
+						<Card.Title class="text-blue-500">{m.howItWorks_techStack_frontend()}</Card.Title>
+					</Card.Header>
+					<Card.Content>
+						<ul class="space-y-2.5 text-sm">
+							{@render techItem('SvelteKit 2', 'Meta-framework + SSR')}
+							{@render techItem('Svelte 5', 'Runes reactivity system')}
+							{@render techItem('TypeScript 5', 'Strict mode, no any')}
+							{@render techItem('Tailwind CSS 4', 'Utility-first styling')}
+							{@render techItem('Paraglide', 'Compile-time i18n')}
+							{@render techItem('openapi-fetch', 'Type-safe API client')}
+							{@render techItem('Vitest', 'Unit & component tests')}
+						</ul>
+					</Card.Content>
+				</Card.Root>
+			</div>
 
 			<!-- Backend -->
-			<Card.Root class="relative overflow-hidden">
-				<div
-					class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-green-500 to-emerald-500"
-				></div>
-				<Card.Header>
-					<Card.Title class="text-green-500">{m.howItWorks_techStack_backend()}</Card.Title>
-				</Card.Header>
-				<Card.Content>
-					<ul class="space-y-2.5 text-sm">
-						{@render techItem('.NET 10', 'C# 13, ASP.NET Core')}
-						{@render techItem('EF Core 10', 'PostgreSQL + migrations')}
-						{@render techItem('FluentValidation', 'Declarative input rules')}
-						{@render techItem('Hangfire', 'Background job engine')}
-						{@render techItem('Serilog', 'Structured logging → Seq')}
-						{@render techItem('SkiaSharp', 'Image processing')}
-						{@render techItem('xUnit', '4-tier test suite')}
-					</ul>
-				</Card.Content>
-			</Card.Root>
+			<div use:reveal={120}>
+				<Card.Root class="relative overflow-hidden">
+					<div
+						class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-green-500 to-emerald-500"
+					></div>
+					<Card.Header>
+						<Card.Title class="text-green-500">{m.howItWorks_techStack_backend()}</Card.Title>
+					</Card.Header>
+					<Card.Content>
+						<ul class="space-y-2.5 text-sm">
+							{@render techItem('.NET 10', 'C# 13, ASP.NET Core')}
+							{@render techItem('EF Core 10', 'PostgreSQL + migrations')}
+							{@render techItem('FluentValidation', 'Declarative input rules')}
+							{@render techItem('Hangfire', 'Background job engine')}
+							{@render techItem('Serilog', 'Structured logging → Seq')}
+							{@render techItem('SkiaSharp', 'Image processing')}
+							{@render techItem('xUnit', '4-tier test suite')}
+						</ul>
+					</Card.Content>
+				</Card.Root>
+			</div>
 
 			<!-- Infrastructure -->
-			<Card.Root class="relative overflow-hidden">
-				<div
-					class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-500 to-orange-500"
-				></div>
-				<Card.Header>
-					<Card.Title class="text-amber-500">{m.howItWorks_techStack_infrastructure()}</Card.Title>
-				</Card.Header>
-				<Card.Content>
-					<ul class="space-y-2.5 text-sm">
-						{@render techItem('PostgreSQL', 'Primary relational DB')}
-						{@render techItem('Redis', 'Distributed cache + resilience')}
-						{@render techItem('MinIO', 'S3-compatible object store')}
-						{@render techItem('Seq', 'Log aggregation & search')}
-						{@render techItem('Docker Compose', 'Dev + production overlays')}
-						{@render techItem('Resend', 'Email delivery service')}
-						{@render techItem('Turnstile', 'Bot protection')}
-					</ul>
-				</Card.Content>
-			</Card.Root>
+			<div use:reveal={240}>
+				<Card.Root class="relative overflow-hidden">
+					<div
+						class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-500 to-orange-500"
+					></div>
+					<Card.Header>
+						<Card.Title class="text-amber-500">{m.howItWorks_techStack_infrastructure()}</Card.Title
+						>
+					</Card.Header>
+					<Card.Content>
+						<ul class="space-y-2.5 text-sm">
+							{@render techItem('PostgreSQL', 'Primary relational DB')}
+							{@render techItem('Redis', 'Distributed cache + resilience')}
+							{@render techItem('MinIO', 'S3-compatible object store')}
+							{@render techItem('Seq', 'Log aggregation & search')}
+							{@render techItem('Docker Compose', 'Dev + production overlays')}
+							{@render techItem('Resend', 'Email delivery service')}
+							{@render techItem('Turnstile', 'Bot protection')}
+						</ul>
+					</Card.Content>
+				</Card.Root>
+			</div>
 		</div>
 	</section>
 
@@ -300,7 +356,7 @@
 
 	<!-- ── Quality Assurance ─────────────────────────────────────────── -->
 	<section>
-		<div class="mb-8 text-center">
+		<div class="mb-8 text-center" use:reveal>
 			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
 				{m.howItWorks_quality_title()}
 			</h2>
@@ -310,30 +366,38 @@
 		</div>
 
 		<div class="grid gap-4 sm:grid-cols-2">
-			{@render qualityCard(
-				Bot,
-				m.howItWorks_quality_ai_title(),
-				m.howItWorks_quality_ai_description(),
-				'bg-violet-500/10 text-violet-500'
-			)}
-			{@render qualityCard(
-				TestTube,
-				m.howItWorks_quality_testing_title(),
-				m.howItWorks_quality_testing_description(),
-				'bg-emerald-500/10 text-emerald-500'
-			)}
-			{@render qualityCard(
-				FileCode2,
-				m.howItWorks_quality_conventions_title(),
-				m.howItWorks_quality_conventions_description(),
-				'bg-blue-500/10 text-blue-500'
-			)}
-			{@render qualityCard(
-				ShieldCheck,
-				m.howItWorks_quality_security_title(),
-				m.howItWorks_quality_security_description(),
-				'bg-rose-500/10 text-rose-500'
-			)}
+			<div use:reveal={0}>
+				{@render qualityCard(
+					Bot,
+					m.howItWorks_quality_ai_title(),
+					m.howItWorks_quality_ai_description(),
+					'bg-violet-500/10 text-violet-500'
+				)}
+			</div>
+			<div use:reveal={100}>
+				{@render qualityCard(
+					TestTube,
+					m.howItWorks_quality_testing_title(),
+					m.howItWorks_quality_testing_description(),
+					'bg-emerald-500/10 text-emerald-500'
+				)}
+			</div>
+			<div use:reveal={200}>
+				{@render qualityCard(
+					FileCode2,
+					m.howItWorks_quality_conventions_title(),
+					m.howItWorks_quality_conventions_description(),
+					'bg-blue-500/10 text-blue-500'
+				)}
+			</div>
+			<div use:reveal={300}>
+				{@render qualityCard(
+					ShieldCheck,
+					m.howItWorks_quality_security_title(),
+					m.howItWorks_quality_security_description(),
+					'bg-rose-500/10 text-rose-500'
+				)}
+			</div>
 		</div>
 	</section>
 
@@ -341,7 +405,7 @@
 
 	<!-- ── Features ──────────────────────────────────────────────────── -->
 	<section>
-		<div class="mb-8 text-center">
+		<div class="mb-8 text-center" use:reveal>
 			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
 				{m.howItWorks_features_title()}
 			</h2>
@@ -351,9 +415,10 @@
 		</div>
 
 		<div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-			{#each features as feat (feat.title())}
+			{#each features as feat, i (feat.title())}
 				<div
 					class="group flex gap-3 rounded-lg border bg-card p-4 transition-colors hover:bg-accent/50"
+					use:reveal={i * 50}
 				>
 					<div
 						class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted transition-colors group-hover:bg-background"
@@ -435,3 +500,54 @@
 		</Card.Content>
 	</Card.Root>
 {/snippet}
+
+<style>
+	/* Hero staggered fade-in on page load */
+	@keyframes hero-fade-in {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+	}
+
+	:global(.hero-animate) {
+		animation: hero-fade-in 0.7s ease-out both;
+	}
+	:global(.hero-delay-0) {
+		animation-delay: 0ms;
+	}
+	:global(.hero-delay-1) {
+		animation-delay: 100ms;
+	}
+	:global(.hero-delay-2) {
+		animation-delay: 200ms;
+	}
+	:global(.hero-delay-3) {
+		animation-delay: 350ms;
+	}
+
+	/* Gentle arrow pulse between architecture boxes */
+	@keyframes arrow-pulse {
+		0%,
+		100% {
+			opacity: 0.3;
+		}
+		50% {
+			opacity: 0.8;
+		}
+	}
+
+	:global(.arrow-pulse) {
+		animation: arrow-pulse 2.5s ease-in-out infinite;
+	}
+
+	/* Respect reduced motion */
+	@media (prefers-reduced-motion: reduce) {
+		:global(.hero-animate) {
+			animation: none;
+		}
+		:global(.arrow-pulse) {
+			animation: none;
+		}
+	}
+</style>

@@ -14,7 +14,7 @@
 #
 # ══════════════════════════════════════════════════════════════════════════════
 
-name: {INIT_PROJECT_SLUG}
+name: netrock
 
 x-hardened: &hardened
   restart: always

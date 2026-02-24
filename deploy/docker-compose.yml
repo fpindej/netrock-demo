@@ -17,14 +17,14 @@ services:
       - frontend
       - backend
     environment:
-      ConnectionStrings__Database: Host=db;Port=5432;Database=${POSTGRES_DB:-{INIT_PROJECT_SLUG}};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      ConnectionStrings__Database: Host=db;Port=5432;Database=${POSTGRES_DB:-netrock};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       Caching__Redis__ConnectionString: redis:6379
       Caching__Redis__Password: ${REDIS_PASSWORD}
       Authentication__Jwt__Key: ${JWT_SECRET_KEY}
       FileStorage__Endpoint: ${FileStorage__Endpoint:-http://storage:9000}
       FileStorage__AccessKey: ${MINIO_ROOT_USER}
       FileStorage__SecretKey: ${MINIO_ROOT_PASSWORD}
-      FileStorage__BucketName: ${FileStorage__BucketName:-{INIT_PROJECT_SLUG}-files}
+      FileStorage__BucketName: ${FileStorage__BucketName:-netrock-files}
       FileStorage__Region: ${FileStorage__Region:-}
       FileStorage__UseSSL: ${FileStorage__UseSSL:-false}
       Hosting__ReverseProxy__TrustedNetworks__0: 172.16.0.0/12
@@ -88,7 +88,7 @@ services:
     networks:
       - backend
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-{INIT_PROJECT_SLUG}}
+      POSTGRES_DB: ${POSTGRES_DB:-netrock}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
@@ -127,8 +127,8 @@ volumes:
 
 networks:
   frontend:
-    name: {INIT_PROJECT_SLUG}-frontend
+    name: netrock-frontend
     driver: bridge
   backend:
-    name: {INIT_PROJECT_SLUG}-backend
+    name: netrock-backend
     driver: bridge

@@ -37,6 +37,12 @@ public sealed class EmailOptions
     public SmtpOptions Smtp { get; init; } = new();
 
     /// <summary>
+    /// Gets or sets the Resend API configuration. When <see cref="ResendOptions.ApiKey"/> is set,
+    /// the Resend-based email service is registered instead of the no-op fallback.
+    /// </summary>
+    public ResendOptions Resend { get; init; } = new();
+
+    /// <summary>
     /// Configuration options for SMTP email delivery.
     /// </summary>
     public sealed class SmtpOptions
@@ -65,5 +71,16 @@ public sealed class EmailOptions
         /// Gets or sets whether the SMTP connection should use SSL/TLS.
         /// </summary>
         public bool UseSsl { get; [UsedImplicitly] init; } = true;
+    }
+
+    /// <summary>
+    /// Configuration options for Resend API email delivery.
+    /// </summary>
+    public sealed class ResendOptions
+    {
+        /// <summary>
+        /// Gets or sets the Resend API key. When non-empty, the Resend email service is used.
+        /// </summary>
+        public string ApiKey { get; [UsedImplicitly] init; } = string.Empty;
     }
 }

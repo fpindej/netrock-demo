@@ -28,7 +28,7 @@ public class FluidEmailTemplateRendererTests
 
         var result = _sut.Render("verify-email", model);
 
-        Assert.Equal("Verify Your Email Address", result.Subject);
+        Assert.Equal("Confirm your NETrock email address", result.Subject);
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class FluidEmailTemplateRendererTests
 
         var result = _sut.Render("verify-email", model);
 
-        Assert.Contains("Verify Email", result.HtmlBody);
+        Assert.Contains("Confirm Email Address", result.HtmlBody);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class FluidEmailTemplateRendererTests
 
         var result = _sut.Render("reset-password", model);
 
-        Assert.Equal("Reset Your Password", result.Subject);
+        Assert.Equal("Reset your NETrock password", result.Subject);
     }
 
     [Fact]
@@ -110,7 +110,7 @@ public class FluidEmailTemplateRendererTests
 
         var result = _sut.Render("admin-reset-password", model);
 
-        Assert.Equal("Reset Your Password", result.Subject);
+        Assert.Equal("Password reset required — NETrock", result.Subject);
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public class FluidEmailTemplateRendererTests
 
         var result = _sut.Render("invitation", model);
 
-        Assert.Equal("You've Been Invited", result.Subject);
+        Assert.Equal("You've been invited to NETrock", result.Subject);
     }
 
     [Fact]
@@ -282,7 +282,7 @@ public class FluidEmailTemplateRendererTests
 
         Assert.All(results, r =>
         {
-            Assert.Equal("Verify Your Email Address", r.Subject);
+            Assert.Equal("Confirm your NETrock email address", r.Subject);
             Assert.Contains("https://example.com/verify?token=abc", r.HtmlBody);
             Assert.Contains("<!DOCTYPE html>", r.HtmlBody);
         });

@@ -26,8 +26,8 @@
         a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; }
     </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f4f4f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';">
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f4f7;">
+<body style="margin: 0; padding: 0; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8fafc;">
         <tr>
             <td align="center" style="padding: 24px 16px;">
                 <!--[if mso]>
@@ -37,25 +37,38 @@
                     <!-- Header -->
                     <tr>
                         <td align="center" style="padding: 24px 0 16px 0;">
-                            <span style="font-size: 20px; font-weight: 700; color: #333333;">{{ app_name }}</span>
+                            <span style="font-size: 22px; font-weight: 700; color: #1e293b; letter-spacing: -0.02em;">NETrock</span>
                         </td>
                     </tr>
                     <!-- Body Card -->
                     <tr>
-                        <td style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+                        <td style="background-color: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0;">
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tr>
-                                    <td style="padding: 40px 40px 32px 40px; color: #51545e; font-size: 16px; line-height: 26px;">
+                                    <td style="padding: 40px 40px 32px 40px; color: #475569; font-size: 16px; line-height: 28px;">
                                         {{ body | raw }}
+                                    </td>
+                                </tr>
+                                <!-- In-card footer divider + help text -->
+                                <tr>
+                                    <td style="padding: 0 40px 32px 40px;">
+                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                            <tr>
+                                                <td style="border-top: 1px solid #e2e8f0; padding-top: 20px; color: #94a3b8; font-size: 13px; line-height: 20px;">
+                                                    If you need help, reply to this email or contact our support team.
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
-                    <!-- Footer -->
+                    <!-- Footer outside card -->
                     <tr>
-                        <td align="center" style="padding: 24px 0; color: #a8aaaf; font-size: 13px; line-height: 20px;">
+                        <td align="center" style="padding: 24px 0; color: #94a3b8; font-size: 13px; line-height: 20px;">
                             <p>&copy; {{ app_name }}. All rights reserved.</p>
+                            <p style="margin-top: 4px;">This is an automated message.</p>
                         </td>
                     </tr>
                 </table>

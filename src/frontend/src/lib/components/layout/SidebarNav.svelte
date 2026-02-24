@@ -5,6 +5,7 @@
 	import { buttonVariants } from '$lib/components/ui/button';
 	import {
 		BookOpen,
+		Layers,
 		Users2,
 		BarChart3,
 		Mail,
@@ -36,6 +37,12 @@
 			href: resolve('/guide'),
 			icon: BookOpen,
 			tour: 'nav-guide'
+		},
+		{
+			title: m.nav_howItWorks,
+			href: resolve('/how-it-works'),
+			icon: Layers,
+			tour: 'nav-how-it-works'
 		},
 		{
 			title: m.nav_contacts,

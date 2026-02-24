@@ -568,6 +568,8 @@
 	"contacts_notes": "Poznámky",
 	"contacts_sortNewest": "Nejnovější",
 	"contacts_sortOldest": "Nejstarší",
+	"contacts_sortNameAsc": "A \u2192 Z",
+	"contacts_sortNameDesc": "Z \u2192 A",
 	"contacts_sortValueHigh": "Nejvyšší hodnota",
 	"contacts_sortValueLow": "Nejnižší hodnota",
 	"contacts_totalCount": "{count} kontaktů",

@@ -8,7 +8,6 @@
 		Users,
 		BarChart3,
 		Settings,
-		Play,
 		ArrowRight,
 		Lightbulb,
 		type IconProps
@@ -142,27 +141,9 @@
 			{@render statPill(m.guide_stats_admin(), m.guide_stats_adminDesc())}
 			{@render statPill(m.guide_stats_pipeline(), m.guide_stats_pipelineDesc())}
 		</div>
-	</section>
 
-	<div class="h-px w-full bg-border"></div>
-
-	<!-- Tour CTA -->
-	<section use:reveal>
-		<div
-			class="mx-auto max-w-xl rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent p-6 text-center sm:p-8"
-		>
-			<div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-				<Play class="h-6 w-6 text-primary" />
-			</div>
-			<h2 class="text-xl font-bold tracking-tight sm:text-2xl">
-				{m.guide_tour_title()}
-			</h2>
-			<p class="mt-2 text-sm text-muted-foreground">
-				{m.guide_tour_description()}
-			</p>
-			<div class="mt-5">
-				<GuideTour />
-			</div>
+		<div class="hero-animate hero-delay-3 mt-6 flex justify-center">
+			<GuideTour />
 		</div>
 	</section>
 
@@ -252,7 +233,7 @@
 
 {#snippet statPill(label: string, description: string)}
 	<div
-		class="flex flex-col items-center rounded-xl border bg-card px-5 py-3 shadow-sm transition-shadow hover:shadow-md"
+		class="flex min-w-[9rem] flex-col items-center rounded-xl border bg-card px-5 py-3 shadow-sm transition-shadow hover:shadow-md"
 	>
 		<span class="text-sm font-bold">{label}</span>
 		<span class="text-xs text-muted-foreground">{description}</span>

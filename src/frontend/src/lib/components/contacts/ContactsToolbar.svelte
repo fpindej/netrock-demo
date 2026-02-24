@@ -42,6 +42,10 @@
 					{m.contacts_sortNewest()}
 				{:else if sortValue === 'oldest'}
 					{m.contacts_sortOldest()}
+				{:else if sortValue === 'nameAsc'}
+					{m.contacts_sortNameAsc()}
+				{:else if sortValue === 'nameDesc'}
+					{m.contacts_sortNameDesc()}
 				{:else if sortValue === 'valueHigh'}
 					{m.contacts_sortValueHigh()}
 				{:else if sortValue === 'valueLow'}
@@ -51,6 +55,8 @@
 			<Select.Content>
 				<Select.Item value="newest" label={m.contacts_sortNewest()} />
 				<Select.Item value="oldest" label={m.contacts_sortOldest()} />
+				<Select.Item value="nameAsc" label={m.contacts_sortNameAsc()} />
+				<Select.Item value="nameDesc" label={m.contacts_sortNameDesc()} />
 				<Select.Item value="valueHigh" label={m.contacts_sortValueHigh()} />
 				<Select.Item value="valueLow" label={m.contacts_sortValueLow()} />
 			</Select.Content>

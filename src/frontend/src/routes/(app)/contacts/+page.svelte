@@ -47,6 +47,14 @@
 				return items.sort(
 					(a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
 				);
+			case 'nameAsc':
+				return items.sort(
+					(a, b) => a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName)
+				);
+			case 'nameDesc':
+				return items.sort(
+					(a, b) => b.lastName.localeCompare(a.lastName) || b.firstName.localeCompare(a.firstName)
+				);
 			case 'valueHigh':
 				return items.sort((a, b) => b.value - a.value);
 			case 'valueLow':

@@ -568,6 +568,8 @@
 	"contacts_notes": "Notes",
 	"contacts_sortNewest": "Newest",
 	"contacts_sortOldest": "Oldest",
+	"contacts_sortNameAsc": "A \u2192 Z",
+	"contacts_sortNameDesc": "Z \u2192 A",
 	"contacts_sortValueHigh": "Highest value",
 	"contacts_sortValueLow": "Lowest value",
 	"contacts_totalCount": "{count} contacts",

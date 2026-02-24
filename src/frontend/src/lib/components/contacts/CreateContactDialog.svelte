@@ -141,7 +141,7 @@
 </script>
 
 <Dialog.Root bind:open onOpenChange={(isOpen) => !isOpen && resetForm()}>
-	<Dialog.Content class="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+	<Dialog.Content class="flex max-h-[85vh] flex-col overflow-hidden sm:max-w-lg">
 		<Dialog.Header>
 			<Dialog.Title>
 				{isEditing ? m.contacts_edit() : m.contacts_create()}
@@ -150,8 +150,8 @@
 				{isEditing ? m.contacts_editDescription() : m.contacts_createDescription()}
 			</Dialog.Description>
 		</Dialog.Header>
-		<form onsubmit={handleSubmit}>
-			<div class="space-y-4 py-4">
+		<form onsubmit={handleSubmit} class="flex min-h-0 flex-1 flex-col">
+			<div class="space-y-4 overflow-y-auto py-4">
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<div>
 						<Label for="contact-firstName">{m.contacts_firstName()}</Label>

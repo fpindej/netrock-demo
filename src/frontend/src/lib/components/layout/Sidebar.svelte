@@ -21,9 +21,10 @@
 
 <div
 	class={cn('flex h-full flex-col gap-2 transition-all duration-300', className)}
+	style="padding-inline-start: env(safe-area-inset-left, 0px);"
 	data-collapsed={collapsed}
 >
-	<div class="flex-1 overflow-auto py-4">
+	<div class="flex-1 overflow-auto overscroll-contain py-4">
 		<div class="px-3 py-2">
 			<div
 				data-tour="sidebar-brand"

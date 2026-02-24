@@ -68,6 +68,33 @@ describe('hasPermission', () => {
 		expect(hasPermission(undefined, Permissions.Users.View)).toBe(false);
 	});
 
+	describe('viewing as SuperAdmin', () => {
+		beforeEach(() => {
+			demoState.viewingAs = 'SuperAdmin';
+		});
+
+		it('grants all permissions except ViewPii', () => {
+			const user = makeUser();
+			expect(hasPermission(user, Permissions.Users.View)).toBe(true);
+			expect(hasPermission(user, Permissions.Users.Manage)).toBe(true);
+			expect(hasPermission(user, Permissions.Users.AssignRoles)).toBe(true);
+			expect(hasPermission(user, Permissions.Roles.View)).toBe(true);
+			expect(hasPermission(user, Permissions.Roles.Manage)).toBe(true);
+			expect(hasPermission(user, Permissions.Jobs.View)).toBe(true);
+			expect(hasPermission(user, Permissions.Jobs.Manage)).toBe(true);
+		});
+
+		it('does not grant ViewPii', () => {
+			const user = makeUser();
+			expect(hasPermission(user, Permissions.Users.ViewPii)).toBe(false);
+		});
+
+		it('does not grant unknown permissions', () => {
+			const user = makeUser();
+			expect(hasPermission(user, 'some.custom.permission')).toBe(false);
+		});
+	});
+
 	describe('viewing as Admin', () => {
 		beforeEach(() => {
 			demoState.viewingAs = 'Admin';
@@ -78,21 +105,21 @@ describe('hasPermission', () => {
 			expect(hasPermission(user, Permissions.Users.View)).toBe(true);
 			expect(hasPermission(user, Permissions.Users.Manage)).toBe(true);
 			expect(hasPermission(user, Permissions.Users.AssignRoles)).toBe(true);
-			expect(hasPermission(user, Permissions.Users.ViewPii)).toBe(true);
 			expect(hasPermission(user, Permissions.Roles.View)).toBe(true);
+			expect(hasPermission(user, Permissions.Roles.Manage)).toBe(true);
 			expect(hasPermission(user, Permissions.Jobs.View)).toBe(true);
+			expect(hasPermission(user, Permissions.Jobs.Manage)).toBe(true);
 		});
 
-		it('does not grant permissions outside Admin scope', () => {
+		it('does not grant ViewPii or unknown permissions', () => {
 			const user = makeUser();
-			expect(hasPermission(user, Permissions.Roles.Manage)).toBe(false);
-			expect(hasPermission(user, Permissions.Jobs.Manage)).toBe(false);
+			expect(hasPermission(user, Permissions.Users.ViewPii)).toBe(false);
 			expect(hasPermission(user, 'some.custom.permission')).toBe(false);
 		});
 
 		it('ignores the actual user permissions array', () => {
-			const user = makeUser({ permissions: [Permissions.Roles.Manage] });
-			expect(hasPermission(user, Permissions.Roles.Manage)).toBe(false);
+			const user = makeUser({ permissions: [Permissions.Users.ViewPii] });
+			expect(hasPermission(user, Permissions.Users.ViewPii)).toBe(false);
 		});
 	});
 
@@ -128,7 +155,9 @@ describe('hasAnyPermission', () => {
 
 	it('returns false when no requested permission is in Admin scope', () => {
 		const user = makeUser();
-		expect(hasAnyPermission(user, [Permissions.Roles.Manage, Permissions.Jobs.Manage])).toBe(false);
+		expect(hasAnyPermission(user, [Permissions.Users.ViewPii, 'some.custom.permission'])).toBe(
+			false
+		);
 	});
 
 	it('returns false for empty permissions list', () => {

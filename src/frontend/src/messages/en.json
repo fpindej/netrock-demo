@@ -707,7 +707,7 @@
 	"tour_tools_title": "Personalization",
 	"tour_tools_description": "Switch languages, toggle light/dark theme, manage your account - the finishing touches that make it feel polished.",
 	"tour_roleSwitcher_title": "Role Switcher",
-	"tour_roleSwitcher_description": "Try switching roles right now - the entire UI adapts in real-time. Permissions control what each user sees and can do.",
+	"tour_roleSwitcher_description": "SuperAdmin is the platform owner with full access. Admin manages users and roles within the organization. User has basic access. Custom roles enable specific features without overloading people who only use parts of the system. Try switching - the UI adapts instantly.",
 
 	"nav_howItWorks": "How It Works",
 	"meta_howItWorks_title": "How It Works",

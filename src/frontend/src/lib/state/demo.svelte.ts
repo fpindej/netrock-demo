@@ -6,11 +6,11 @@
 
 import { browser } from '$app/environment';
 
-/** The two demo roles a user can preview. */
-export type DemoRole = 'User' | 'Admin';
+/** The three demo roles a user can preview. */
+export type DemoRole = 'User' | 'Admin' | 'SuperAdmin';
 
 const STORAGE_KEY = 'netrock-demo-role';
-const VALID_ROLES: ReadonlySet<string> = new Set<DemoRole>(['User', 'Admin']);
+const VALID_ROLES: ReadonlySet<string> = new Set<DemoRole>(['User', 'Admin', 'SuperAdmin']);
 
 function canUseLocalStorage(): boolean {
 	return browser && typeof globalThis.localStorage !== 'undefined';

@@ -10,6 +10,7 @@
 		Globe,
 		ArrowRight,
 		ArrowDown,
+		ArrowUp,
 		ArrowLeft as ArrowLeftIcon,
 		Building2,
 		Users,
@@ -194,9 +195,9 @@
 				)}
 			</div>
 
-			<!-- Row 2: Arrow between top spoke and hub -->
+			<!-- Row 2: Arrow between hub and top spoke -->
 			<div class="col-start-2 row-start-2">
-				<ArrowDown class="arrow-flow-down h-6 w-6 text-muted-foreground/50" />
+				<ArrowUp class="arrow-flow-up h-6 w-6 text-muted-foreground/50" />
 			</div>
 
 			<!-- Row 3: Left spoke + hub + right spoke -->
@@ -401,6 +402,18 @@
 		}
 	}
 
+	@keyframes arrow-nudge-up {
+		0%,
+		100% {
+			transform: translateY(0);
+			opacity: 0.4;
+		}
+		50% {
+			transform: translateY(-3px);
+			opacity: 0.9;
+		}
+	}
+
 	@keyframes arrow-nudge-down {
 		0%,
 		100% {
@@ -429,6 +442,10 @@
 		animation: arrow-nudge 2s ease-in-out infinite;
 	}
 
+	:global(.arrow-flow-up) {
+		animation: arrow-nudge-up 2s ease-in-out infinite;
+	}
+
 	:global(.arrow-flow-down) {
 		animation: arrow-nudge-down 2s ease-in-out infinite;
 	}
@@ -443,6 +460,7 @@
 			animation: none;
 		}
 		:global(.arrow-flow),
+		:global(.arrow-flow-up),
 		:global(.arrow-flow-down),
 		:global(.arrow-flow-left) {
 			animation: none;

@@ -13,7 +13,7 @@
 	import { StatusIndicator } from '$lib/components/common';
 	import * as m from '$lib/paraglide/messages';
 	import { fly, scale } from 'svelte/transition';
-	import { Check, Loader2 } from '@lucide/svelte';
+	import { Check, Loader2, ShieldCheck } from '@lucide/svelte';
 	import { LoginBackground, RegisterDialog } from '$lib/components/auth';
 	import { toast } from '$lib/components/ui/sonner';
 
@@ -107,6 +107,14 @@
 		<StatusIndicator status={isApiOnline ? 'online' : 'offline'} size="sm" />
 		<span class="hidden group-hover:inline">{apiUrl ?? 'API'}</span>
 	</div>
+
+	<a
+		href={resolve('/privacy')}
+		class="absolute end-4 bottom-4 flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
+	>
+		<ShieldCheck class="h-3.5 w-3.5" />
+		{m.nav_privacy()}
+	</a>
 
 	{#if !isSuccess}
 		<div

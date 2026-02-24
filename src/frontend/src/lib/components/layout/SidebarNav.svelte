@@ -8,6 +8,7 @@
 		Users2,
 		BarChart3,
 		Mail,
+		ShieldCheck,
 		Users,
 		Shield,
 		Clock,
@@ -49,6 +50,11 @@
 			title: m.nav_contactMe,
 			href: resolve('/contact'),
 			icon: Mail
+		},
+		{
+			title: m.nav_privacy,
+			href: resolve('/privacy'),
+			icon: ShieldCheck
 		}
 	];
 

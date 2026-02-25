@@ -2,12 +2,11 @@
  * Client-side permission utilities.
  * Mirrors backend AppPermissions constants.
  *
- * When the demo role switcher is active, permissions are masked to
- * match the selected role so users can preview the app as different roles.
+ * Permissions are always based on the user's real JWT claims — the demo role
+ * switcher calls the backend to change the actual role, so no client-side
+ * masking is needed.
  */
 
-import { browser } from '$app/environment';
-import { demoState, type DemoRole } from '$lib/state';
 import type { User } from '$lib/types';
 
 export const Permissions = {
@@ -27,46 +26,15 @@ export const Permissions = {
 	}
 } as const;
 
-/** Permissions granted to the Admin demo role. */
-const ADMIN_PERMISSIONS: string[] = [
-	Permissions.Users.View,
-	Permissions.Users.Manage,
-	Permissions.Users.AssignRoles,
-	Permissions.Roles.View,
-	Permissions.Roles.Manage,
-	Permissions.Jobs.View,
-	Permissions.Jobs.Manage
-];
-
-/**
- * Returns the effective permissions for a demo role.
- * Admin = a curated subset (no PII access). User = none.
- */
-function getDemoPermissions(role: DemoRole): string[] {
-	switch (role) {
-		case 'Admin':
-			return ADMIN_PERMISSIONS;
-		case 'User':
-			return [];
-	}
-}
-
 /** Returns true if the user is a SuperAdmin (implicit all permissions). */
 export function isSuperAdmin(user: User | null | undefined): boolean {
 	return user?.roles?.includes('SuperAdmin') ?? false;
 }
 
-/** Returns true if the user has a specific permission based on the active demo role. */
+/** Returns true if the user has a specific permission based on their real JWT claims. */
 export function hasPermission(user: User | null | undefined, permission: string): boolean {
 	if (!user) return false;
 
-	// Client-side: demo role masking for all users
-	if (browser) {
-		const demoPerms = getDemoPermissions(demoState.viewingAs);
-		return demoPerms.includes(permission);
-	}
-
-	// Server-side: use real permissions (SuperAdmin has implicit all)
 	if (isSuperAdmin(user)) return true;
 	return user.permissions?.includes(permission) ?? false;
 }

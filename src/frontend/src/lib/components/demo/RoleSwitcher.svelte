@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
+	import { browserClient } from '$lib/api';
 	import { demoState, type DemoRole } from '$lib/state';
 	import * as m from '$lib/paraglide/messages';
 	import type { User } from '$lib/types';
-	import { Eye, X, Shield, User as UserIcon } from '@lucide/svelte';
+	import { toast } from '$lib/components/ui/sonner';
+	import { Eye, X, Shield, Loader2, User as UserIcon } from '@lucide/svelte';
 
 	interface Props {
 		user: User | null | undefined;
@@ -11,6 +14,7 @@
 	let { user }: Props = $props();
 
 	let expanded = $state(false);
+	let loading = $state(false);
 
 	const roles: { key: DemoRole; label: () => string; icon: typeof Shield }[] = [
 		{ key: 'User', label: m.demo_role_user, icon: UserIcon },
@@ -19,8 +23,30 @@
 
 	let availableRoles = $derived(roles);
 
-	function setRole(role: DemoRole) {
-		demoState.viewingAs = role;
+	async function setRole(role: DemoRole) {
+		if (loading || role === demoState.viewingAs) return;
+
+		const previousRole = demoState.viewingAs;
+		loading = true;
+
+		try {
+			const { response } = await browserClient.POST('/api/v1/demo/elevate', {
+				body: { role }
+			});
+
+			if (!response.ok) {
+				toast.error(m.demo_role_switch_failed());
+				return;
+			}
+
+			demoState.viewingAs = role;
+			await invalidateAll();
+		} catch {
+			demoState.viewingAs = previousRole;
+			toast.error(m.demo_role_switch_failed());
+		} finally {
+			loading = false;
+		}
 	}
 
 	function toggle() {
@@ -89,20 +115,26 @@
 					{#each availableRoles as role (role.key)}
 						{@const isActive = demoState.viewingAs === role.key}
 						<button
-							onclick={() => {
-								setRole(role.key);
+							onclick={async () => {
+								await setRole(role.key);
 								collapse();
 							}}
+							disabled={loading}
 							class="role-option group flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-start text-sm font-medium transition-all duration-200
 								{isActive
 								? 'bg-primary text-primary-foreground shadow-md'
-								: 'text-foreground/80 hover:bg-muted/80 hover:text-foreground'}"
+								: 'text-foreground/80 hover:bg-muted/80 hover:text-foreground'}
+								{loading ? 'cursor-not-allowed opacity-50' : ''}"
 						>
-							<role.icon
-								class="size-4 shrink-0 {isActive
-									? 'opacity-100'
-									: 'opacity-50 group-hover:opacity-75'}"
-							/>
+							{#if loading && role.key !== demoState.viewingAs}
+								<Loader2 class="size-4 shrink-0 animate-spin opacity-50" />
+							{:else}
+								<role.icon
+									class="size-4 shrink-0 {isActive
+										? 'opacity-100'
+										: 'opacity-50 group-hover:opacity-75'}"
+								/>
+							{/if}
 							<span>{role.label()}</span>
 							{#if isActive}
 								<span class="ms-auto inline-block size-1.5 rounded-full bg-primary-foreground/60"

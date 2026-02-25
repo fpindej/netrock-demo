@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Netrock.Infrastructure.Caching.Extensions;
 using Netrock.Infrastructure.Cookies.Extensions;
 using Netrock.Infrastructure.Features.Admin.Extensions;
+using Netrock.Infrastructure.Features.Demo.Extensions;
 using Netrock.Infrastructure.Features.Audit.Extensions;
 using Netrock.Infrastructure.Features.Avatar.Extensions;
 using Netrock.Infrastructure.Features.Captcha.Extensions;
@@ -59,6 +60,9 @@ try
 
         Log.Debug("Adding admin services");
         builder.Services.AddAdminServices();
+
+        Log.Debug("Adding demo services");
+        builder.Services.AddDemoServices();
 
         Log.Debug("Adding audit services");
         builder.Services.AddAuditServices();

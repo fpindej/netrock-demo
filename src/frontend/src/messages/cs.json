@@ -627,6 +627,7 @@
 	"demo_role_user": "User",
 	"demo_role_admin": "Admin",
 	"demo_role_superAdmin": "SuperAdmin",
+	"demo_role_switch_failed": "Nepodařilo se přepnout roli. Zkuste to prosím znovu.",
 
 	"nav_privacy": "Ochrana soukromí",
 

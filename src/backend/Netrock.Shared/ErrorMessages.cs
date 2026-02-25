@@ -155,6 +155,16 @@ public static class ErrorMessages
     }
 
     /// <summary>
+    /// Demo role elevation error messages.
+    /// </summary>
+    public static class Demo
+    {
+        public const string InvalidRole = "Only 'Admin' or 'User' roles are allowed for demo elevation.";
+        public const string UserNotFound = "User not found.";
+        public const string RoleChangeFailed = "Failed to change demo role.";
+    }
+
+    /// <summary>
     /// Generic entity operation error messages (repository layer).
     /// </summary>
     public static class Entity

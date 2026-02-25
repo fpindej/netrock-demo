@@ -343,6 +343,445 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	'/api/v1/demo/elevate': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Sets the demo role for the current user. Accepts `"Admin"` or `"User"`.
+		 *     SuperAdmin is always rejected.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			/** @description A cancellation token */
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['ElevateRequest'];
+				};
+			};
+			responses: {
+				/** @description Role changed successfully */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/** @description If the role is invalid or the operation fails */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user is not authenticated */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user was not found */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the rate limit is exceeded */
+				429: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/contacts': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets a paginated list of the current user's contacts with optional search and filtering. */
+		get: {
+			parameters: {
+				query?: {
+					/** @description Optional search term to filter by name, email, or company. */
+					search?: string;
+					/** @description Optional pipeline status filter. */
+					status?: components['schemas']['ContactStatus'];
+					/** @description Optional acquisition source filter. */
+					source?: components['schemas']['ContactSource'];
+					/** @description The page number to retrieve (1-based). */
+					pageNumber?: number;
+					/** @description The number of items per page (maximum 100). */
+					pageSize?: number;
+				};
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the paginated contact list */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ContactListResponse'];
+					};
+				};
+				/** @description If the pagination parameters are invalid */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user is not authenticated */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		put?: never;
+		/** Creates a new contact for the current user. */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			/** @description A cancellation token */
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['CreateContactRequest'];
+				};
+			};
+			responses: {
+				/** @description Contact created successfully */
+				201: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ContactResponse'];
+					};
+				};
+				/** @description If the request validation fails */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user is not authenticated */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/contacts/{id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets a single contact by ID. */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The contact ID */
+					id: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the contact */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ContactResponse'];
+					};
+				};
+				/** @description If the user is not authenticated */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the contact was not found */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		/** Updates an existing contact owned by the current user. */
+		put: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The contact ID */
+					id: string;
+				};
+				cookie?: never;
+			};
+			/** @description A cancellation token */
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['UpdateContactRequest'];
+				};
+			};
+			responses: {
+				/** @description Contact updated successfully */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ContactResponse'];
+					};
+				};
+				/** @description If the request validation fails */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user is not authenticated */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the contact was not found */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		post?: never;
+		/** Soft-deletes a contact owned by the current user. */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The contact ID */
+					id: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Contact deleted successfully */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/** @description If the user is not authenticated */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the contact was not found */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/contacts/generate': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Generates a batch of realistic sample contacts using Bogus for demo purposes. */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			/** @description A cancellation token */
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['GenerateContactsRequest'];
+				};
+			};
+			responses: {
+				/** @description Sample contacts generated successfully */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/** @description If the count is invalid */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user is not authenticated */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/contacts/stats': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets aggregate pipeline statistics for the current user's contacts. */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the contact statistics */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ContactStatsResponse'];
+					};
+				};
+				/** @description If the user is not authenticated */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	'/api/auth/login': {
 		parameters: {
 			query?: never;
@@ -2679,51 +3118,6 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	'/api/v1/contacts/stats': {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/** Gets aggregate pipeline statistics for the current user's contacts. */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Returns the contact statistics */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ContactStatsResponse'];
-					};
-				};
-				/** @description If the user is not authenticated */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2846,6 +3240,151 @@ export interface components {
 			/** @description The new password to set for the account. */
 			newPassword: string;
 		};
+		/** @description Paginated response containing a list of contact records. */
+		ContactListResponse: {
+			/** @description The contacts for the current page. */
+			items?: components['schemas']['ContactResponse'][];
+			/**
+			 * Format: int32
+			 * @description The total number of items (across all pages).
+			 */
+			totalCount?: number;
+			/**
+			 * Format: int32
+			 * @description The current page number.
+			 */
+			pageNumber?: number;
+			/**
+			 * Format: int32
+			 * @description The number of items per page.
+			 */
+			pageSize?: number;
+			/**
+			 * Format: int32
+			 * @description The total number of pages.
+			 */
+			totalPages?: number;
+			/** @description Indicates if there is a previous page. */
+			hasPreviousPage?: boolean;
+			/** @description Indicates if there is a next page. */
+			hasNextPage?: boolean;
+		};
+		/** @description Represents a contact's details in API responses. */
+		ContactResponse: {
+			/**
+			 * Format: uuid
+			 * @description The unique identifier of the contact.
+			 */
+			id?: string;
+			/** @description The contact's first name. */
+			firstName?: string;
+			/** @description The contact's last name. */
+			lastName?: string;
+			/** @description The contact's email address. */
+			email?: string;
+			/** @description The company the contact is associated with. */
+			company?: null | string;
+			/** @description The pipeline status of the contact. */
+			status?: string;
+			/** @description The acquisition source of the contact. */
+			source?: string;
+			/**
+			 * Format: double
+			 * @description The estimated monetary value of the contact.
+			 */
+			value?: number;
+			/** @description Free-text notes about the contact. */
+			notes?: null | string;
+			/** @description The contact's phone number. */
+			phone?: null | string;
+			/**
+			 * Format: uuid
+			 * @description The identifier of the user who owns this contact.
+			 */
+			ownerId?: string;
+			/**
+			 * Format: date-time
+			 * @description The date and time when the contact was created.
+			 */
+			createdAt?: string;
+			/**
+			 * Format: date-time
+			 * @description The date and time when the contact was last updated.
+			 */
+			updatedAt?: null | string;
+		};
+		/** @enum {string} */
+		ContactSource: 'Web' | 'Email' | 'Phone' | 'SocialMedia' | 'Referral' | 'Other';
+		/** @description Represents aggregate pipeline statistics for the current user's contacts. */
+		ContactStatsResponse: {
+			/**
+			 * Format: int32
+			 * @description The total number of contacts.
+			 */
+			totalContacts?: number;
+			/**
+			 * Format: double
+			 * @description The total monetary value across all contacts.
+			 */
+			totalValue?: number;
+			/**
+			 * Format: int32
+			 * @description The number of contacts with Lead status.
+			 */
+			leadCount?: number;
+			/**
+			 * Format: int32
+			 * @description The number of contacts with Prospect status.
+			 */
+			prospectCount?: number;
+			/**
+			 * Format: int32
+			 * @description The number of contacts with Customer status.
+			 */
+			customerCount?: number;
+			/**
+			 * Format: int32
+			 * @description The number of contacts with Churning status.
+			 */
+			churningCount?: number;
+			/**
+			 * Format: double
+			 * @description The average monetary value per contact.
+			 */
+			averageValue?: number;
+			/** @description A dictionary of source names to their respective contact counts. */
+			sourceBreakdown?: {
+				[key: string]: number;
+			};
+			/** @description The most recent contacts, ordered by creation date descending. */
+			recentContacts?: components['schemas']['ContactResponse'][];
+		};
+		/** @enum {string} */
+		ContactStatus: 'Lead' | 'Prospect' | 'Customer' | 'Churning';
+		/** @description Request to create a new CRM contact. */
+		CreateContactRequest: {
+			/** @description The contact's first name. */
+			firstName: string;
+			/** @description The contact's last name. */
+			lastName: string;
+			/** @description The contact's email address. */
+			email: string;
+			/** @description The company the contact is associated with. */
+			company?: null | string;
+			/** @description The pipeline status of the contact. */
+			status: components['schemas']['ContactStatus'];
+			/** @description The acquisition source of the contact. */
+			source: components['schemas']['ContactSource'];
+			/**
+			 * Format: double
+			 * @description The estimated monetary value of the contact.
+			 */
+			value?: number;
+			/** @description Free-text notes about the contact. */
+			notes?: null | string;
+			/** @description The contact's phone number. */
+			phone?: null | string;
+		};
 		/** @description Request to create a new custom role. */
 		CreateRoleRequest: {
 			/** @description The name of the new role. */
@@ -2867,12 +3406,25 @@ export interface components {
 			/** @description The user's current password for confirmation. */
 			password: string;
 		};
+		/** @description Request to set the demo role for the current user. */
+		ElevateRequest: {
+			/** @description The target role: `"Admin"` to elevate or `"User"` to de-elevate. */
+			role: string;
+		};
 		/** @description Represents a request to initiate a password reset flow. */
 		ForgotPasswordRequest: {
 			/** @description The email address associated with the account. */
 			email: string;
 			/** @description The CAPTCHA verification token from Cloudflare Turnstile. */
 			captchaToken: string;
+		};
+		/** @description Request to generate sample contacts with Bogus. */
+		GenerateContactsRequest: {
+			/**
+			 * Format: int32
+			 * @description The number of sample contacts to generate (1–100).
+			 */
+			count?: number;
 		};
 		/** Format: binary */
 		IFormFile: string;
@@ -3099,6 +3651,30 @@ export interface components {
 			/** @description The full set of permission values to assign to the role. */
 			permissions: string[];
 		};
+		/** @description Request to update an existing CRM contact. */
+		UpdateContactRequest: {
+			/** @description The contact's first name. */
+			firstName: string;
+			/** @description The contact's last name. */
+			lastName: string;
+			/** @description The contact's email address. */
+			email: string;
+			/** @description The company the contact is associated with. */
+			company?: null | string;
+			/** @description The pipeline status of the contact. */
+			status: components['schemas']['ContactStatus'];
+			/** @description The acquisition source of the contact. */
+			source: components['schemas']['ContactSource'];
+			/**
+			 * Format: double
+			 * @description The estimated monetary value of the contact.
+			 */
+			value?: number;
+			/** @description Free-text notes about the contact. */
+			notes?: null | string;
+			/** @description The contact's phone number. */
+			phone?: null | string;
+		};
 		/** @description Request to update an existing role's name and/or description. */
 		UpdateRoleRequest: {
 			/** @description The new role name, or `null` to keep the current name. */
@@ -3149,69 +3725,6 @@ export interface components {
 		VerifyEmailRequest: {
 			/** @description The opaque token received via the email verification email. */
 			token: string;
-		};
-		/** @description Represents aggregate pipeline statistics for the current user's contacts. */
-		ContactStatsResponse: {
-			/**
-			 * Format: int32
-			 * @description The total number of contacts.
-			 */
-			totalContacts?: number;
-			/**
-			 * Format: decimal
-			 * @description The total monetary value across all contacts.
-			 */
-			totalValue?: number;
-			/**
-			 * Format: int32
-			 * @description The number of contacts with Lead status.
-			 */
-			leadCount?: number;
-			/**
-			 * Format: int32
-			 * @description The number of contacts with Prospect status.
-			 */
-			prospectCount?: number;
-			/**
-			 * Format: int32
-			 * @description The number of contacts with Customer status.
-			 */
-			customerCount?: number;
-			/**
-			 * Format: int32
-			 * @description The number of contacts with Churning status.
-			 */
-			churningCount?: number;
-			/**
-			 * Format: decimal
-			 * @description The average monetary value per contact.
-			 */
-			averageValue?: number;
-			/** @description A dictionary of source names to their respective contact counts. */
-			sourceBreakdown?: {
-				[key: string]: number;
-			};
-			/** @description The most recent contacts, ordered by creation date descending. */
-			recentContacts?: {
-				/** Format: uuid */
-				id?: string;
-				firstName?: string;
-				lastName?: string;
-				email?: string;
-				company?: null | string;
-				status?: string;
-				source?: string;
-				/** Format: decimal */
-				value?: number;
-				notes?: null | string;
-				phone?: null | string;
-				/** Format: uuid */
-				ownerId?: string;
-				/** Format: date-time */
-				createdAt?: string;
-				/** Format: date-time */
-				updatedAt?: null | string;
-			}[];
 		};
 	};
 	responses: never;

@@ -167,6 +167,11 @@
 	{/each}
 
 	<div class="my-2 h-px w-full bg-border"></div>
+	{#if !collapsed}
+		<span class="mb-1 px-3 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+			{m.nav_crmDemo()}
+		</span>
+	{/if}
 
 	{#each dataItems as item (item.href)}
 		{@render navItem(item)}

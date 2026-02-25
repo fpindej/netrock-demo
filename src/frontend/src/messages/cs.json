@@ -256,6 +256,7 @@
 	"meta_adminJobs_title": "Naplánované úlohy",
 	"meta_adminJobs_description": "Správa naplánovaných úloh na pozadí.",
 
+	"nav_crmDemo": "CRM Demo",
 	"nav_admin": "Administrace",
 	"nav_adminUsers": "Uživatelé",
 	"nav_adminRoles": "Role",

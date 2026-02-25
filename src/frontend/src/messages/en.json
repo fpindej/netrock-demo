@@ -256,6 +256,7 @@
 	"meta_adminJobs_title": "Scheduled Jobs",
 	"meta_adminJobs_description": "Manage scheduled background jobs.",
 
+	"nav_crmDemo": "CRM Demo",
 	"nav_admin": "Admin",
 	"nav_adminUsers": "Users",
 	"nav_adminRoles": "Roles",

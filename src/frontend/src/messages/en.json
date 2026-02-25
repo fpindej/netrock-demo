@@ -903,5 +903,86 @@
 	"forYou_cta_subtitle": "Grab the template from GitHub and start building - or explore the live demo first.",
 	"forYou_cta_button": "Get the Template",
 	"forYou_cta_explore": "Explore the Live Demo",
-	"forYou_cta_docs": "Read the Docs"
+	"forYou_cta_docs": "Read the Docs",
+
+	"nav_gettingStarted": "Getting Started",
+	"meta_gettingStarted_title": "Getting Started",
+	"meta_gettingStarted_description": "From template to running app in 5 steps.",
+
+	"gettingStarted_hero_badge": "Getting Started",
+	"gettingStarted_hero_title": "From Template to Running App",
+	"gettingStarted_hero_subtitle": "Five steps to go from \"Use this template\" to a fully running application on your machine.",
+
+	"gettingStarted_prereq_title": "Prerequisites",
+	"gettingStarted_prereq_description": "Make sure you have these tools installed before you begin.",
+	"gettingStarted_prereq_git": "Git",
+	"gettingStarted_prereq_gitDesc": "Version control — required",
+	"gettingStarted_prereq_docker": "Docker",
+	"gettingStarted_prereq_dockerDesc": "Container runtime for the full stack — required",
+	"gettingStarted_prereq_dotnet": ".NET SDK",
+	"gettingStarted_prereq_dotnetDesc": "Optional — for IDE IntelliSense and local debugging",
+	"gettingStarted_prereq_node": "Node.js + pnpm",
+	"gettingStarted_prereq_nodeDesc": "Optional — for frontend development outside Docker",
+
+	"gettingStarted_steps_title": "Setup in 5 Steps",
+	"gettingStarted_steps_description": "Follow along from start to finish — you'll be up and running in minutes.",
+
+	"gettingStarted_step1_title": "Visit the Repository",
+	"gettingStarted_step1_description": "Head to the NETrock GitHub repository and click the green \"Use this template\" button.",
+	"gettingStarted_step1_linkText": "Open NETrock on GitHub",
+	"gettingStarted_step1_note": "Look for the green \"Use this template\" button near the top of the page.",
+
+	"gettingStarted_step2_title": "Create from Template",
+	"gettingStarted_step2_description": "GitHub will ask you to name your new repository and choose its visibility. Pick a name, set it to public or private, and click \"Create repository\".",
+	"gettingStarted_step2_note": "Your new repo will have the full NETrock codebase — ready to customize.",
+
+	"gettingStarted_step3_title": "Clone & Initialize",
+	"gettingStarted_step3_description": "Clone your new repository and run the initialization script to set up your project.",
+	"gettingStarted_step3_code1": "git clone https://github.com/your-username/your-repo.git",
+	"gettingStarted_step3_code2": "cd your-repo && ./init.sh",
+	"gettingStarted_step3_note": "The init script renames the solution, updates namespaces, and configures Docker services.",
+
+	"gettingStarted_step4_title": "Start the Stack",
+	"gettingStarted_step4_description": "Spin up the entire development environment with a single command.",
+	"gettingStarted_step4_code": "docker compose up",
+	"gettingStarted_step4_note": "This starts the API, PostgreSQL, Redis, Seq, and MinIO — everything you need.",
+
+	"gettingStarted_step5_title": "Start Coding",
+	"gettingStarted_step5_description": "Your app is running. Open it in your browser and start building your features.",
+	"gettingStarted_step5_frontend": "Frontend",
+	"gettingStarted_step5_frontendUrl": "http://localhost:5173",
+	"gettingStarted_step5_backend": "Backend API",
+	"gettingStarted_step5_backendUrl": "http://localhost:8080",
+	"gettingStarted_step5_note": "You're ready to go. Open your IDE and start building.",
+
+	"gettingStarted_checklist_title": "What's Next",
+	"gettingStarted_checklist_description": "Once you're up and running, here are some recommended next steps.",
+	"gettingStarted_checklist_item1": "Update appsettings.json with your app name",
+	"gettingStarted_checklist_item2": "Set up your SMTP provider for emails",
+	"gettingStarted_checklist_item3": "Configure S3-compatible storage (or use default MinIO)",
+	"gettingStarted_checklist_item4": "Add your first entity with ./init.sh entity",
+	"gettingStarted_checklist_item5": "Deploy with the included deploy script",
+	"gettingStarted_checklist_item6": "Read the README for full documentation",
+
+	"gettingStarted_resources_title": "Resources",
+	"gettingStarted_resources_description": "Useful links to help you along the way.",
+	"gettingStarted_resources_github_title": "GitHub Repository",
+	"gettingStarted_resources_github_description": "Source code, issues, and contributions.",
+	"gettingStarted_resources_readme_title": "Documentation",
+	"gettingStarted_resources_readme_description": "Full README with setup guides and conventions.",
+	"gettingStarted_resources_deepwiki_title": "DeepWiki",
+	"gettingStarted_resources_deepwiki_description": "AI-generated documentation and code exploration.",
+	"gettingStarted_resources_demo_title": "Live Demo",
+	"gettingStarted_resources_demo_description": "Explore the running application with all features.",
+
+	"gettingStarted_cta_title": "Ready to Get Started?",
+	"gettingStarted_cta_subtitle": "Grab the template from GitHub and build your next app.",
+	"gettingStarted_cta_github": "Use This Template",
+	"gettingStarted_cta_explore": "Explore the Demo",
+
+	"gettingStarted_codeBlock_copy": "Copy",
+	"gettingStarted_codeBlock_copied": "Copied!",
+
+	"tour_gettingStarted_title": "Getting Started",
+	"tour_gettingStarted_description": "This page walks you through the five steps to go from the GitHub template to a running app on your machine — clone, init, Docker up, and start coding."
 }

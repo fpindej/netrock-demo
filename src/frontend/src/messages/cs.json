@@ -903,5 +903,86 @@
 	"forYou_cta_subtitle": "Stáhněte šablonu z GitHubu a začněte tvořit - nebo nejdříve prozkoumejte živé demo.",
 	"forYou_cta_button": "Získat šablonu",
 	"forYou_cta_explore": "Prozkoumat živé demo",
-	"forYou_cta_docs": "Přečíst dokumentaci"
+	"forYou_cta_docs": "Přečíst dokumentaci",
+
+	"nav_gettingStarted": "Začínáme",
+	"meta_gettingStarted_title": "Začínáme",
+	"meta_gettingStarted_description": "Od šablony k běžící aplikaci v 5 krocích.",
+
+	"gettingStarted_hero_badge": "Začínáme",
+	"gettingStarted_hero_title": "Od šablony k běžící aplikaci",
+	"gettingStarted_hero_subtitle": "Pět kroků od \"Use this template\" k plně funkční aplikaci na vašem počítači.",
+
+	"gettingStarted_prereq_title": "Předpoklady",
+	"gettingStarted_prereq_description": "Než začnete, ujistěte se, že máte nainstalované tyto nástroje.",
+	"gettingStarted_prereq_git": "Git",
+	"gettingStarted_prereq_gitDesc": "Správa verzí — povinný",
+	"gettingStarted_prereq_docker": "Docker",
+	"gettingStarted_prereq_dockerDesc": "Kontejnerový runtime pro celý stack — povinný",
+	"gettingStarted_prereq_dotnet": ".NET SDK",
+	"gettingStarted_prereq_dotnetDesc": "Volitelný — pro IDE IntelliSense a lokální ladění",
+	"gettingStarted_prereq_node": "Node.js + pnpm",
+	"gettingStarted_prereq_nodeDesc": "Volitelný — pro vývoj frontendu mimo Docker",
+
+	"gettingStarted_steps_title": "Nastavení v 5 krocích",
+	"gettingStarted_steps_description": "Postupujte od začátku do konce — za pár minut budete mít vše připravené.",
+
+	"gettingStarted_step1_title": "Navštivte repozitář",
+	"gettingStarted_step1_description": "Přejděte na GitHub repozitář NETrock a klikněte na zelené tlačítko \"Use this template\".",
+	"gettingStarted_step1_linkText": "Otevřít NETrock na GitHubu",
+	"gettingStarted_step1_note": "Hledejte zelené tlačítko \"Use this template\" v horní části stránky.",
+
+	"gettingStarted_step2_title": "Vytvořte z šablony",
+	"gettingStarted_step2_description": "GitHub vás požádá o pojmenování nového repozitáře a výběr viditelnosti. Zvolte název, nastavte veřejný nebo soukromý přístup a klikněte na \"Create repository\".",
+	"gettingStarted_step2_note": "Váš nový repozitář bude obsahovat celý kód NETrock — připravený k úpravám.",
+
+	"gettingStarted_step3_title": "Klonujte a inicializujte",
+	"gettingStarted_step3_description": "Naklonujte svůj nový repozitář a spusťte inicializační skript pro nastavení projektu.",
+	"gettingStarted_step3_code1": "git clone https://github.com/your-username/your-repo.git",
+	"gettingStarted_step3_code2": "cd your-repo && ./init.sh",
+	"gettingStarted_step3_note": "Init skript přejmenuje řešení, aktualizuje jmenné prostory a nakonfiguruje Docker služby.",
+
+	"gettingStarted_step4_title": "Spusťte stack",
+	"gettingStarted_step4_description": "Nastartujte celé vývojové prostředí jedním příkazem.",
+	"gettingStarted_step4_code": "docker compose up",
+	"gettingStarted_step4_note": "Spustí se API, PostgreSQL, Redis, Seq a MinIO — vše, co potřebujete.",
+
+	"gettingStarted_step5_title": "Začněte kódovat",
+	"gettingStarted_step5_description": "Vaše aplikace běží. Otevřete ji v prohlížeči a začněte stavět své funkce.",
+	"gettingStarted_step5_frontend": "Frontend",
+	"gettingStarted_step5_frontendUrl": "http://localhost:5173",
+	"gettingStarted_step5_backend": "Backend API",
+	"gettingStarted_step5_backendUrl": "http://localhost:8080",
+	"gettingStarted_step5_note": "Máte hotovo. Otevřete IDE a začněte tvořit.",
+
+	"gettingStarted_checklist_title": "Co dál",
+	"gettingStarted_checklist_description": "Jakmile máte vše spuštěné, zde je pár doporučených dalších kroků.",
+	"gettingStarted_checklist_item1": "Aktualizujte appsettings.json s názvem vaší aplikace",
+	"gettingStarted_checklist_item2": "Nastavte SMTP poskytovatele pro e-maily",
+	"gettingStarted_checklist_item3": "Nakonfigurujte S3-kompatibilní úložiště (nebo použijte výchozí MinIO)",
+	"gettingStarted_checklist_item4": "Přidejte svou první entitu pomocí ./init.sh entity",
+	"gettingStarted_checklist_item5": "Nasaďte pomocí přiloženého deploy skriptu",
+	"gettingStarted_checklist_item6": "Přečtěte si README pro kompletní dokumentaci",
+
+	"gettingStarted_resources_title": "Zdroje",
+	"gettingStarted_resources_description": "Užitečné odkazy, které vám pomohou na cestě.",
+	"gettingStarted_resources_github_title": "GitHub repozitář",
+	"gettingStarted_resources_github_description": "Zdrojový kód, hlášení chyb a přispívání.",
+	"gettingStarted_resources_readme_title": "Dokumentace",
+	"gettingStarted_resources_readme_description": "Kompletní README s návody a konvencemi.",
+	"gettingStarted_resources_deepwiki_title": "DeepWiki",
+	"gettingStarted_resources_deepwiki_description": "AI-generovaná dokumentace a průzkum kódu.",
+	"gettingStarted_resources_demo_title": "Živé demo",
+	"gettingStarted_resources_demo_description": "Prozkoumejte běžící aplikaci se všemi funkcemi.",
+
+	"gettingStarted_cta_title": "Připraveni začít?",
+	"gettingStarted_cta_subtitle": "Stáhněte šablonu z GitHubu a postavte svou další aplikaci.",
+	"gettingStarted_cta_github": "Použít šablonu",
+	"gettingStarted_cta_explore": "Prozkoumat demo",
+
+	"gettingStarted_codeBlock_copy": "Kopírovat",
+	"gettingStarted_codeBlock_copied": "Zkopírováno!",
+
+	"tour_gettingStarted_title": "Začínáme",
+	"tour_gettingStarted_description": "Tato stránka vás provede pěti kroky od GitHub šablony k běžící aplikaci — naklonujte, inicializujte, spusťte Docker a začněte kódovat."
 }

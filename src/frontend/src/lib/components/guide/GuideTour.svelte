@@ -64,6 +64,15 @@
 							align: 'center' as const
 						} satisfies StepDef
 					]),
+			// Getting Started - Steps
+			{
+				page: resolve('/getting-started'),
+				element: '[data-tour="getting-started-steps"]',
+				title: m.tour_gettingStarted_title(),
+				description: m.tour_gettingStarted_description(),
+				side: 'bottom',
+				align: 'center'
+			},
 			// For You - Personas
 			{
 				page: resolve('/for-you'),

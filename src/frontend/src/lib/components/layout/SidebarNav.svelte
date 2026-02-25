@@ -4,6 +4,7 @@
 	import { cn, hasPermission, Permissions } from '$lib/utils';
 	import { buttonVariants } from '$lib/components/ui/button';
 	import {
+		PlayCircle,
 		Sparkles,
 		BookOpen,
 		Layers,
@@ -32,6 +33,12 @@
 	type AdminNavItem = NavItem & { permission: string };
 
 	let showcaseItems: NavItem[] = [
+		{
+			title: m.nav_gettingStarted,
+			href: resolve('/getting-started'),
+			icon: PlayCircle,
+			tour: 'nav-getting-started'
+		},
 		{
 			title: m.nav_guide,
 			href: resolve('/guide'),

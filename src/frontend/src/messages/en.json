@@ -948,7 +948,7 @@
 	"gettingStarted_step4_title": "Start the Stack",
 	"gettingStarted_step4_description": "Spin up the entire development environment with the included deploy script.",
 	"gettingStarted_step4_code": "./deploy/up.sh local up -d --build",
-	"gettingStarted_step4_note": "This starts the API, PostgreSQL, Redis, Seq, and SeaweedFS — everything you need.",
+	"gettingStarted_step4_note": "This starts the API, PostgreSQL, Redis, Seq, and MinIO — everything you need.",
 
 	"gettingStarted_step5_title": "Start Coding",
 	"gettingStarted_step5_description": "Your app is running. Open it in your browser and start building your features.",
@@ -969,7 +969,7 @@
 	"gettingStarted_checklist_description": "Once you're up and running, here are some recommended next steps.",
 	"gettingStarted_checklist_item1": "Update appsettings.json with your app name",
 	"gettingStarted_checklist_item2": "Connect an email service like Resend or Mailtrap",
-	"gettingStarted_checklist_item3": "Configure S3-compatible storage (or keep default SeaweedFS)",
+	"gettingStarted_checklist_item3": "Configure S3-compatible storage (or keep default MinIO)",
 	"gettingStarted_checklist_item4": "Add your first domain entity following SKILLS.md",
 	"gettingStarted_checklist_item5": "Deploy with the included deploy script",
 	"gettingStarted_checklist_item6": "Read the README for full documentation",

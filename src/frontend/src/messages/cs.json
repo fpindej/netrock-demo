@@ -948,7 +948,7 @@
 	"gettingStarted_step4_title": "Spusťte stack",
 	"gettingStarted_step4_description": "Nastartujte celé vývojové prostředí přiloženým deploy skriptem.",
 	"gettingStarted_step4_code": "./deploy/up.sh local up -d --build",
-	"gettingStarted_step4_note": "Nastartuje API, PostgreSQL, Redis, Seq a SeaweedFS — vše, co potřebujete.",
+	"gettingStarted_step4_note": "Nastartuje API, PostgreSQL, Redis, Seq a MinIO — vše, co potřebujete.",
 
 	"gettingStarted_step5_title": "Začněte kódovat",
 	"gettingStarted_step5_description": "Aplikace běží. Otevřete prohlížeč a můžete tvořit.",
@@ -969,7 +969,7 @@
 	"gettingStarted_checklist_description": "Máte vše spuštěné — tady je pár doporučených kroků.",
 	"gettingStarted_checklist_item1": "Nastavte název aplikace v appsettings.json",
 	"gettingStarted_checklist_item2": "Připojte e-mailovou službu jako Resend nebo Mailtrap",
-	"gettingStarted_checklist_item3": "Nastavte S3-kompatibilní úložiště (nebo nechte výchozí SeaweedFS)",
+	"gettingStarted_checklist_item3": "Nastavte S3-kompatibilní úložiště (nebo nechte výchozí MinIO)",
 	"gettingStarted_checklist_item4": "Přidejte první doménovou entitu podle SKILLS.md",
 	"gettingStarted_checklist_item5": "Nasaďte přiloženým deploy skriptem",
 	"gettingStarted_checklist_item6": "Projděte si README pro kompletní dokumentaci",

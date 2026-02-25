@@ -271,7 +271,6 @@
 				</Button>
 				<Button
 					variant="outline"
-					size="sm"
 					href="https://github.com/fpindej/netrock"
 					target="_blank"
 					rel="noopener noreferrer"

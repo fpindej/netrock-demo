@@ -146,19 +146,19 @@
 								aria-label="Select {contact.firstName} {contact.lastName}"
 							/>
 						</td>
-						<td class="px-4 py-3">
-							<div>
-								<p class="font-medium">
+						<td class="max-w-48 px-4 py-3">
+							<div class="min-w-0">
+								<p class="truncate font-medium">
 									{contact.firstName}
 									{contact.lastName}
 								</p>
-								<p class="mt-0.5 text-xs text-muted-foreground">
+								<p class="mt-0.5 truncate text-xs text-muted-foreground">
 									{contact.email}
 								</p>
 							</div>
 						</td>
-						<td class="hidden px-4 py-3 text-muted-foreground lg:table-cell">
-							{contact.company ?? '\u2014'}
+						<td class="hidden max-w-32 px-4 py-3 text-muted-foreground lg:table-cell">
+							<span class="block truncate">{contact.company ?? '\u2014'}</span>
 						</td>
 						<td class="px-4 py-3">
 							<ContactStatusBadge status={contact.status} />

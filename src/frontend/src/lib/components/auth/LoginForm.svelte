@@ -102,25 +102,29 @@
 </script>
 
 <LoginBackground>
-	<div class="absolute end-4 top-4 flex gap-2">
+	<div
+		class="absolute end-[max(1rem,env(safe-area-inset-right,0px))] top-[max(1rem,env(safe-area-inset-top,0px))] flex gap-2"
+	>
 		<LanguageSelector />
 		<ThemeToggle />
 	</div>
 
 	<!-- Subtle API status indicator for debugging -->
 	<div
-		class="group absolute start-4 bottom-4 flex cursor-default items-center gap-2 rounded-lg px-2 py-1 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
+		class="group absolute start-[max(1rem,env(safe-area-inset-left,0px))] bottom-[max(1rem,env(safe-area-inset-bottom,0px))] flex cursor-default items-center gap-2 rounded-lg px-2 py-1.5 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
 		title={apiUrl}
 	>
 		<StatusIndicator status={isApiOnline ? 'online' : 'offline'} size="sm" />
 		<span class="hidden group-hover:inline">{apiUrl ?? 'API'}</span>
 	</div>
 
-	<div class="absolute end-4 bottom-4 flex items-center gap-3">
+	<div
+		class="absolute end-[max(1rem,env(safe-area-inset-right,0px))] bottom-[max(1rem,env(safe-area-inset-bottom,0px))] flex items-center gap-3"
+	>
 		{#if onTryDemo}
 			<button
 				type="button"
-				class="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
+				class="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
 				onclick={onTryDemo}
 			>
 				<Rocket class="h-3.5 w-3.5" />
@@ -130,7 +134,7 @@
 		{#if onReplayWelcome}
 			<button
 				type="button"
-				class="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
+				class="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
 				onclick={onReplayWelcome}
 			>
 				<Play class="h-3.5 w-3.5" />
@@ -139,14 +143,14 @@
 		{/if}
 		<a
 			href={resolve('/for-you')}
-			class="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
+			class="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
 		>
 			<Sparkles class="h-3.5 w-3.5" />
 			{m.nav_forYou()}
 		</a>
 		<a
 			href={resolve('/privacy')}
-			class="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
+			class="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
 		>
 			<ShieldCheck class="h-3.5 w-3.5" />
 			{m.nav_privacy()}

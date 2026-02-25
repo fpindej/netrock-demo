@@ -138,7 +138,7 @@
 		<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
 			{#each featureCards as card, i (card.title())}
 				<div
-					class="group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:bg-accent/50"
+					class="group relative flex flex-col overflow-hidden rounded-xl border bg-card"
 					use:reveal={i * 80}
 				>
 					<div

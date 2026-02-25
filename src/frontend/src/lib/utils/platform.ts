@@ -22,3 +22,5 @@ export const IS_MAC = browser
 		// Fallback for iPad with desktop mode (reports MacIntel but has touch)
 		(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 	: false;
+
+export const IS_WINDOWS = browser ? /win/i.test(platform) && !/darwin/i.test(platform) : false;

@@ -943,11 +943,13 @@
 	"gettingStarted_step3_description": "Clone your new repository and run the initialization script to set up your project.",
 	"gettingStarted_step3_code1": "git clone https://github.com/your-username/your-repo.git",
 	"gettingStarted_step3_code2": "cd your-repo && ./init.sh",
+	"gettingStarted_step3_code2Ps": "cd your-repo; .\\init.ps1",
 	"gettingStarted_step3_note": "The init script renames the solution, updates namespaces, and configures Docker services.",
 
 	"gettingStarted_step4_title": "Start the Stack",
 	"gettingStarted_step4_description": "Spin up the entire development environment with the included deploy script.",
 	"gettingStarted_step4_code": "./deploy/up.sh local up -d --build",
+	"gettingStarted_step4_codePs": ".\\deploy\\up.ps1 local up -d --build",
 	"gettingStarted_step4_note": "This starts the API, PostgreSQL, Redis, Seq, and MinIO — everything you need.",
 
 	"gettingStarted_step5_title": "Start Coding",
@@ -992,6 +994,8 @@
 
 	"gettingStarted_codeBlock_copy": "Copy",
 	"gettingStarted_codeBlock_copied": "Copied!",
+	"gettingStarted_codeBlock_shellUnix": "Bash",
+	"gettingStarted_codeBlock_shellPowershell": "PowerShell",
 
 	"tour_gettingStarted_title": "Getting Started",
 	"tour_gettingStarted_description": "This page walks you through the five steps to go from the GitHub template to a running app on your machine — clone, init, Docker up, and start coding."

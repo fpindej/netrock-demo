@@ -943,11 +943,13 @@
 	"gettingStarted_step3_description": "Naklonujte svůj nový repozitář a spusťte inicializační skript.",
 	"gettingStarted_step3_code1": "git clone https://github.com/your-username/your-repo.git",
 	"gettingStarted_step3_code2": "cd your-repo && ./init.sh",
+	"gettingStarted_step3_code2Ps": "cd your-repo; .\\init.ps1",
 	"gettingStarted_step3_note": "Skript přejmenuje řešení, aktualizuje jmenné prostory a nastaví Docker služby.",
 
 	"gettingStarted_step4_title": "Spusťte stack",
 	"gettingStarted_step4_description": "Nastartujte celé vývojové prostředí přiloženým deploy skriptem.",
 	"gettingStarted_step4_code": "./deploy/up.sh local up -d --build",
+	"gettingStarted_step4_codePs": ".\\deploy\\up.ps1 local up -d --build",
 	"gettingStarted_step4_note": "Nastartuje API, PostgreSQL, Redis, Seq a MinIO — vše, co potřebujete.",
 
 	"gettingStarted_step5_title": "Začněte kódovat",
@@ -992,6 +994,8 @@
 
 	"gettingStarted_codeBlock_copy": "Kopírovat",
 	"gettingStarted_codeBlock_copied": "Zkopírováno!",
+	"gettingStarted_codeBlock_shellUnix": "Bash",
+	"gettingStarted_codeBlock_shellPowershell": "PowerShell",
 
 	"tour_gettingStarted_title": "Začínáme",
 	"tour_gettingStarted_description": "Pět kroků od GitHub šablony k běžící aplikaci — naklonovat, inicializovat, spustit Docker a začít kódovat."

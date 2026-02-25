@@ -282,72 +282,71 @@
 		</div>
 
 		<!-- API → Consumer carousel -->
-		<div
-			class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-6"
-			use:reveal={0}
-		>
-			<!-- .NET API box -->
-			<div
-				class="flex w-full max-w-64 flex-col items-center justify-center rounded-xl border-2 border-green-500/40 bg-green-500/5 p-5 text-center shadow-sm shadow-green-500/10 sm:h-44 sm:w-48 sm:max-w-none"
-			>
-				<Server class="h-8 w-8 text-green-500" />
-				<span class="mt-2 text-sm font-bold">{m.forYou_diagram_hub()}</span>
-				<span class="text-xs text-muted-foreground">{m.forYou_diagram_hubDesc()}</span>
+		<div use:reveal={0}>
+			<div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-6">
+				<!-- .NET API box -->
+				<div
+					class="flex w-full max-w-64 flex-col items-center justify-center rounded-xl border-2 border-green-500/40 bg-green-500/5 p-5 text-center shadow-sm shadow-green-500/10 sm:h-44 sm:w-48 sm:max-w-none"
+				>
+					<Server class="h-8 w-8 text-green-500" />
+					<span class="mt-2 text-sm font-bold">{m.forYou_diagram_hub()}</span>
+					<span class="text-xs text-muted-foreground">{m.forYou_diagram_hubDesc()}</span>
+				</div>
+
+				<!-- Arrow -->
+				<ArrowRight
+					class="arrow-flow hidden h-6 w-6 shrink-0 self-center text-muted-foreground/50 sm:block"
+				/>
+				<ArrowDown class="arrow-flow-down h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
+
+				<!-- Consumer carousel -->
+				<div
+					class="relative w-full max-w-64 sm:w-48 sm:max-w-none"
+					role="region"
+					aria-roledescription="carousel"
+					aria-label={m.forYou_diagram_title()}
+					onpointerdown={onPointerDown}
+					onpointerup={onPointerUp}
+					onpointerenter={() => (paused = true)}
+					onpointerleave={() => {
+						paused = false;
+						swiping = false;
+					}}
+				>
+					<div class="overflow-hidden">
+						{#each consumers as consumer, i (consumer.name())}
+							{#if i === currentIndex}
+								<div
+									class="carousel-slide"
+									class:carousel-enter-next={direction === 'next'}
+									class:carousel-enter-prev={direction === 'prev'}
+								>
+									{@render consumerBox(
+										consumer.icon,
+										consumer.name(),
+										consumer.desc(),
+										consumer.borderClass,
+										consumer.iconColor
+									)}
+								</div>
+							{/if}
+						{/each}
+					</div>
+				</div>
 			</div>
 
-			<!-- Arrow -->
-			<ArrowRight
-				class="arrow-flow hidden h-6 w-6 shrink-0 self-center text-muted-foreground/50 sm:block"
-			/>
-			<ArrowDown class="arrow-flow-down h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
-
-			<!-- Consumer carousel -->
-			<div
-				class="relative w-full max-w-64 sm:w-48 sm:max-w-none"
-				role="region"
-				aria-roledescription="carousel"
-				aria-label={m.forYou_diagram_title()}
-				onpointerdown={onPointerDown}
-				onpointerup={onPointerUp}
-				onpointerenter={() => (paused = true)}
-				onpointerleave={() => {
-					paused = false;
-					swiping = false;
-				}}
-			>
-				<div class="overflow-hidden">
-					{#each consumers as consumer, i (consumer.name())}
-						{#if i === currentIndex}
-							<div
-								class="carousel-slide"
-								class:carousel-enter-next={direction === 'next'}
-								class:carousel-enter-prev={direction === 'prev'}
-							>
-								{@render consumerBox(
-									consumer.icon,
-									consumer.name(),
-									consumer.desc(),
-									consumer.borderClass,
-									consumer.iconColor
-								)}
-							</div>
-						{/if}
-					{/each}
-				</div>
-
-				<!-- Dot indicators -->
-				<div class="mt-3 flex justify-center gap-1.5">
-					{#each consumers as consumer, i (consumer.name())}
-						<button
-							type="button"
-							class="h-2 w-2 rounded-full transition-colors {i === currentIndex
-								? 'bg-foreground'
-								: 'bg-foreground/20 hover:bg-foreground/40'}"
-							aria-label="Go to slide {i + 1}"
-							onclick={() => goTo(i)}
-						></button>
-					{/each}
-				</div>
+			<!-- Dot indicators -->
+			<div class="mt-3 flex justify-center gap-1.5">
+				{#each consumers as consumer, i (consumer.name())}
+					<button
+						type="button"
+						class="h-2 w-2 rounded-full transition-colors {i === currentIndex
+							? 'bg-foreground'
+							: 'bg-foreground/20 hover:bg-foreground/40'}"
+						aria-label="Go to slide {i + 1}"
+						onclick={() => goTo(i)}
+					></button>
+				{/each}
 			</div>
 		</div>
 	</section>

@@ -157,7 +157,12 @@
 			>
 				<div class="space-y-3">
 					<CodeBlock code={m.gettingStarted_step3_code1()} lang="bash" />
-					<CodeBlock code={m.gettingStarted_step3_code2()} lang="bash" />
+					<CodeBlock
+						variants={{
+							unix: m.gettingStarted_step3_code2(),
+							powershell: m.gettingStarted_step3_code2Ps()
+						}}
+					/>
 				</div>
 				<p class="mt-3 text-xs text-muted-foreground">
 					{m.gettingStarted_step3_note()}
@@ -172,7 +177,12 @@
 				title={m.gettingStarted_step4_title}
 				description={m.gettingStarted_step4_description}
 			>
-				<CodeBlock code={m.gettingStarted_step4_code()} lang="bash" />
+				<CodeBlock
+					variants={{
+						unix: m.gettingStarted_step4_code(),
+						powershell: m.gettingStarted_step4_codePs()
+					}}
+				/>
 				<p class="mt-3 text-xs text-muted-foreground">
 					{m.gettingStarted_step4_note()}
 				</p>

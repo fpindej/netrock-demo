@@ -290,9 +290,9 @@
 		>
 			<!-- .NET API box -->
 			<div
-				class="flex w-full max-w-64 flex-col items-center rounded-xl border-2 border-green-500/40 bg-green-500/5 p-6 text-center shadow-sm shadow-green-500/10 sm:w-48 sm:max-w-none"
+				class="flex w-full max-w-64 flex-col items-center justify-center rounded-xl border-2 border-green-500/40 bg-green-500/5 p-5 text-center shadow-sm shadow-green-500/10 sm:h-32 sm:w-48 sm:max-w-none"
 			>
-				<Server class="h-10 w-10 text-green-500" />
+				<Server class="h-8 w-8 text-green-500" />
 				<span class="mt-2 text-sm font-bold">{m.forYou_diagram_hub()}</span>
 				<span class="text-xs text-muted-foreground">{m.forYou_diagram_hubDesc()}</span>
 			</div>
@@ -403,7 +403,9 @@
 	borderClass: string,
 	iconColor: string
 )}
-	<div class="flex w-full flex-col items-center rounded-xl border-2 p-5 text-center {borderClass}">
+	<div
+		class="flex w-full flex-col items-center justify-center rounded-xl border-2 p-5 text-center sm:h-32 {borderClass}"
+	>
 		<Icon class="h-8 w-8 {iconColor}" />
 		<span class="mt-2 text-sm font-bold">{name}</span>
 		<span class="text-xs text-muted-foreground">{desc}</span>

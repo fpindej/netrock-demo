@@ -26,7 +26,7 @@
 			oninput={(e) => onSearch(e.currentTarget.value)}
 		/>
 	</div>
-	<div class="flex items-center gap-3">
+	<div class="flex items-center justify-between gap-3 sm:justify-end">
 		<p class="text-sm text-muted-foreground">
 			{m.contacts_totalCount({ count: totalCount })}
 		</p>

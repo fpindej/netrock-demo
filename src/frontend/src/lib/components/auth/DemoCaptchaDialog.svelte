@@ -32,7 +32,10 @@
 </script>
 
 <Dialog.Root bind:open onOpenChange={handleOpenChange}>
-	<Dialog.Content class="sm:max-w-md" onInteractOutside={(e) => isLoading && e.preventDefault()}>
+	<Dialog.Content
+		class="max-w-[calc(100vw-2rem)] overflow-hidden sm:max-w-md"
+		onInteractOutside={(e) => isLoading && e.preventDefault()}
+	>
 		<Dialog.Header>
 			<Dialog.Title>{m.welcome_cta_tryDemo()}</Dialog.Title>
 			{#if !isLoading}
@@ -51,7 +54,9 @@
 					</div>
 				</div>
 			{:else}
-				<TurnstileWidget siteKey={turnstileSiteKey} onVerified={handleVerified} />
+				<div class="w-full overflow-hidden">
+					<TurnstileWidget siteKey={turnstileSiteKey} onVerified={handleVerified} />
+				</div>
 			{/if}
 		</div>
 	</Dialog.Content>

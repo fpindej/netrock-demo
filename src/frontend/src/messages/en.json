@@ -914,7 +914,7 @@
 
 	"gettingStarted_hero_badge": "Getting Started",
 	"gettingStarted_hero_title": "From Template to Running App",
-	"gettingStarted_hero_subtitle": "Five steps to go from \"Use this template\" to a fully running application on your machine.",
+	"gettingStarted_hero_subtitle": "Five steps to go from \"Use this template\" to a fully running application on your machine. Works on Windows, macOS, and Linux out of the box.",
 
 	"gettingStarted_prereq_title": "Prerequisites",
 	"gettingStarted_prereq_description": "Make sure you have these tools installed before you begin.",
@@ -937,7 +937,7 @@
 
 	"gettingStarted_step2_title": "Create from Template",
 	"gettingStarted_step2_description": "GitHub will ask you to name your new repository and choose its visibility. Pick a name, set it to public or private, and click \"Create repository\".",
-	"gettingStarted_step2_note": "Your new repo will have the full NETrock codebase — ready to customize.",
+	"gettingStarted_step2_note": "Your new repo starts clean — same foundation as this demo, without the sample data.",
 
 	"gettingStarted_step3_title": "Clone & Initialize",
 	"gettingStarted_step3_description": "Clone your new repository and run the initialization script to set up your project.",
@@ -946,8 +946,8 @@
 	"gettingStarted_step3_note": "The init script renames the solution, updates namespaces, and configures Docker services.",
 
 	"gettingStarted_step4_title": "Start the Stack",
-	"gettingStarted_step4_description": "Spin up the entire development environment with a single command.",
-	"gettingStarted_step4_code": "docker compose up",
+	"gettingStarted_step4_description": "Spin up the entire development environment with the included deploy script.",
+	"gettingStarted_step4_code": "./deploy/up.sh local up -d --build",
 	"gettingStarted_step4_note": "This starts the API, PostgreSQL, Redis, Seq, and SeaweedFS — everything you need.",
 
 	"gettingStarted_step5_title": "Start Coding",
@@ -968,9 +968,9 @@
 	"gettingStarted_checklist_title": "What's Next",
 	"gettingStarted_checklist_description": "Once you're up and running, here are some recommended next steps.",
 	"gettingStarted_checklist_item1": "Update appsettings.json with your app name",
-	"gettingStarted_checklist_item2": "Set up your SMTP provider for emails",
-	"gettingStarted_checklist_item3": "Configure S3-compatible storage (or use default MinIO)",
-	"gettingStarted_checklist_item4": "Add your first entity with ./init.sh entity",
+	"gettingStarted_checklist_item2": "Connect an email service like Resend or Mailtrap",
+	"gettingStarted_checklist_item3": "Configure S3-compatible storage (or keep default SeaweedFS)",
+	"gettingStarted_checklist_item4": "Add your first domain entity following SKILLS.md",
 	"gettingStarted_checklist_item5": "Deploy with the included deploy script",
 	"gettingStarted_checklist_item6": "Read the README for full documentation",
 

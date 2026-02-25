@@ -247,8 +247,7 @@
 						<div
 							class="welcome-stagger-2 rounded-xl border border-primary/20 bg-primary/5 px-6 py-4"
 						>
-							<span class="text-2xl font-bold text-primary">650+</span>
-							<p class="mt-1 text-sm text-muted-foreground">{m.welcome_tech_tests()}</p>
+							<p class="text-sm text-muted-foreground">{m.welcome_tech_tests()}</p>
 						</div>
 					{:else if currentSlide === 3}
 						<!-- Slide 3: Privacy & Safety -->

@@ -629,6 +629,8 @@
 	"demo_role_superAdmin": "SuperAdmin",
 	"demo_role_switch_failed": "Nepodařilo se přepnout roli. Zkuste to prosím znovu.",
 	"demo_tryDemo_failed": "Nepodařilo se vytvořit demo účet. Zkuste to prosím znovu.",
+	"demo_captcha_description": "Dokončete ověření pro zahájení demo relace.",
+	"demo_captcha_loading": "Příprava vašeho demo účtu…",
 
 	"nav_privacy": "Ochrana soukromí",
 

@@ -3,7 +3,7 @@
 	import { goto, invalidateAll, replaceState } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { browserClient } from '$lib/api';
-	import { LoginForm, WelcomeOverlay } from '$lib/components/auth';
+	import { DemoCaptchaDialog, LoginForm, WelcomeOverlay } from '$lib/components/auth';
 	import { toast } from '$lib/components/ui/sonner';
 	import * as m from '$lib/paraglide/messages';
 
@@ -38,22 +38,35 @@
 		showWelcome = true;
 	}
 
+	let showDemoCaptcha = $state(false);
 	let isDemoLoading = $state(false);
 
-	async function handleTryDemo() {
-		if (isDemoLoading) return;
+	const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+	function handleTryDemo() {
+		showDemoCaptcha = true;
+	}
+
+	async function handleDemoCaptchaVerified(captchaToken: string) {
 		isDemoLoading = true;
 
 		try {
-			const { response } = await browserClient.POST('/api/v1/demo/try');
+			const [{ response }] = await Promise.all([
+				browserClient.POST('/api/v1/demo/try', { body: { captchaToken } }),
+				delay(1500)
+			]);
 
 			if (response.ok) {
+				await delay(500);
+				showDemoCaptcha = false;
 				await invalidateAll();
 				await goto(resolve('/'));
 			} else {
+				showDemoCaptcha = false;
 				toast.error(m.demo_tryDemo_failed());
 			}
 		} catch {
+			showDemoCaptcha = false;
 			toast.error(m.demo_tryDemo_failed());
 		} finally {
 			isDemoLoading = false;
@@ -119,3 +132,10 @@
 		/>
 	{/if}
 </div>
+
+<DemoCaptchaDialog
+	bind:open={showDemoCaptcha}
+	isLoading={isDemoLoading}
+	turnstileSiteKey={data.turnstileSiteKey}
+	onVerified={handleDemoCaptchaVerified}
+/>

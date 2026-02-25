@@ -433,6 +433,7 @@ export interface paths {
 		/**
 		 * Creates a short-lived demo account and logs the user in via cookies.
 		 *     The account expires after 24 hours and is cleaned up on logout or by a background job.
+		 *     Requires a valid CAPTCHA token to prevent automated abuse.
 		 */
 		post: {
 			parameters: {
@@ -441,7 +442,12 @@ export interface paths {
 				path?: never;
 				cookie?: never;
 			};
-			requestBody?: never;
+			/** @description The request containing a CAPTCHA token */
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['TryDemoRequest'];
+				};
+			};
 			responses: {
 				/** @description Demo account created and logged in successfully */
 				204: {
@@ -3465,6 +3471,11 @@ export interface components {
 		ElevateRequest: {
 			/** @description The target role: `"Admin"` to elevate or `"User"` to de-elevate. */
 			role: string;
+		};
+		/** @description Request to create a short-lived demo account. Requires a valid CAPTCHA token. */
+		TryDemoRequest: {
+			/** @description The Cloudflare Turnstile CAPTCHA token proving the caller is human. */
+			captchaToken: string;
 		};
 		/** @description Represents a request to initiate a password reset flow. */
 		ForgotPasswordRequest: {

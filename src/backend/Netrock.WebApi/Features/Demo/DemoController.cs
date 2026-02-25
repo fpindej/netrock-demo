@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Netrock.Application.Features.Authentication;
+using Netrock.Application.Features.Captcha;
 using Netrock.Application.Features.Demo;
 using Netrock.Application.Identity;
 using Netrock.WebApi.Features.Demo.Dtos;
 using Netrock.WebApi.Shared;
+using Netrock.Shared;
 
 namespace Netrock.WebApi.Features.Demo;
 
@@ -18,6 +20,7 @@ namespace Netrock.WebApi.Features.Demo;
 public class DemoController(
     IDemoService demoService,
     IAuthenticationService authenticationService,
+    ICaptchaService captchaService,
     IUserContext userContext) : ApiController
 {
     /// <summary>
@@ -57,11 +60,13 @@ public class DemoController(
     /// <summary>
     /// Creates a short-lived demo account and logs the user in via cookies.
     /// The account expires after 24 hours and is cleaned up on logout or by a background job.
+    /// Requires a valid CAPTCHA token to prevent automated abuse.
     /// </summary>
+    /// <param name="request">The request containing a CAPTCHA token</param>
     /// <param name="cancellationToken">A cancellation token</param>
     /// <returns>No content on success (cookies are set by the login call)</returns>
     /// <response code="204">Demo account created and logged in successfully</response>
-    /// <response code="400">If demo account creation or login fails</response>
+    /// <response code="400">If CAPTCHA validation, demo account creation, or login fails</response>
     /// <response code="429">If the rate limit is exceeded</response>
     [HttpPost("try")]
     [AllowAnonymous]
@@ -69,8 +74,15 @@ public class DemoController(
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
-    public async Task<ActionResult> Try(CancellationToken cancellationToken)
+    public async Task<ActionResult> Try(
+        [FromBody] TryDemoRequest request,
+        CancellationToken cancellationToken)
     {
+        if (!await captchaService.ValidateTokenAsync(request.CaptchaToken, cancellationToken))
+        {
+            return ProblemFactory.Create(ErrorMessages.Auth.CaptchaInvalid, ErrorType.Validation);
+        }
+
         var createResult = await demoService.CreateDemoAccountAsync(cancellationToken);
 
         if (!createResult.IsSuccess)

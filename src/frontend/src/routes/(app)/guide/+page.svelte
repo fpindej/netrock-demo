@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { reveal } from '$lib/actions/reveal';
 	import { StatPill } from '$lib/components/common';
 	import { GuideTour } from '$lib/components/guide';
 	import { Button } from '$lib/components/ui/button';
+	import { demoState } from '$lib/state';
 	import {
 		Rocket,
 		ShieldCheck,
@@ -25,7 +28,7 @@
 		color: string;
 		bgColor: string;
 		gradientFrom: string;
-		action?: { label: () => string; href: string };
+		action?: { label: () => string; href: string; onclick?: () => void };
 	};
 
 	const featureCards: FeatureCard[] = [
@@ -79,7 +82,14 @@
 			color: 'text-red-500',
 			bgColor: 'bg-red-500/10',
 			gradientFrom: 'from-red-500',
-			action: { label: m.guide_viewAsAdmin, href: '/admin/users' }
+			action: {
+				label: m.guide_viewAsAdmin,
+				href: '/admin/users',
+				onclick: () => {
+					demoState.viewingAs = 'Admin';
+					goto(resolve('/admin/users'));
+				}
+			}
 		}
 	];
 </script>
@@ -157,10 +167,11 @@
 						{#if card.action}
 							<div class="mt-auto pt-1">
 								<Button
-									variant="ghost"
+									variant="link"
 									size="sm"
-									href={card.action.href}
-									class="group/btn gap-1.5 px-0 text-xs font-medium"
+									href={card.action.onclick ? undefined : card.action.href}
+									onclick={card.action.onclick}
+									class="group/btn h-auto gap-1 p-0 text-xs font-medium"
 								>
 									{card.action.label()}
 									<ArrowRight

@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { browserClient } from '$lib/api';
 	import { reveal } from '$lib/actions/reveal';
 	import { StatPill } from '$lib/components/common';
 	import { GuideTour } from '$lib/components/guide';
@@ -85,8 +86,15 @@
 			action: {
 				label: m.guide_viewAsAdmin,
 				href: '/admin/users',
-				onclick: () => {
-					demoState.viewingAs = 'Admin';
+				onclick: async () => {
+					if (demoState.viewingAs !== 'Admin') {
+						const { response } = await browserClient.POST('/api/v1/demo/elevate', {
+							body: { role: 'Admin' }
+						});
+						if (!response.ok) return;
+						demoState.viewingAs = 'Admin';
+						await invalidateAll();
+					}
 					goto(resolve('/admin/users'));
 				}
 			}

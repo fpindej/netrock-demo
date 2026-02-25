@@ -204,34 +204,3 @@
 		</div>
 	</section>
 </div>
-
-<style>
-	@keyframes hero-fade-in {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-	}
-
-	:global(.hero-animate) {
-		animation: hero-fade-in 0.6s ease-out both;
-	}
-	:global(.hero-delay-0) {
-		animation-delay: 0ms;
-	}
-	:global(.hero-delay-1) {
-		animation-delay: 100ms;
-	}
-	:global(.hero-delay-2) {
-		animation-delay: 200ms;
-	}
-	:global(.hero-delay-3) {
-		animation-delay: 350ms;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global(.hero-animate) {
-			animation: none;
-		}
-	}
-</style>

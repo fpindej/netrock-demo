@@ -168,7 +168,7 @@
 		<div class="grid gap-4 sm:grid-cols-2">
 			{#each engageCards as card, i (card.title())}
 				<div
-					class="group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:bg-accent/50"
+					class="group relative flex flex-col overflow-hidden rounded-xl border bg-card"
 					use:reveal={i * 80}
 				>
 					<div
@@ -219,7 +219,7 @@
 		<div class="grid gap-3 sm:grid-cols-3">
 			{#each connectChannels as channel, i (channel.href)}
 				<div
-					class="group flex items-center gap-4 rounded-xl border bg-card p-4 transition-colors hover:bg-accent/50"
+					class="group flex items-center gap-4 rounded-xl border bg-card p-4"
 					use:reveal={i * 80}
 				>
 					<div

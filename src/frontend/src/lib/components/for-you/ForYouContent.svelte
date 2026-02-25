@@ -231,7 +231,7 @@
 		<div class="flex flex-wrap justify-center gap-4">
 			{#each personas as persona, i (persona.title())}
 				<div
-					class="group relative flex flex-[1_1_100%] flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:bg-accent/50 sm:max-w-[calc(50%-0.5rem)] sm:flex-[1_1_calc(50%-0.5rem)] xl:max-w-[calc(33.333%-0.667rem)] xl:flex-[1_1_calc(33.333%-0.667rem)]"
+					class="relative flex flex-[1_1_100%] flex-col overflow-hidden rounded-xl border bg-card sm:max-w-[calc(50%-0.5rem)] sm:flex-[1_1_calc(50%-0.5rem)] xl:max-w-[calc(33.333%-0.667rem)] xl:flex-[1_1_calc(33.333%-0.667rem)]"
 					use:reveal={i * 80}
 				>
 					<div

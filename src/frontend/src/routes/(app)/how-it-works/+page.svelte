@@ -399,13 +399,8 @@
 
 		<div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
 			{#each features as feat, i (feat.title())}
-				<div
-					class="group flex gap-3 rounded-lg border bg-card p-4 transition-colors hover:bg-accent/50"
-					use:reveal={i * 50}
-				>
-					<div
-						class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted transition-colors group-hover:bg-background"
-					>
+				<div class="flex gap-3 rounded-lg border bg-card p-4" use:reveal={i * 50}>
+					<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
 						<feat.icon class="h-5 w-5 {feat.color}" />
 					</div>
 					<div class="min-w-0">

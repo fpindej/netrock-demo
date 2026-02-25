@@ -1,0 +1,101 @@
+name: netrock
+
+services:
+  api:
+    image: fpindej/netrock-api:latest
+    restart: always
+    env_file: .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Database: Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      Caching__Redis__ConnectionString: redis:6379
+      Caching__Redis__Password: ${REDIS_PASSWORD}
+      Caching__Redis__UseSsl: "false"
+      Authentication__Jwt__Key: ${JWT_SECRET_KEY}
+      FileStorage__Endpoint: http://storage:9000
+      FileStorage__AccessKey: ${S3_ACCESS_KEY}
+      FileStorage__SecretKey: ${S3_SECRET_KEY}
+      FileStorage__BucketName: netrock-files
+      FileStorage__UseSSL: "false"
+      Hosting__ReverseProxy__TrustedNetworks__0: 172.16.0.0/12
+    ports:
+      - "11002:8080"
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - db
+      - storage
+
+  frontend:
+    image: fpindej/netrock-frontend:latest
+    restart: always
+    environment:
+      API_URL: http://api:8080
+      TURNSTILE_SITE_KEY: ${TURNSTILE_SITE_KEY}
+      XFF_DEPTH: "1"
+      ORIGIN: https://demo.netrock.dev
+    ports:
+      - "11000:3000"
+    networks:
+      - frontend
+    depends_on:
+      - api
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "11004:5432"
+    networks:
+      - backend
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    networks:
+      - backend
+    volumes:
+      - redis_data:/data
+    command:
+      - sh
+      - -c
+      - |
+        printf 'requirepass %s\nappendonly yes\n' "$$REDIS_PASSWORD" > /tmp/redis.conf
+        exec redis-server /tmp/redis.conf
+
+  storage:
+    image: chrislusf/seaweedfs:latest
+    restart: always
+    environment:
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${S3_SECRET_KEY}
+    networks:
+      - backend
+    volumes:
+      - storage_data:/data
+    entrypoint:
+      - sh
+      - -c
+      - |
+        printf '{"identities":[{"name":"admin","credentials":[{"accessKey":"%s","secretKey":"%s"}],"actions":["Admin","Read","Write","List","Tagging"]}]}' "$$S3_ACCESS_KEY" "$$S3_SECRET_KEY" > /tmp/s3.json
+        exec weed server -ip=0.0.0.0 -s3 -s3.port=9000 -s3.config=/tmp/s3.json -dir=/data
+
+volumes:
+  db_data:
+  redis_data:
+  storage_data:
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge

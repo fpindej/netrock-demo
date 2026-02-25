@@ -113,7 +113,7 @@
 	<div class="h-px w-full bg-border"></div>
 
 	{#if hasData}
-		<div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			<StatCard
 				label={m.analytics_totalContacts()}
 				value={totalContacts.toString()}

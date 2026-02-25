@@ -46,7 +46,7 @@
 		>
 			{#key page.url.pathname}
 				<div
-					class="motion-safe:duration-300 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4"
+					class="mx-auto w-full max-w-7xl motion-safe:duration-300 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4"
 				>
 					{@render children()}
 				</div>

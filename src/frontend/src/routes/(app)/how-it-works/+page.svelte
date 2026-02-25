@@ -262,7 +262,7 @@
 			</p>
 		</div>
 
-		<div class="grid gap-6 sm:grid-cols-3">
+		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 			<!-- Frontend -->
 			<div class="h-full" use:reveal={0}>
 				<Card.Root class="relative h-full overflow-hidden">

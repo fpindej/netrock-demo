@@ -37,7 +37,7 @@
 				if (v) onSort(v);
 			}}
 		>
-			<Select.Trigger class="w-[180px]">
+			<Select.Trigger class="w-full sm:w-[180px]">
 				{#if sortValue === 'newest'}
 					{m.contacts_sortNewest()}
 				{:else if sortValue === 'oldest'}

@@ -3,6 +3,6 @@
   "backendImage": "netrock-api",
   "frontendImage": "netrock-frontend",
   "backendVersion": "0.3.0",
-  "frontendVersion": "0.4.0",
+  "frontendVersion": "0.4.1",
   "platform": "linux/amd64"
 }

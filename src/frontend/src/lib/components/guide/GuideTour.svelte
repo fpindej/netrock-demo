@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { Play } from '@lucide/svelte';
 	import { Button } from '$lib/components/ui/button';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { setSidebarCollapsed } from '$lib/state';
+	import { browserClient } from '$lib/api';
+	import { setSidebarCollapsed, demoState } from '$lib/state';
 	import * as m from '$lib/paraglide/messages';
 
 	type StepDef = {
@@ -25,6 +26,18 @@
 
 		if (!isMobile) {
 			setSidebarCollapsed(false);
+		}
+
+		// Ensure admin access for the full tour
+		const originalRole = demoState.viewingAs;
+		if (originalRole !== 'Admin') {
+			const { response } = await browserClient.POST('/api/v1/demo/elevate', {
+				body: { role: 'Admin' }
+			});
+			if (response.ok) {
+				demoState.viewingAs = 'Admin';
+				await invalidateAll();
+			}
 		}
 
 		await new Promise((r) => setTimeout(r, 350));
@@ -186,7 +199,18 @@
 			prevBtnText: m.tour_prev(),
 			doneBtnText: m.tour_done(),
 			progressText: m.tour_progress({ current: '{{current}}', total: '{{total}}' }),
-			steps
+			steps,
+			onDestroyed: async () => {
+				if (demoState.viewingAs !== originalRole) {
+					const { response } = await browserClient.POST('/api/v1/demo/elevate', {
+						body: { role: originalRole }
+					});
+					if (response.ok) {
+						demoState.viewingAs = originalRole;
+						await invalidateAll();
+					}
+				}
+			}
 		});
 
 		driverObj.drive();

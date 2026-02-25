@@ -23,7 +23,11 @@
 		pink: { bg: 'bg-pink-500/10', text: 'text-pink-500', border: 'border-pink-500/30' }
 	};
 
-	const defaultColor = { bg: 'bg-blue-500/10', text: 'text-blue-500', border: 'border-blue-500/30' };
+	const defaultColor = {
+		bg: 'bg-blue-500/10',
+		text: 'text-blue-500',
+		border: 'border-blue-500/30'
+	};
 
 	let colors = $derived(colorMap[color] ?? defaultColor);
 </script>

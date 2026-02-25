@@ -34,16 +34,16 @@
 
 	let showcaseItems: NavItem[] = [
 		{
-			title: m.nav_gettingStarted,
-			href: resolve('/getting-started'),
-			icon: PlayCircle,
-			tour: 'nav-getting-started'
-		},
-		{
 			title: m.nav_guide,
 			href: resolve('/guide'),
 			icon: BookOpen,
 			tour: 'nav-guide'
+		},
+		{
+			title: m.nav_gettingStarted,
+			href: resolve('/getting-started'),
+			icon: PlayCircle,
+			tour: 'nav-getting-started'
 		},
 		{
 			title: m.nav_forYou,

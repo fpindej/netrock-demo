@@ -187,22 +187,62 @@
 				description={m.gettingStarted_step5_description}
 				last
 			>
-				<div class="grid gap-2 sm:grid-cols-2">
-					<div class="rounded-lg border bg-muted/50 p-3 text-center">
-						<span class="text-xs font-medium text-muted-foreground">
-							{m.gettingStarted_step5_frontend()}
+				<div class="space-y-4">
+					<!-- Docker ports -->
+					<div>
+						<span
+							class="mb-2 inline-block rounded-full border border-pink-500/20 bg-pink-500/10 px-2.5 py-0.5 text-[10px] font-semibold tracking-wider text-pink-500 uppercase"
+						>
+							{m.gettingStarted_step5_docker_label()}
 						</span>
-						<p class="mt-1 font-mono text-sm font-semibold">
-							{m.gettingStarted_step5_frontendUrl()}
-						</p>
+						<div class="grid gap-2 sm:grid-cols-2">
+							<div class="rounded-lg border bg-muted/50 p-3 text-center">
+								<span class="text-xs font-medium text-muted-foreground">
+									{m.gettingStarted_step5_docker_frontend()}
+								</span>
+								<p class="mt-1 font-mono text-sm font-semibold">
+									{m.gettingStarted_step5_docker_frontendUrl()}
+								</p>
+							</div>
+							<div class="rounded-lg border bg-muted/50 p-3 text-center">
+								<span class="text-xs font-medium text-muted-foreground">
+									{m.gettingStarted_step5_docker_backend()}
+								</span>
+								<p class="mt-1 font-mono text-sm font-semibold">
+									{m.gettingStarted_step5_docker_backendUrl()}
+								</p>
+							</div>
+						</div>
 					</div>
-					<div class="rounded-lg border bg-muted/50 p-3 text-center">
-						<span class="text-xs font-medium text-muted-foreground">
-							{m.gettingStarted_step5_backend()}
+
+					<!-- Local dev -->
+					<div class="rounded-lg border border-dashed border-muted-foreground/20 bg-muted/20 p-3">
+						<span
+							class="mb-2 inline-block rounded-full border border-violet-500/20 bg-violet-500/10 px-2.5 py-0.5 text-[10px] font-semibold tracking-wider text-violet-500 uppercase"
+						>
+							{m.gettingStarted_step5_local_label()}
 						</span>
-						<p class="mt-1 font-mono text-sm font-semibold">
-							{m.gettingStarted_step5_backendUrl()}
+						<p class="mb-2 text-xs text-muted-foreground">
+							{m.gettingStarted_step5_local_description()}
 						</p>
+						<div class="grid gap-2 sm:grid-cols-2">
+							<div class="rounded-lg border bg-card p-2.5 text-center">
+								<span class="text-xs font-medium text-muted-foreground">
+									{m.gettingStarted_step5_local_frontend()}
+								</span>
+								<p class="mt-0.5 font-mono text-sm font-semibold">
+									{m.gettingStarted_step5_local_frontendUrl()}
+								</p>
+							</div>
+							<div class="rounded-lg border bg-card p-2.5 text-center">
+								<span class="text-xs font-medium text-muted-foreground">
+									{m.gettingStarted_step5_local_backend()}
+								</span>
+								<p class="mt-0.5 font-mono text-sm font-semibold">
+									{m.gettingStarted_step5_local_backendUrl()}
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 				<p class="mt-3 text-xs text-muted-foreground">

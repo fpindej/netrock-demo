@@ -193,12 +193,28 @@
 	}
 </script>
 
-<Button onclick={startTour} variant="outline" class="w-full sm:w-auto">
+<Button onclick={startTour} class="tour-cta w-full sm:w-auto">
 	<Play class="me-2 h-4 w-4" />
 	{m.tour_startButton()}
 </Button>
 
 <style>
+	/* Pulsing glow to draw attention to the tour button */
+	:global(.tour-cta) {
+		box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+		animation: tour-pulse 2.5s ease-in-out infinite;
+	}
+
+	@keyframes tour-pulse {
+		0%,
+		100% {
+			box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+		}
+		50% {
+			box-shadow: 0 0 0 6px hsl(var(--primary) / 0);
+		}
+	}
+
 	/* Driver.js popover theming - match NETrock design system */
 	:global(.netrock-tour) {
 		background-color: hsl(var(--popover)) !important;
@@ -274,5 +290,12 @@
 		box-shadow:
 			0 4px 24px rgba(0, 0, 0, 0.4),
 			0 1px 8px rgba(0, 0, 0, 0.2) !important;
+	}
+
+	/* Respect reduced motion */
+	@media (prefers-reduced-motion: reduce) {
+		:global(.tour-cta) {
+			animation: none;
+		}
 	}
 </style>

@@ -50,6 +50,13 @@ RUN if [ "$STRIP_DEV_CONFIG" = "true" ]; then \
 
 # Final stage
 FROM base AS final
+
+# SkiaSharp requires fontconfig for image processing (avatar upload).
+# The slim aspnet image does not include it.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends fontconfig \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY --from=publish /app/publish .
 COPY --from=publish /app/healthprobe ./healthprobe/

@@ -628,6 +628,7 @@
 	"demo_role_admin": "Admin",
 	"demo_role_superAdmin": "SuperAdmin",
 	"demo_role_switch_failed": "Nepodařilo se přepnout roli. Zkuste to prosím znovu.",
+	"demo_tryDemo_failed": "Nepodařilo se vytvořit demo účet. Zkuste to prosím znovu.",
 
 	"nav_privacy": "Ochrana soukromí",
 
@@ -810,6 +811,7 @@
 	"welcome_cta_title": "Dost řečí - vyzkoušejte to",
 	"welcome_cta_subtitle": "Vytvořte si účet zdarma a prověřte každou funkci. Líbí se vám to? Naklonujte repo a upravte si to po svém.",
 	"welcome_cta_register": "Vytvořit účet",
+	"welcome_cta_tryDemo": "Vyzkoušet demo",
 	"welcome_cta_signIn": "Přihlásit se",
 	"welcome_cta_note": "Bez platební karty. Bez závazků. Jen kód.",
 	"welcome_replay": "Prohlídka",

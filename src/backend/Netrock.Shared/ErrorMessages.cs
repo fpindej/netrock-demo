@@ -162,6 +162,8 @@ public static class ErrorMessages
         public const string InvalidRole = "Only 'Admin' or 'User' roles are allowed for demo elevation.";
         public const string UserNotFound = "User not found.";
         public const string RoleChangeFailed = "Failed to change demo role.";
+        public const string DemoAccountCreationFailed = "Failed to create demo account.";
+        public const string DemoLoginFailed = "Failed to log in to demo account.";
     }
 
     /// <summary>

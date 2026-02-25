@@ -10,6 +10,7 @@ using Netrock.Application.Cookies.Constants;
 using Netrock.Application.Features.Audit;
 using Netrock.Application.Features.Authentication;
 using Netrock.Application.Features.Authentication.Dtos;
+using Netrock.Application.Features.Demo;
 using Netrock.Application.Features.Email;
 using Netrock.Application.Features.Email.Models;
 using Netrock.Application.Identity;
@@ -37,6 +38,7 @@ internal class AuthenticationService(
     ITemplatedEmailSender templatedEmailSender,
     EmailTokenService emailTokenService,
     IAuditService auditService,
+    IDemoService demoService,
     IOptions<AuthenticationOptions> authenticationOptions,
     IOptions<EmailOptions> emailOptions,
     ILogger<AuthenticationService> logger,
@@ -165,6 +167,7 @@ internal class AuthenticationService(
         {
             await auditService.LogAsync(AuditActions.Logout, userId: userId.Value, ct: cancellationToken);
             await RevokeUserTokens(userId.Value);
+            await demoService.CleanupDemoAccountAsync(userId.Value, cancellationToken);
         }
     }
 

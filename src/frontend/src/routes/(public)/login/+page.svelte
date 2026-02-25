@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
-	import { replaceState } from '$app/navigation';
+	import { goto, invalidateAll, replaceState } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { browserClient } from '$lib/api';
 	import { LoginForm, WelcomeOverlay } from '$lib/components/auth';
 	import { toast } from '$lib/components/ui/sonner';
 	import * as m from '$lib/paraglide/messages';
@@ -35,6 +36,28 @@
 	function replayWelcome() {
 		welcomeSlide = 0;
 		showWelcome = true;
+	}
+
+	let isDemoLoading = $state(false);
+
+	async function handleTryDemo() {
+		if (isDemoLoading) return;
+		isDemoLoading = true;
+
+		try {
+			const { response } = await browserClient.POST('/api/v1/demo/try');
+
+			if (response.ok) {
+				await invalidateAll();
+				await goto(resolve('/'));
+			} else {
+				toast.error(m.demo_tryDemo_failed());
+			}
+		} catch {
+			toast.error(m.demo_tryDemo_failed());
+		} finally {
+			isDemoLoading = false;
+		}
 	}
 
 	onMount(async () => {
@@ -83,6 +106,7 @@
 			turnstileSiteKey={data.turnstileSiteKey}
 			bind:isRegisterOpen
 			onReplayWelcome={replayWelcome}
+			onTryDemo={handleTryDemo}
 		/>
 	</div>
 
@@ -90,6 +114,7 @@
 		<WelcomeOverlay
 			onComplete={completeWelcome}
 			onRegister={handleRegister}
+			onTryDemo={handleTryDemo}
 			initialSlide={welcomeSlide}
 		/>
 	{/if}

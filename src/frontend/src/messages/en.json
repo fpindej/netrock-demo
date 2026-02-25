@@ -628,6 +628,7 @@
 	"demo_role_admin": "Admin",
 	"demo_role_superAdmin": "SuperAdmin",
 	"demo_role_switch_failed": "Failed to switch role. Please try again.",
+	"demo_tryDemo_failed": "Could not create demo account. Please try again.",
 
 	"nav_privacy": "Privacy",
 
@@ -810,6 +811,7 @@
 	"welcome_cta_title": "Enough Talk - Try It",
 	"welcome_cta_subtitle": "Create a free account and put every feature through its paces. Like what you see? Clone the repo and make it yours.",
 	"welcome_cta_register": "Create Account",
+	"welcome_cta_tryDemo": "Try Demo",
 	"welcome_cta_signIn": "Sign In Instead",
 	"welcome_cta_note": "No credit card. No strings. Just code.",
 	"welcome_replay": "Tour",

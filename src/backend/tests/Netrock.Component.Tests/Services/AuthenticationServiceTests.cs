@@ -9,6 +9,7 @@ using Netrock.Application.Cookies;
 using Netrock.Application.Cookies.Constants;
 using Netrock.Application.Features.Audit;
 using Netrock.Application.Features.Authentication.Dtos;
+using Netrock.Application.Features.Demo;
 using Netrock.Application.Features.Email;
 using Netrock.Application.Features.Email.Models;
 using Netrock.Application.Identity;
@@ -86,6 +87,7 @@ public class AuthenticationServiceTests : IDisposable
             _templatedEmailSender,
             emailTokenService,
             _auditService,
+            Substitute.For<IDemoService>(),
             authOptions,
             emailOptions,
             Substitute.For<ILogger<AuthenticationService>>(),

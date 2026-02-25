@@ -31,4 +31,10 @@ public class ApplicationUser : IdentityUser<Guid>
     /// Gets or sets whether the user has an uploaded avatar image stored in file storage.
     /// </summary>
     public bool HasAvatar { get; set; }
+
+    /// <summary>
+    /// Gets or sets the expiry time for demo accounts. <c>null</c> for normal users.
+    /// When set, indicates this is a temporary demo account that should be cleaned up after expiry.
+    /// </summary>
+    public DateTimeOffset? DemoExpiresAtUtc { get; set; }
 }

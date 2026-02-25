@@ -13,7 +13,7 @@
 	import { StatusIndicator } from '$lib/components/common';
 	import * as m from '$lib/paraglide/messages';
 	import { fly, scale } from 'svelte/transition';
-	import { Check, Loader2, Play, ShieldCheck, Sparkles } from '@lucide/svelte';
+	import { Check, Loader2, Play, Rocket, ShieldCheck, Sparkles } from '@lucide/svelte';
 	import { LoginBackground, RegisterDialog } from '$lib/components/auth';
 	import { toast } from '$lib/components/ui/sonner';
 
@@ -22,13 +22,15 @@
 		turnstileSiteKey: string;
 		isRegisterOpen?: boolean;
 		onReplayWelcome?: () => void;
+		onTryDemo?: () => void;
 	}
 
 	let {
 		apiUrl,
 		turnstileSiteKey,
 		isRegisterOpen = $bindable(false),
-		onReplayWelcome
+		onReplayWelcome,
+		onTryDemo
 	}: Props = $props();
 
 	let email = $state('');
@@ -115,6 +117,16 @@
 	</div>
 
 	<div class="absolute end-4 bottom-4 flex items-center gap-3">
+		{#if onTryDemo}
+			<button
+				type="button"
+				class="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-foreground/60 transition-all hover:bg-muted/50 hover:text-muted-foreground"
+				onclick={onTryDemo}
+			>
+				<Rocket class="h-3.5 w-3.5" />
+				{m.welcome_cta_tryDemo()}
+			</button>
+		{/if}
 		{#if onReplayWelcome}
 			<button
 				type="button"

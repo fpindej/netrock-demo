@@ -19,10 +19,11 @@
 	interface Props {
 		onComplete: () => void;
 		onRegister: () => void;
+		onTryDemo?: () => void;
 		initialSlide?: number;
 	}
 
-	let { onComplete, onRegister, initialSlide = 0 }: Props = $props();
+	let { onComplete, onRegister, onTryDemo, initialSlide = 0 }: Props = $props();
 
 	const TOTAL_SLIDES = 5;
 	const SWIPE_THRESHOLD = 50;
@@ -114,6 +115,12 @@
 		visible = false;
 		clearSlideState();
 		setTimeout(() => onRegister(), fadeDuration(500) + 50);
+	}
+
+	function handleTryDemo() {
+		visible = false;
+		clearSlideState();
+		setTimeout(() => onTryDemo?.(), fadeDuration(500) + 50);
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
@@ -283,6 +290,11 @@
 							<Button size="lg" onclick={handleRegister}>
 								{m.welcome_cta_register()}
 							</Button>
+							{#if onTryDemo}
+								<Button variant="secondary" size="lg" onclick={handleTryDemo}>
+									{m.welcome_cta_tryDemo()}
+								</Button>
+							{/if}
 							<Button variant="outline" size="lg" onclick={dismiss}>
 								{m.welcome_cta_signIn()}
 							</Button>

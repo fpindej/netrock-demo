@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import { SidebarNav, ThemeToggle, LanguageSelector, UserNav } from '$lib/components/layout';
-	import { Package2, PanelLeftClose, PanelLeft } from '@lucide/svelte';
+	import { Package2, PanelLeftClose, PanelLeft, Github, BookOpen } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 	import type { User } from '$lib/types';
 	import * as m from '$lib/paraglide/messages';
@@ -51,6 +51,48 @@
 				<!-- Collapsed: stack vertically -->
 				<LanguageSelector />
 				<ThemeToggle collapsed />
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						{#snippet child({ props })}
+							<Button
+								variant="ghost"
+								size="icon"
+								class="h-9 w-9"
+								href="https://github.com/fpindej/netrock"
+								target="_blank"
+								rel="noopener noreferrer"
+								aria-label={m.nav_github()}
+								{...props}
+							>
+								<Github class="h-4 w-4" />
+							</Button>
+						{/snippet}
+					</Tooltip.Trigger>
+					<Tooltip.Content side="right">
+						{m.nav_github()}
+					</Tooltip.Content>
+				</Tooltip.Root>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						{#snippet child({ props })}
+							<Button
+								variant="ghost"
+								size="icon"
+								class="h-9 w-9"
+								href="https://deepwiki.org/fpindej/netrock"
+								target="_blank"
+								rel="noopener noreferrer"
+								aria-label={m.nav_deepwiki()}
+								{...props}
+							>
+								<BookOpen class="h-4 w-4" />
+							</Button>
+						{/snippet}
+					</Tooltip.Trigger>
+					<Tooltip.Content side="right">
+						{m.nav_deepwiki()}
+					</Tooltip.Content>
+				</Tooltip.Root>
 				{#if user}
 					<UserNav {user} />
 				{/if}
@@ -78,6 +120,48 @@
 				<div class="flex items-center gap-1">
 					<LanguageSelector />
 					<ThemeToggle />
+					<Tooltip.Root>
+						<Tooltip.Trigger>
+							{#snippet child({ props })}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-9 w-9"
+									href="https://github.com/fpindej/netrock"
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label={m.nav_github()}
+									{...props}
+								>
+									<Github class="h-4 w-4" />
+								</Button>
+							{/snippet}
+						</Tooltip.Trigger>
+						<Tooltip.Content side="top">
+							{m.nav_github()}
+						</Tooltip.Content>
+					</Tooltip.Root>
+					<Tooltip.Root>
+						<Tooltip.Trigger>
+							{#snippet child({ props })}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-9 w-9"
+									href="https://deepwiki.org/fpindej/netrock"
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label={m.nav_deepwiki()}
+									{...props}
+								>
+									<BookOpen class="h-4 w-4" />
+								</Button>
+							{/snippet}
+						</Tooltip.Trigger>
+						<Tooltip.Content side="top">
+							{m.nav_deepwiki()}
+						</Tooltip.Content>
+					</Tooltip.Root>
 				</div>
 				<div class="flex items-center gap-1">
 					{#if user}

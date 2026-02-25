@@ -27,6 +27,8 @@
 	"nav_loggedInAs": "Logged in as",
 	"nav_collapse": "Collapse sidebar",
 	"nav_expand": "Expand sidebar",
+	"nav_github": "GitHub Repository",
+	"nav_deepwiki": "DeepWiki Docs",
 
 	"common_user": "User",
 	"common_language": "Language",

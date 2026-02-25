@@ -47,7 +47,7 @@ services:
   storage:
     ports:
       - "${STORAGE_PORT:-13010}:9000"
-      - "${STORAGE_CONSOLE_PORT:-13012}:9001"
+      - "${STORAGE_MASTER_PORT:-13012}:9333"
 
   redis:
     ports:

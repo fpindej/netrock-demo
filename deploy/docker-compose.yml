@@ -22,8 +22,8 @@ services:
       Caching__Redis__Password: ${REDIS_PASSWORD}
       Authentication__Jwt__Key: ${JWT_SECRET_KEY}
       FileStorage__Endpoint: ${FileStorage__Endpoint:-http://storage:9000}
-      FileStorage__AccessKey: ${MINIO_ROOT_USER}
-      FileStorage__SecretKey: ${MINIO_ROOT_PASSWORD}
+      FileStorage__AccessKey: ${S3_ACCESS_KEY}
+      FileStorage__SecretKey: ${S3_SECRET_KEY}
       FileStorage__BucketName: ${FileStorage__BucketName:-netrock-files}
       FileStorage__Region: ${FileStorage__Region:-}
       FileStorage__UseSSL: ${FileStorage__UseSSL:-false}
@@ -41,22 +41,27 @@ services:
         condition: service_healthy
 
   storage:
-    image: minio/minio
+    image: chrislusf/seaweedfs:latest
     restart: unless-stopped
     networks:
       - backend
-    command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${S3_SECRET_KEY}
     volumes:
       - storage_data:/data
+    command:
+      - sh
+      - -c
+      - |
+        printf '{"identities":[{"name":"admin","credentials":[{"accessKey":"%s","secretKey":"%s"}],"actions":["Admin","Read","Write","List","Tagging"]}]}' "$$S3_ACCESS_KEY" "$$S3_SECRET_KEY" > /tmp/s3.json
+        exec weed server -s3 -s3.port=9000 -s3.config=/tmp/s3.json -dir=/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:9333/cluster/status || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 15s
+      start_period: 20s
 
   redis:
     image: redis:7-alpine

@@ -35,12 +35,13 @@ function createDemoState() {
 			if (canUseLocalStorage()) localStorage.setItem(STORAGE_KEY, role);
 		},
 		/**
-		 * Sets the initial role from the user's actual roles when there is
-		 * no stored preference yet. Picks the highest available demo role.
+		 * Sets the initial role from the user's actual backend roles.
+		 * Always syncs to the server state so stale localStorage values
+		 * from a previous demo session don't persist.
 		 */
 		initializeFromRoles(roles: string[] | undefined) {
-			if (readStoredRole()) return;
-			viewingAs = roles?.includes('Admin') ? 'Admin' : 'User';
+			const serverRole: DemoRole = roles?.includes('Admin') ? 'Admin' : 'User';
+			if (viewingAs !== serverRole) viewingAs = serverRole;
 		}
 	};
 }

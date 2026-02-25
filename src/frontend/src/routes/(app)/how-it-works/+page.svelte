@@ -141,9 +141,7 @@
 		</p>
 
 		<!-- Stats pills -->
-		<div
-			class="hero-animate hero-delay-3 mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center"
-		>
+		<div class="hero-animate hero-delay-3 mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
 			<StatPill label={m.howItWorks_stats_tests()} description={m.howItWorks_stats_testsDesc()} />
 			<StatPill
 				label={m.howItWorks_stats_features()}

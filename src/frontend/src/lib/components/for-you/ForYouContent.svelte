@@ -207,9 +207,7 @@
 			{m.forYou_hero_subtitle()}
 		</p>
 
-		<div
-			class="hero-animate hero-delay-3 mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center"
-		>
+		<div class="hero-animate hero-delay-3 mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
 			<StatPill label={m.forYou_hero_stat1()} description={m.forYou_hero_stat1Desc()} />
 			<StatPill label={m.forYou_hero_stat2()} description={m.forYou_hero_stat2Desc()} />
 			<StatPill label={m.forYou_hero_stat3()} description={m.forYou_hero_stat3Desc()} />
@@ -290,7 +288,7 @@
 		>
 			<!-- .NET API box -->
 			<div
-				class="flex w-full max-w-64 flex-col items-center justify-center rounded-xl border-2 border-green-500/40 bg-green-500/5 p-5 text-center shadow-sm shadow-green-500/10 sm:h-32 sm:w-48 sm:max-w-none"
+				class="flex w-full max-w-64 flex-col items-center justify-center rounded-xl border-2 border-green-500/40 bg-green-500/5 p-5 text-center shadow-sm shadow-green-500/10 sm:h-44 sm:w-48 sm:max-w-none"
 			>
 				<Server class="h-8 w-8 text-green-500" />
 				<span class="mt-2 text-sm font-bold">{m.forYou_diagram_hub()}</span>
@@ -298,7 +296,9 @@
 			</div>
 
 			<!-- Arrow -->
-			<ArrowRight class="arrow-flow hidden h-6 w-6 shrink-0 text-muted-foreground/50 sm:block" />
+			<ArrowRight
+				class="arrow-flow hidden h-6 w-6 shrink-0 self-center text-muted-foreground/50 sm:block"
+			/>
 			<ArrowDown class="arrow-flow-down h-6 w-6 shrink-0 text-muted-foreground/50 sm:hidden" />
 
 			<!-- Consumer carousel -->
@@ -404,7 +404,7 @@
 	iconColor: string
 )}
 	<div
-		class="flex w-full flex-col items-center justify-center rounded-xl border-2 p-5 text-center sm:h-32 {borderClass}"
+		class="flex w-full flex-col items-center justify-center rounded-xl border-2 p-5 text-center sm:h-44 {borderClass}"
 	>
 		<Icon class="h-8 w-8 {iconColor}" />
 		<span class="mt-2 text-sm font-bold">{name}</span>

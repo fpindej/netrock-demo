@@ -109,9 +109,7 @@
 			{m.guide_hero_subtitle()}
 		</p>
 
-		<div
-			class="hero-animate hero-delay-3 mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center"
-		>
+		<div class="hero-animate hero-delay-3 mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
 			<StatPill label={m.guide_stats_stack()} description={m.guide_stats_stackDesc()} />
 			<StatPill label={m.guide_stats_auth()} description={m.guide_stats_authDesc()} />
 			<StatPill label={m.guide_stats_admin()} description={m.guide_stats_adminDesc()} />

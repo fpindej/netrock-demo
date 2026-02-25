@@ -27,8 +27,6 @@
 	"nav_loggedInAs": "Logged in as",
 	"nav_collapse": "Collapse sidebar",
 	"nav_expand": "Expand sidebar",
-	"nav_github": "GitHub Repository",
-	"nav_deepwiki": "DeepWiki Docs",
 
 	"common_user": "User",
 	"common_language": "Language",
@@ -503,7 +501,7 @@
 
 	"guide_hero_badge": "Live Demo",
 	"guide_hero_title": "This Is NETrock",
-	"guide_hero_subtitle": "A production-ready .NET 10 + SvelteKit template — and everything you see here ships with it. Auth, admin panel, CRM pipeline, background jobs, all wired up and tested. Explore below, then clone it and make it yours.",
+	"guide_hero_subtitle": "A production-ready .NET 10 + SvelteKit template - and everything you see here ships with it. Auth, admin panel, CRM pipeline, background jobs, all wired up and tested. Explore below, then clone it and make it yours.",
 	"guide_stats_stack": "Full-Stack",
 	"guide_stats_stackDesc": ".NET 10 + SvelteKit",
 	"guide_stats_auth": "Auth Built-In",
@@ -919,18 +917,18 @@
 	"gettingStarted_hero_subtitle": "Five steps to go from \"Use this template\" to a fully running application on your machine. Works on Windows, macOS, and Linux out of the box.",
 
 	"gettingStarted_prereq_title": "Prerequisites",
-	"gettingStarted_prereq_description": "Make sure you have these tools installed before you begin. Don't worry — the init script will catch any missing dependencies for you.",
+	"gettingStarted_prereq_description": "Make sure you have these tools installed before you begin. Don't worry - the init script will catch any missing dependencies for you.",
 	"gettingStarted_prereq_git": "Git",
-	"gettingStarted_prereq_gitDesc": "Version control — required",
+	"gettingStarted_prereq_gitDesc": "Version control - required",
 	"gettingStarted_prereq_docker": "Docker",
-	"gettingStarted_prereq_dockerDesc": "Container runtime for the full stack — required",
+	"gettingStarted_prereq_dockerDesc": "Container runtime for the full stack - required",
 	"gettingStarted_prereq_dotnet": ".NET SDK",
-	"gettingStarted_prereq_dotnetDesc": "Required — builds and runs the backend",
+	"gettingStarted_prereq_dotnetDesc": "Required - builds and runs the backend",
 	"gettingStarted_prereq_node": "Node.js + pnpm",
-	"gettingStarted_prereq_nodeDesc": "Required — runs the frontend toolchain",
+	"gettingStarted_prereq_nodeDesc": "Required - runs the frontend toolchain",
 
 	"gettingStarted_steps_title": "Setup in 5 Steps",
-	"gettingStarted_steps_description": "Follow along from start to finish — you'll be up and running in minutes.",
+	"gettingStarted_steps_description": "Follow along from start to finish - you'll be up and running in minutes.",
 
 	"gettingStarted_step1_title": "Visit the Repository",
 	"gettingStarted_step1_description": "Head to the NETrock GitHub repository and click the \"Use this template\" button.",
@@ -939,7 +937,7 @@
 
 	"gettingStarted_step2_title": "Create from Template",
 	"gettingStarted_step2_description": "GitHub will ask you to name your new repository and choose its visibility. Pick a name, set it to public or private, and click \"Create repository\".",
-	"gettingStarted_step2_note": "Your new repo starts clean — same foundation as this demo, without the sample data.",
+	"gettingStarted_step2_note": "Your new repo starts clean - same foundation as this demo, without the sample data.",
 
 	"gettingStarted_step3_title": "Clone & Initialize",
 	"gettingStarted_step3_description": "Clone your new repository and run the initialization script to set up your project.",
@@ -952,7 +950,7 @@
 	"gettingStarted_step4_description": "Spin up the entire development environment with the included deploy script.",
 	"gettingStarted_step4_code": "./deploy/up.sh local up -d --build",
 	"gettingStarted_step4_codePs": ".\\deploy\\up.ps1 local up -d --build",
-	"gettingStarted_step4_note": "This starts the API, PostgreSQL, Redis, Seq, and MinIO — everything you need.",
+	"gettingStarted_step4_note": "This starts the API, PostgreSQL, Redis, Seq, and MinIO - everything you need.",
 
 	"gettingStarted_step5_title": "Start Coding",
 	"gettingStarted_step5_description": "Your app is running. Open your IDE or Claude Code and start building.",
@@ -962,7 +960,7 @@
 	"gettingStarted_step5_docker_backend": "Backend API",
 	"gettingStarted_step5_docker_backendUrl": "localhost:13002",
 	"gettingStarted_step5_local_label": "Run locally",
-	"gettingStarted_step5_local_description": "Or run the frontend and API directly on your machine — they connect to the Docker database, Redis, and storage out of the box.",
+	"gettingStarted_step5_local_description": "Or run the frontend and API directly on your machine - they connect to the Docker database, Redis, and storage out of the box.",
 	"gettingStarted_step5_local_frontend": "Frontend",
 	"gettingStarted_step5_local_frontendUrl": "localhost:5173",
 	"gettingStarted_step5_local_backend": "Backend API",
@@ -989,7 +987,7 @@
 	"gettingStarted_resources_demo_description": "Jump back to the guide and try every feature hands-on.",
 
 	"gettingStarted_cta_title": "Five Steps. That's It.",
-	"gettingStarted_cta_subtitle": "You've seen the steps — now use the GitHub template and have a running app in minutes.",
+	"gettingStarted_cta_subtitle": "You've seen the steps - now use the GitHub template and have a running app in minutes.",
 	"gettingStarted_cta_github": "Use This Template",
 	"gettingStarted_cta_explore": "Back to the Guide",
 
@@ -999,5 +997,5 @@
 	"gettingStarted_codeBlock_shellPowershell": "PowerShell",
 
 	"tour_gettingStarted_title": "Getting Started",
-	"tour_gettingStarted_description": "This page walks you through the five steps to go from the GitHub template to a running app on your machine — clone, init, Docker up, and start coding."
+	"tour_gettingStarted_description": "This page walks you through the five steps to go from the GitHub template to a running app on your machine - clone, init, Docker up, and start coding."
 }

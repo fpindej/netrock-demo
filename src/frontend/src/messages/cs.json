@@ -27,8 +27,6 @@
 	"nav_loggedInAs": "Přihlášen jako",
 	"nav_collapse": "Sbalit postranní panel",
 	"nav_expand": "Rozbalit postranní panel",
-	"nav_github": "GitHub repozitář",
-	"nav_deepwiki": "DeepWiki dokumentace",
 
 	"common_user": "Uživatel",
 	"common_language": "Jazyk",
@@ -503,7 +501,7 @@
 
 	"guide_hero_badge": "Živé demo",
 	"guide_hero_title": "Toto je NETrock",
-	"guide_hero_subtitle": "Produkční šablona .NET 10 + SvelteKit — a vše, co zde vidíte, je její součástí. Autentizace, admin panel, CRM pipeline, úlohy na pozadí, vše propojené a otestované. Prozkoumejte níže a pak si ji naklonujte.",
+	"guide_hero_subtitle": "Produkční šablona .NET 10 + SvelteKit - a vše, co zde vidíte, je její součástí. Autentizace, admin panel, CRM pipeline, úlohy na pozadí, vše propojené a otestované. Prozkoumejte níže a pak si ji naklonujte.",
 	"guide_stats_stack": "Full-Stack",
 	"guide_stats_stackDesc": ".NET 10 + SvelteKit",
 	"guide_stats_auth": "Autentizace",
@@ -921,16 +919,16 @@
 	"gettingStarted_prereq_title": "Co budete potřebovat",
 	"gettingStarted_prereq_description": "Než začnete, zkontrolujte si tyto nástroje. Init skript vás upozorní, pokud něco chybí.",
 	"gettingStarted_prereq_git": "Git",
-	"gettingStarted_prereq_gitDesc": "Správa verzí — nutný",
+	"gettingStarted_prereq_gitDesc": "Správa verzí - nutný",
 	"gettingStarted_prereq_docker": "Docker",
-	"gettingStarted_prereq_dockerDesc": "Runtime pro celý stack — nutný",
+	"gettingStarted_prereq_dockerDesc": "Runtime pro celý stack - nutný",
 	"gettingStarted_prereq_dotnet": ".NET SDK",
-	"gettingStarted_prereq_dotnetDesc": "Nutný — sestaví a spustí backend",
+	"gettingStarted_prereq_dotnetDesc": "Nutný - sestaví a spustí backend",
 	"gettingStarted_prereq_node": "Node.js + pnpm",
-	"gettingStarted_prereq_nodeDesc": "Nutný — spustí frontend toolchain",
+	"gettingStarted_prereq_nodeDesc": "Nutný - spustí frontend toolchain",
 
 	"gettingStarted_steps_title": "Nastavení v 5 krocích",
-	"gettingStarted_steps_description": "Projděte si je postupně — za pár minut máte hotovo.",
+	"gettingStarted_steps_description": "Projděte si je postupně - za pár minut máte hotovo.",
 
 	"gettingStarted_step1_title": "Navštivte repozitář",
 	"gettingStarted_step1_description": "Otevřete GitHub repozitář NETrock a klikněte na tlačítko \"Use this template\".",
@@ -939,7 +937,7 @@
 
 	"gettingStarted_step2_title": "Vytvořte z šablony",
 	"gettingStarted_step2_description": "GitHub se vás zeptá na název repozitáře a viditelnost. Zvolte jméno, nastavte přístup a klikněte na \"Create repository\".",
-	"gettingStarted_step2_note": "Váš nový repozitář bude čistý — stejný základ jako toto demo, ale bez ukázkových dat.",
+	"gettingStarted_step2_note": "Váš nový repozitář bude čistý - stejný základ jako toto demo, ale bez ukázkových dat.",
 
 	"gettingStarted_step3_title": "Naklonujte a inicializujte",
 	"gettingStarted_step3_description": "Naklonujte svůj nový repozitář a spusťte inicializační skript.",
@@ -952,7 +950,7 @@
 	"gettingStarted_step4_description": "Nastartujte celé vývojové prostředí přiloženým deploy skriptem.",
 	"gettingStarted_step4_code": "./deploy/up.sh local up -d --build",
 	"gettingStarted_step4_codePs": ".\\deploy\\up.ps1 local up -d --build",
-	"gettingStarted_step4_note": "Nastartuje API, PostgreSQL, Redis, Seq a MinIO — vše, co potřebujete.",
+	"gettingStarted_step4_note": "Nastartuje API, PostgreSQL, Redis, Seq a MinIO - vše, co potřebujete.",
 
 	"gettingStarted_step5_title": "Začněte kódovat",
 	"gettingStarted_step5_description": "Aplikace běží. Otevřete IDE nebo Claude Code a začněte vyvíjet.",
@@ -962,7 +960,7 @@
 	"gettingStarted_step5_docker_backend": "Backend API",
 	"gettingStarted_step5_docker_backendUrl": "localhost:13002",
 	"gettingStarted_step5_local_label": "Lokálně",
-	"gettingStarted_step5_local_description": "Nebo spusťte frontend a API přímo na počítači — připojí se k Docker databázi, Redisu a úložišti automaticky.",
+	"gettingStarted_step5_local_description": "Nebo spusťte frontend a API přímo na počítači - připojí se k Docker databázi, Redisu a úložišti automaticky.",
 	"gettingStarted_step5_local_frontend": "Frontend",
 	"gettingStarted_step5_local_frontendUrl": "localhost:5173",
 	"gettingStarted_step5_local_backend": "Backend API",
@@ -970,7 +968,7 @@
 	"gettingStarted_step5_note": "Porty lze měnit přes proměnné prostředí. Podrobnosti v README.",
 
 	"gettingStarted_checklist_title": "Co dál",
-	"gettingStarted_checklist_description": "Máte vše spuštěné — tady je pár doporučených kroků.",
+	"gettingStarted_checklist_description": "Máte vše spuštěné - tady je pár doporučených kroků.",
 	"gettingStarted_checklist_item1": "Připojte poskytovatele e-mailů (SMTP, Resend, Postmark…)",
 	"gettingStarted_checklist_item2": "Vytvořte svou první feature podle SKILLS.md",
 	"gettingStarted_checklist_item3": "Nastavte CORS, JWT secret a CAPTCHA pro produkci",
@@ -989,7 +987,7 @@
 	"gettingStarted_resources_demo_description": "Vraťte se do průvodce a vyzkoušejte každou funkci na vlastní kůži.",
 
 	"gettingStarted_cta_title": "Pět kroků. To je vše.",
-	"gettingStarted_cta_subtitle": "Viděli jste kroky — teď použijte GitHub šablonu a mějte běžící aplikaci během pár minut.",
+	"gettingStarted_cta_subtitle": "Viděli jste kroky - teď použijte GitHub šablonu a mějte běžící aplikaci během pár minut.",
 	"gettingStarted_cta_github": "Použít šablonu",
 	"gettingStarted_cta_explore": "Zpět na průvodce",
 
@@ -999,5 +997,5 @@
 	"gettingStarted_codeBlock_shellPowershell": "PowerShell",
 
 	"tour_gettingStarted_title": "Začínáme",
-	"tour_gettingStarted_description": "Pět kroků od GitHub šablony k běžící aplikaci — naklonovat, inicializovat, spustit Docker a začít kódovat."
+	"tour_gettingStarted_description": "Pět kroků od GitHub šablony k běžící aplikaci - naklonovat, inicializovat, spustit Docker a začít kódovat."
 }

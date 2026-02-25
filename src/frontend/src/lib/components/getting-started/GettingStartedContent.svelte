@@ -75,7 +75,7 @@
 					</div>
 				</div>
 				<div class="flex items-start gap-3 rounded-lg border bg-card p-3">
-					<CircleCheck class="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/50" />
+					<CircleCheck class="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
 					<div>
 						<span class="text-sm font-medium">{m.gettingStarted_prereq_dotnet()}</span>
 						<p class="text-xs text-muted-foreground">
@@ -84,7 +84,7 @@
 					</div>
 				</div>
 				<div class="flex items-start gap-3 rounded-lg border bg-card p-3">
-					<CircleCheck class="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/50" />
+					<CircleCheck class="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
 					<div>
 						<span class="text-sm font-medium">{m.gettingStarted_prereq_node()}</span>
 						<p class="text-xs text-muted-foreground">
@@ -281,7 +281,6 @@
 			<ChecklistItem label={m.gettingStarted_checklist_item3} />
 			<ChecklistItem label={m.gettingStarted_checklist_item4} />
 			<ChecklistItem label={m.gettingStarted_checklist_item5} />
-			<ChecklistItem label={m.gettingStarted_checklist_item6} />
 		</div>
 	</section>
 

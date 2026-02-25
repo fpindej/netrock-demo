@@ -16,6 +16,10 @@
 	let expanded = $state(false);
 	let loading = $state(false);
 
+	$effect(() => {
+		if (user) demoState.initializeFromRoles(user.roles);
+	});
+
 	const roles: { key: DemoRole; label: () => string; icon: typeof Shield }[] = [
 		{ key: 'User', label: m.demo_role_user, icon: UserIcon },
 		{ key: 'Admin', label: m.demo_role_admin, icon: Shield }

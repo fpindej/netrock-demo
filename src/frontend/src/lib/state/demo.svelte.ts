@@ -33,6 +33,14 @@ function createDemoState() {
 		set viewingAs(role: DemoRole) {
 			viewingAs = role;
 			if (canUseLocalStorage()) localStorage.setItem(STORAGE_KEY, role);
+		},
+		/**
+		 * Sets the initial role from the user's actual roles when there is
+		 * no stored preference yet. Picks the highest available demo role.
+		 */
+		initializeFromRoles(roles: string[] | undefined) {
+			if (readStoredRole()) return;
+			viewingAs = roles?.includes('Admin') ? 'Admin' : 'User';
 		}
 	};
 }

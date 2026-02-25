@@ -193,7 +193,9 @@
 		</div>
 
 		<!-- Language + theme selectors (top-right, matching login page) -->
-		<div class="welcome-safe-top absolute end-4 top-4 z-10 flex gap-2">
+		<div
+			class="welcome-safe-top absolute end-[max(1rem,env(safe-area-inset-right,0px))] top-4 z-10 flex gap-2"
+		>
 			<LanguageSelector />
 			<ThemeToggle />
 		</div>
@@ -311,7 +313,7 @@
 		<div class="welcome-safe-bottom relative z-10 flex items-center gap-4 pb-8">
 			<button
 				type="button"
-				class="rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground disabled:pointer-events-none disabled:opacity-0"
+				class="flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground disabled:pointer-events-none disabled:opacity-0"
 				onclick={prevSlide}
 				disabled={currentSlide === 0}
 				aria-label="Previous slide"
@@ -319,23 +321,27 @@
 				<ChevronLeft class="h-5 w-5" />
 			</button>
 
-			<div class="flex items-center gap-2">
+			<div class="flex items-center gap-1">
 				{#each Array.from({ length: TOTAL_SLIDES }, (__, k) => k) as i (i)}
 					<button
 						type="button"
-						class="h-2 rounded-full transition-all duration-300 {i === currentSlide
-							? 'w-6 bg-primary'
-							: 'w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50'}"
+						class="flex h-8 items-center justify-center rounded-full px-1"
 						onclick={() => (currentSlide = i)}
 						aria-label="Go to slide {i + 1}"
-					></button>
+					>
+						<span
+							class="block h-2 rounded-full transition-all duration-300 {i === currentSlide
+								? 'w-6 bg-primary'
+								: 'w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50'}"
+						></span>
+					</button>
 				{/each}
 			</div>
 
 			{#if currentSlide < TOTAL_SLIDES - 1}
 				<button
 					type="button"
-					class="rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
+					class="flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
 					onclick={nextSlide}
 					aria-label="Next slide"
 				>
@@ -343,7 +349,7 @@
 				</button>
 			{:else}
 				<!-- Invisible spacer to keep dots centered on last slide -->
-				<div class="w-8"></div>
+				<div class="w-10"></div>
 			{/if}
 		</div>
 
@@ -351,7 +357,7 @@
 		{#if skipVisible && currentSlide < TOTAL_SLIDES - 1}
 			<button
 				type="button"
-				class="welcome-safe-skip absolute end-4 bottom-6 z-10 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
+				class="welcome-safe-skip absolute end-[max(1rem,env(safe-area-inset-right,0px))] bottom-6 z-10 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
 				onclick={dismiss}
 				in:fade={{ duration: fadeDuration(300) }}
 			>
@@ -389,7 +395,7 @@
 	.welcome-glow-center {
 		position: absolute;
 		top: 50%;
-		left: 50%;
+		inset-inline-start: 50%;
 		width: 24rem;
 		height: 24rem;
 		transform: translate(-50%, -50%);

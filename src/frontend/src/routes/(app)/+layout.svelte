@@ -42,7 +42,7 @@
 			<EmailVerificationBanner />
 		{/if}
 		<main
-			class="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-4 pb-16 lg:gap-6 lg:p-6 lg:pb-16"
+			class="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-4 pb-[max(4rem,calc(env(safe-area-inset-bottom,0px)+2rem))] lg:gap-6 lg:p-6 lg:pb-[max(4rem,calc(env(safe-area-inset-bottom,0px)+2rem))]"
 		>
 			{#key page.url.pathname}
 				<div

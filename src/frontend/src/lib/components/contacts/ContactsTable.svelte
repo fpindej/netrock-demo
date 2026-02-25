@@ -79,7 +79,7 @@
 					<Button
 						variant="ghost"
 						size="icon"
-						class="h-8 w-8"
+						class="h-9 w-9"
 						onclick={() => onEdit(contact)}
 						aria-label={m.contacts_edit()}
 					>
@@ -88,7 +88,7 @@
 					<Button
 						variant="ghost"
 						size="icon"
-						class="h-8 w-8 text-destructive hover:text-destructive"
+						class="h-9 w-9 text-destructive hover:text-destructive"
 						onclick={() => onDelete(contact)}
 						aria-label={m.contacts_deleteConfirm_title()}
 					>
@@ -174,7 +174,7 @@
 								<Button
 									variant="ghost"
 									size="icon"
-									class="h-8 w-8"
+									class="h-9 w-9"
 									onclick={() => onEdit(contact)}
 									aria-label={m.contacts_edit()}
 								>
@@ -183,7 +183,7 @@
 								<Button
 									variant="ghost"
 									size="icon"
-									class="h-8 w-8 text-destructive hover:text-destructive"
+									class="h-9 w-9 text-destructive hover:text-destructive"
 									onclick={() => onDelete(contact)}
 									aria-label={m.contacts_deleteConfirm_title()}
 								>

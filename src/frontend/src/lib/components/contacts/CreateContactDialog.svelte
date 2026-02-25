@@ -141,7 +141,7 @@
 </script>
 
 <Dialog.Root bind:open onOpenChange={(isOpen) => !isOpen && resetForm()}>
-	<Dialog.Content class="flex max-h-[85vh] flex-col overflow-hidden sm:max-w-lg">
+	<Dialog.Content class="flex max-h-[min(85dvh,85vh)] flex-col overflow-hidden sm:max-w-lg">
 		<Dialog.Header>
 			<Dialog.Title>
 				{isEditing ? m.contacts_edit() : m.contacts_create()}

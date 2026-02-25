@@ -354,7 +354,7 @@
 			</a>
 
 			<a
-				href={resolve('/login')}
+				href={resolve('/guide')}
 				class="group rounded-xl border bg-card p-4 shadow-sm transition-all hover:border-primary/30 hover:shadow-md"
 			>
 				<div class="mb-2 flex items-center gap-3">
@@ -394,7 +394,7 @@
 					{m.gettingStarted_cta_github()}
 					<ExternalLink class="ms-2 h-3.5 w-3.5" />
 				</Button>
-				<Button variant="outline" size="sm" href={resolve('/login')}>
+				<Button variant="outline" size="sm" href={resolve('/guide')}>
 					{m.gettingStarted_cta_explore()}
 				</Button>
 			</div>

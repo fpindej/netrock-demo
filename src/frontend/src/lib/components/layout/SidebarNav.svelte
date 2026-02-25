@@ -40,12 +40,6 @@
 			tour: 'nav-guide'
 		},
 		{
-			title: m.nav_gettingStarted,
-			href: resolve('/getting-started'),
-			icon: PlayCircle,
-			tour: 'nav-getting-started'
-		},
-		{
 			title: m.nav_forYou,
 			href: resolve('/for-you'),
 			icon: Sparkles,
@@ -56,6 +50,12 @@
 			href: resolve('/how-it-works'),
 			icon: Layers,
 			tour: 'nav-how-it-works'
+		},
+		{
+			title: m.nav_gettingStarted,
+			href: resolve('/getting-started'),
+			icon: PlayCircle,
+			tour: 'nav-getting-started'
 		}
 	];
 

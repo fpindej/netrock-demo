@@ -374,7 +374,7 @@
 					{m.forYou_cta_button()}
 					<ExternalLink class="ms-2 h-3.5 w-3.5" />
 				</Button>
-				<Button variant="outline" size="sm" href="/login">
+				<Button variant="outline" size="sm" href="/guide">
 					{m.forYou_cta_explore()}
 				</Button>
 				<Button

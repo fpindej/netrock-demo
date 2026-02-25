@@ -177,32 +177,6 @@
 
 	<div class="h-px w-full bg-border"></div>
 
-	<!-- Getting Started Callout -->
-	<section use:reveal>
-		<div
-			class="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent p-6 sm:p-8"
-		>
-			<div class="flex gap-4">
-				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-					<PlayCircle class="h-5 w-5 text-primary" />
-				</div>
-				<div>
-					<h3 class="text-base font-semibold">{m.guide_gettingStarted_title()}</h3>
-					<p class="mt-1 text-sm text-muted-foreground">
-						{m.guide_gettingStarted_description()}
-					</p>
-					<Button variant="default" size="sm" href="/getting-started" class="mt-3">
-						<PlayCircle class="me-2 h-4 w-4" />
-						{m.guide_gettingStarted_button()}
-						<ArrowRight class="ms-2 h-3.5 w-3.5" />
-					</Button>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<div class="h-px w-full bg-border"></div>
-
 	<!-- Template Disclaimer -->
 	<section use:reveal>
 		<div
@@ -225,6 +199,32 @@
 					>
 						{m.guide_disclaimer_learnMore()}
 						<ArrowRight class="h-3.5 w-3.5" />
+					</Button>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="h-px w-full bg-border"></div>
+
+	<!-- Getting Started Callout -->
+	<section use:reveal>
+		<div
+			class="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent p-6 sm:p-8"
+		>
+			<div class="flex gap-4">
+				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+					<PlayCircle class="h-5 w-5 text-primary" />
+				</div>
+				<div>
+					<h3 class="text-base font-semibold">{m.guide_gettingStarted_title()}</h3>
+					<p class="mt-1 text-sm text-muted-foreground">
+						{m.guide_gettingStarted_description()}
+					</p>
+					<Button variant="default" size="sm" href="/getting-started" class="mt-3">
+						<PlayCircle class="me-2 h-4 w-4" />
+						{m.guide_gettingStarted_button()}
+						<ArrowRight class="ms-2 h-3.5 w-3.5" />
 					</Button>
 				</div>
 			</div>

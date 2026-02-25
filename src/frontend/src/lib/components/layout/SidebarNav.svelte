@@ -31,7 +31,7 @@
 	type NavItem = { title: () => string; href: string; icon: Component<IconProps>; tour?: string };
 	type AdminNavItem = NavItem & { permission: string };
 
-	let items: NavItem[] = [
+	let showcaseItems: NavItem[] = [
 		{
 			title: m.nav_guide,
 			href: resolve('/guide'),
@@ -49,7 +49,10 @@
 			href: resolve('/how-it-works'),
 			icon: Layers,
 			tour: 'nav-how-it-works'
-		},
+		}
+	];
+
+	let dataItems: NavItem[] = [
 		{
 			title: m.nav_contacts,
 			href: resolve('/contacts'),
@@ -61,14 +64,15 @@
 			href: resolve('/analytics'),
 			icon: BarChart3,
 			tour: 'nav-analytics'
-		},
-		{
-			title: m.nav_contactMe,
-			href: resolve('/contact-us'),
-			icon: Mail,
-			tour: 'nav-contact-us'
 		}
 	];
+
+	let contactItem: NavItem = {
+		title: m.nav_contactMe,
+		href: resolve('/contact-us'),
+		icon: Mail,
+		tour: 'nav-contact-us'
+	};
 
 	let adminItems: AdminNavItem[] = [
 		{
@@ -158,7 +162,13 @@
 {/snippet}
 
 <nav class={cn('grid gap-1', collapsed ? 'justify-center px-2' : 'px-2')}>
-	{#each items as item (item.href)}
+	{#each showcaseItems as item (item.href)}
+		{@render navItem(item)}
+	{/each}
+
+	<div class="my-2 h-px w-full bg-border"></div>
+
+	{#each dataItems as item (item.href)}
 		{@render navItem(item)}
 	{/each}
 
@@ -179,4 +189,7 @@
 			</div>
 		</div>
 	{/if}
+
+	<div class="my-2 h-px w-full bg-border"></div>
+	{@render navItem(contactItem)}
 </nav>

@@ -3628,8 +3628,6 @@ export interface components {
 			id?: string;
 			/** @description The recurring job identifier. */
 			recurringJobId?: string;
-			/** @description The Hangfire background job identifier, if available. */
-			hangfireJobId?: null | string;
 			/** @description The execution status ("Running", "Succeeded", "Failed"). */
 			status?: string;
 			/**

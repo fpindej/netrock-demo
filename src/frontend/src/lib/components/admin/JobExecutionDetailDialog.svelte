@@ -3,7 +3,7 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import { Timeline, TimelineItem, TimelineContent } from '$lib/components/ui/timeline';
 	import { browserClient } from '$lib/api/client';
-	import { History } from '@lucide/svelte';
+	import { History, TriangleAlert } from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
 	import type { JobExecutionDetail } from '$lib/types';
 	import {
@@ -26,17 +26,25 @@
 
 	let detail = $state<JobExecutionDetail | null>(null);
 	let loading = $state(false);
+	let error = $state(false);
 
 	async function loadDetail(id: string): Promise<void> {
 		loading = true;
 		detail = null;
+		error = false;
 
-		const { data } = await browserClient.GET('/api/v1/admin/jobs/executions/{executionId}', {
-			params: { path: { executionId: id } }
-		});
+		try {
+			const { data } = await browserClient.GET('/api/v1/admin/jobs/executions/{executionId}', {
+				params: { path: { executionId: id } }
+			});
 
-		if (data) {
-			detail = data as JobExecutionDetail;
+			if (data) {
+				detail = data as JobExecutionDetail;
+			} else {
+				error = true;
+			}
+		} catch {
+			error = true;
 		}
 
 		loading = false;
@@ -60,6 +68,15 @@
 				<div
 					class="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"
 				></div>
+			</div>
+		{:else if error}
+			<div class="flex flex-col items-center justify-center py-12 text-center">
+				<div class="mb-3 rounded-full bg-destructive/10 p-3">
+					<TriangleAlert class="h-6 w-6 text-destructive" />
+				</div>
+				<p class="text-sm text-muted-foreground">
+					{m.serverError_failedToLoadExecutionDetail()}
+				</p>
 			</div>
 		{:else if detail}
 			<div class="space-y-4">

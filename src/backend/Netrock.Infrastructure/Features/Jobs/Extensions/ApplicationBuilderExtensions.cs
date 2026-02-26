@@ -211,24 +211,35 @@ public static class ApplicationBuilderExtensions
 
             logger.LogError(ex, "Job '{JobId}' failed after {ElapsedMs}ms", jobId, stopwatch.ElapsedMilliseconds);
 
-            await FlushExecutionAsync(dbContext, execution, executionContext);
+            await SafeFlushAsync(dbContext, execution, executionContext, logger, jobId);
             throw;
         }
 
-        await FlushExecutionAsync(dbContext, execution, executionContext);
+        await SafeFlushAsync(dbContext, execution, executionContext, logger, jobId);
     }
 
     /// <summary>
     /// Persists the execution record and any collected log entries to the database.
+    /// Catches and logs any persistence failures to avoid masking the original job exception.
     /// </summary>
-    private static async Task FlushExecutionAsync(
-        NetrockDbContext dbContext, JobExecution execution, JobExecutionContext executionContext)
+    private static async Task SafeFlushAsync(
+        NetrockDbContext dbContext, JobExecution execution, JobExecutionContext executionContext,
+        ILogger logger, string jobId)
     {
-        if (executionContext.Entries.Count > 0)
+        try
         {
-            dbContext.JobExecutionLogEntries.AddRange(executionContext.Entries);
-        }
+            if (executionContext.Entries.Count > 0)
+            {
+                dbContext.JobExecutionLogEntries.AddRange(executionContext.Entries);
+            }
 
-        await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex,
+                "Failed to flush execution record for job '{JobId}' (execution {ExecutionId})",
+                jobId, execution.Id);
+        }
     }
 }

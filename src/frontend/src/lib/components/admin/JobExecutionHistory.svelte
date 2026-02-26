@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import * as Card from '$lib/components/ui/card';
 	import * as Select from '$lib/components/ui/select';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Pagination, JobExecutionDetailDialog } from '$lib/components/admin';
 	import { browserClient } from '$lib/api/client';
-	import { History } from '@lucide/svelte';
+	import { History, TriangleAlert } from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
 	import type { JobExecutionSummary } from '$lib/types';
 	import {
@@ -23,6 +24,7 @@
 
 	let executions = $state<JobExecutionSummary[]>([]);
 	let loading = $state(true);
+	let error = $state(false);
 	let pageNumber = $state(1);
 	let totalPages = $state(0);
 	let hasPreviousPage = $state(false);
@@ -43,24 +45,31 @@
 
 	async function loadExecutions(page: number): Promise<void> {
 		loading = true;
+		error = false;
 
-		const { data } = await browserClient.GET('/api/v1/admin/jobs/{jobId}/executions', {
-			params: {
-				path: { jobId },
-				query: {
-					pageNumber: page,
-					pageSize,
-					status: statusFilter || undefined
+		try {
+			const { data } = await browserClient.GET('/api/v1/admin/jobs/{jobId}/executions', {
+				params: {
+					path: { jobId },
+					query: {
+						pageNumber: page,
+						pageSize,
+						status: statusFilter || undefined
+					}
 				}
-			}
-		});
+			});
 
-		if (data) {
-			executions = (data.items as JobExecutionSummary[]) ?? [];
-			pageNumber = data.pageNumber ?? 1;
-			totalPages = data.totalPages ?? 0;
-			hasPreviousPage = data.hasPreviousPage ?? false;
-			hasNextPage = data.hasNextPage ?? false;
+			if (data) {
+				executions = (data.items as JobExecutionSummary[]) ?? [];
+				pageNumber = data.pageNumber ?? 1;
+				totalPages = data.totalPages ?? 0;
+				hasPreviousPage = data.hasPreviousPage ?? false;
+				hasNextPage = data.hasNextPage ?? false;
+			} else {
+				error = true;
+			}
+		} catch {
+			error = true;
 		}
 
 		loading = false;
@@ -82,7 +91,12 @@
 	}
 
 	$effect(() => {
-		loadExecutions(1);
+		// Only re-run when jobId changes; untrack to avoid re-running on statusFilter changes
+		void jobId;
+		untrack(() => {
+			statusFilter = '';
+			loadExecutions(1);
+		});
 	});
 </script>
 
@@ -109,6 +123,13 @@
 				<div
 					class="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"
 				></div>
+			</div>
+		{:else if error}
+			<div class="flex flex-col items-center justify-center py-12 text-center">
+				<div class="mb-3 rounded-full bg-destructive/10 p-3">
+					<TriangleAlert class="h-6 w-6 text-destructive" />
+				</div>
+				<p class="text-sm text-muted-foreground">{m.serverError_failedToLoadExecutions()}</p>
 			</div>
 		{:else if executions.length === 0}
 			<div class="flex flex-col items-center justify-center py-12 text-center">

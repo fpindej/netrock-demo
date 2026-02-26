@@ -28,6 +28,7 @@ export function getJobStatusVariant(
 		case 'Failed':
 			return 'destructive';
 		case 'Processing':
+		case 'Running':
 			return 'secondary';
 		default:
 			return 'outline';
@@ -45,6 +46,7 @@ export function getJobStatusLabel(status: string | null | undefined, isPaused?: 
 		case 'Failed':
 			return m.admin_jobs_status_failed();
 		case 'Processing':
+		case 'Running':
 			return m.admin_jobs_status_running();
 		default:
 			return status ?? m.admin_jobs_status_idle();

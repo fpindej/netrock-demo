@@ -47,27 +47,31 @@ internal sealed class JobManagementService(
         using var connection = jobStorage.GetConnection();
         var recurringJobs = connection.GetRecurringJobs();
 
-        var result = recurringJobs.Select(job => new RecurringJobOutput(
-            Id: job.Id,
-            Cron: PausedJobCrons.ContainsKey(job.Id) ? PausedJobCrons[job.Id] : job.Cron,
-            NextExecution: job.NextExecution.HasValue
-                ? new DateTimeOffset(job.NextExecution.Value, TimeSpan.Zero)
-                : null,
-            LastExecution: job.LastExecution.HasValue
-                ? new DateTimeOffset(job.LastExecution.Value, TimeSpan.Zero)
-                : null,
-            LastStatus: job.LastJobState,
-            IsPaused: PausedJobCrons.ContainsKey(job.Id),
-            CreatedAt: job.CreatedAt.HasValue
-                ? new DateTimeOffset(job.CreatedAt.Value, TimeSpan.Zero)
-                : null
-        )).ToList();
+        var result = recurringJobs.Select(job =>
+        {
+            var isPaused = PausedJobCrons.TryGetValue(job.Id, out var originalCron);
+            return new RecurringJobOutput(
+                Id: job.Id,
+                Cron: isPaused ? originalCron! : job.Cron,
+                NextExecution: job.NextExecution.HasValue
+                    ? new DateTimeOffset(job.NextExecution.Value, TimeSpan.Zero)
+                    : null,
+                LastExecution: job.LastExecution.HasValue
+                    ? new DateTimeOffset(job.LastExecution.Value, TimeSpan.Zero)
+                    : null,
+                LastStatus: job.LastJobState,
+                IsPaused: isPaused,
+                CreatedAt: job.CreatedAt.HasValue
+                    ? new DateTimeOffset(job.CreatedAt.Value, TimeSpan.Zero)
+                    : null
+            );
+        }).ToList();
 
         return Task.FromResult<IReadOnlyList<RecurringJobOutput>>(result);
     }
 
     /// <inheritdoc />
-    public Task<Result<RecurringJobDetailOutput>> GetRecurringJobDetailAsync(string jobId)
+    public async Task<Result<RecurringJobDetailOutput>> GetRecurringJobDetailAsync(string jobId)
     {
         using var connection = jobStorage.GetConnection();
         var recurringJobs = connection.GetRecurringJobs();
@@ -75,13 +79,13 @@ internal sealed class JobManagementService(
 
         if (job is null)
         {
-            return Task.FromResult(Result<RecurringJobDetailOutput>.Failure(ErrorMessages.Jobs.NotFound, ErrorType.NotFound));
+            return Result<RecurringJobDetailOutput>.Failure(ErrorMessages.Jobs.NotFound, ErrorType.NotFound);
         }
 
-        var isPaused = PausedJobCrons.ContainsKey(job.Id);
-        var displayCron = isPaused ? PausedJobCrons[job.Id] : job.Cron;
+        var isPaused = PausedJobCrons.TryGetValue(job.Id, out var originalCron);
+        var displayCron = isPaused ? originalCron! : job.Cron;
 
-        var executionHistory = GetRecentExecutions(job);
+        var executionHistory = await GetRecentExecutionsAsync(job);
 
         var detail = new RecurringJobDetailOutput(
             Id: job.Id,
@@ -100,7 +104,7 @@ internal sealed class JobManagementService(
             ExecutionHistory: executionHistory
         );
 
-        return Task.FromResult(Result<RecurringJobDetailOutput>.Success(detail));
+        return Result<RecurringJobDetailOutput>.Success(detail);
     }
 
     /// <inheritdoc />
@@ -252,9 +256,9 @@ internal sealed class JobManagementService(
         return recurringJobs.Any(j => j.Id == jobId);
     }
 
-    private IReadOnlyList<JobExecutionOutput> GetRecentExecutions(RecurringJobDto job)
+    private async Task<IReadOnlyList<JobExecutionOutput>> GetRecentExecutionsAsync(RecurringJobDto job)
     {
-        return dbContext.JobExecutions
+        return await dbContext.JobExecutions
             .AsNoTracking()
             .Where(e => e.RecurringJobId == job.Id)
             .OrderByDescending(e => e.StartedAt)
@@ -266,6 +270,6 @@ internal sealed class JobManagementService(
                 Duration: e.Duration,
                 Error: e.ErrorMessage
             ))
-            .ToList();
+            .ToListAsync();
     }
 }

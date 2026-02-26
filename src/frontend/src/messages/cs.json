@@ -422,6 +422,26 @@
 	"admin_jobDetail_deleteSuccess": "Úloha byla úspěšně smazána.",
 	"admin_jobDetail_deleteError": "Nepodařilo se smazat úlohu.",
 
+	"admin_jobDetail_triggeredBy": "Spuštěno",
+	"admin_jobDetail_triggeredBy_schedule": "Plánovač",
+	"admin_jobDetail_triggeredBy_manual": "Ručně",
+	"admin_jobDetail_completedAt": "Dokončeno",
+	"admin_jobDetail_errorMessage": "Chybová zpráva",
+	"admin_jobDetail_logEntries": "Záznamy",
+	"admin_jobDetail_noLogEntries": "Žádné záznamy nebyly zaznamenány.",
+	"admin_jobDetail_logLevel_info": "Info",
+	"admin_jobDetail_logLevel_warning": "Varování",
+	"admin_jobDetail_logLevel_error": "Chyba",
+	"admin_jobDetail_filterByStatus": "Filtrovat podle stavu",
+	"admin_jobDetail_allStatuses": "Všechny stavy",
+	"admin_jobDetail_executionDetail": "Detail spuštění",
+	"admin_jobDetail_status_running": "Běží",
+	"admin_jobDetail_totalRuns": "Celkem spuštění",
+	"admin_jobDetail_successRate": "Úspěšnost",
+
+	"serverError_failedToLoadExecutions": "Nepodařilo se načíst historii spuštění",
+	"serverError_failedToLoadExecutionDetail": "Nepodařilo se načíst detail spuštění",
+
 	"meta_adminJobDetail_title": "Detail úlohy",
 	"meta_adminJobDetail_description": "Zobrazení a správa detailů úlohy a historie spuštění.",
 

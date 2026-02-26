@@ -16,4 +16,5 @@ export { default as JobTable } from './JobTable.svelte';
 export { default as JobInfoCard } from './JobInfoCard.svelte';
 export { default as JobActionsCard } from './JobActionsCard.svelte';
 export { default as JobExecutionHistory } from './JobExecutionHistory.svelte';
+export { default as JobExecutionDetailDialog } from './JobExecutionDetailDialog.svelte';
 export { default as AuditTrailCard } from './AuditTrailCard.svelte';

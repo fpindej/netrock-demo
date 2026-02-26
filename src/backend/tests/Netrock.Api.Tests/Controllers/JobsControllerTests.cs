@@ -5,6 +5,8 @@ using Netrock.Api.Tests.Fixtures;
 using Netrock.Application.Features.Jobs.Dtos;
 using Netrock.Application.Identity.Constants;
 using Netrock.Shared;
+using JobExecutionDetailResponse = Netrock.Api.Tests.Contracts.JobExecutionDetailResponse;
+using ListExecutionsResponse = Netrock.Api.Tests.Contracts.ListExecutionsResponse;
 
 namespace Netrock.Api.Tests.Controllers;
 
@@ -211,6 +213,88 @@ public class JobsControllerTests : IClassFixture<CustomWebApplicationFactory>, I
     {
         var response = await _client.SendAsync(
             Post("/api/v1/admin/jobs/restore", TestAuth.User()));
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    #endregion
+
+    #region ListExecutions
+
+    [Fact]
+    public async Task ListExecutions_WithPermission_Returns200()
+    {
+        var executionId = Guid.NewGuid();
+        _factory.JobExecutionService.GetExecutionsAsync("test-job", 1, 10, null, Arg.Any<CancellationToken>())
+            .Returns(new JobExecutionListOutput(
+                [new JobExecutionSummaryOutput(executionId, "test-job", "Succeeded",
+                    DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, TimeSpan.FromSeconds(5), null, "Schedule")],
+                1, 1, 10));
+
+        var response = await _client.SendAsync(
+            Get("/api/v1/admin/jobs/test-job/executions?pageNumber=1&pageSize=10",
+                TestAuth.WithPermissions(AppPermissions.Jobs.View)));
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<ListExecutionsResponse>();
+        Assert.NotNull(body);
+        Assert.Single(body.Items);
+        Assert.Equal(1, body.TotalCount);
+    }
+
+    [Fact]
+    public async Task ListExecutions_WithoutPermission_Returns403()
+    {
+        var response = await _client.SendAsync(
+            Get("/api/v1/admin/jobs/test-job/executions", TestAuth.User()));
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    #endregion
+
+    #region GetExecutionDetail
+
+    [Fact]
+    public async Task GetExecutionDetail_WithPermission_Returns200()
+    {
+        var executionId = Guid.NewGuid();
+        _factory.JobExecutionService.GetExecutionDetailAsync(executionId, Arg.Any<CancellationToken>())
+            .Returns(Result<JobExecutionDetailOutput>.Success(
+                new JobExecutionDetailOutput(executionId, "test-job", null, "Succeeded",
+                    DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, TimeSpan.FromSeconds(5), null, "Schedule", [])));
+
+        var response = await _client.SendAsync(
+            Get($"/api/v1/admin/jobs/executions/{executionId}",
+                TestAuth.WithPermissions(AppPermissions.Jobs.View)));
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<JobExecutionDetailResponse>();
+        Assert.NotNull(body);
+        Assert.Equal(executionId, body.Id);
+        Assert.Equal("Succeeded", body.Status);
+    }
+
+    [Fact]
+    public async Task GetExecutionDetail_NotFound_Returns404()
+    {
+        var executionId = Guid.NewGuid();
+        _factory.JobExecutionService.GetExecutionDetailAsync(executionId, Arg.Any<CancellationToken>())
+            .Returns(Result<JobExecutionDetailOutput>.Failure(ErrorMessages.Jobs.ExecutionNotFound, ErrorType.NotFound));
+
+        var response = await _client.SendAsync(
+            Get($"/api/v1/admin/jobs/executions/{executionId}",
+                TestAuth.WithPermissions(AppPermissions.Jobs.View)));
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetExecutionDetail_WithoutPermission_Returns403()
+    {
+        var executionId = Guid.NewGuid();
+        var response = await _client.SendAsync(
+            Get($"/api/v1/admin/jobs/executions/{executionId}", TestAuth.User()));
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }

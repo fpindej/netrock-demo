@@ -114,6 +114,7 @@ internal sealed class JobManagementService(
 
         try
         {
+            ApplicationBuilderExtensions.ManualTriggers[jobId] = true;
             jobManager.Trigger(jobId);
             logger.LogInformation("Manually triggered job '{JobId}'", jobId);
             return Task.FromResult(Result.Success());
@@ -253,47 +254,18 @@ internal sealed class JobManagementService(
 
     private IReadOnlyList<JobExecutionOutput> GetRecentExecutions(RecurringJobDto job)
     {
-        if (string.IsNullOrEmpty(job.LastJobId))
-        {
-            return [];
-        }
-
-        var monitoringApi = jobStorage.GetMonitoringApi();
-        var history = new List<JobExecutionOutput>();
-
-        var succeededJobs = monitoringApi.SucceededJobs(0, 20);
-        foreach (var succeeded in succeededJobs.Where(s => s.Value.Job?.Type == job.Job?.Type))
-        {
-            history.Add(new JobExecutionOutput(
-                JobId: succeeded.Key,
-                Status: "Succeeded",
-                StartedAt: succeeded.Value.SucceededAt.HasValue
-                    ? new DateTimeOffset(succeeded.Value.SucceededAt.Value, TimeSpan.Zero)
-                    : null,
-                Duration: succeeded.Value.TotalDuration.HasValue
-                    ? TimeSpan.FromMilliseconds(succeeded.Value.TotalDuration.Value)
-                    : null,
-                Error: null
-            ));
-        }
-
-        var failedJobs = monitoringApi.FailedJobs(0, 20);
-        foreach (var failed in failedJobs.Where(f => f.Value.Job?.Type == job.Job?.Type))
-        {
-            history.Add(new JobExecutionOutput(
-                JobId: failed.Key,
-                Status: "Failed",
-                StartedAt: failed.Value.FailedAt.HasValue
-                    ? new DateTimeOffset(failed.Value.FailedAt.Value, TimeSpan.Zero)
-                    : null,
-                Duration: null,
-                Error: failed.Value.ExceptionMessage
-            ));
-        }
-
-        return history
+        return dbContext.JobExecutions
+            .AsNoTracking()
+            .Where(e => e.RecurringJobId == job.Id)
             .OrderByDescending(e => e.StartedAt)
             .Take(10)
+            .Select(e => new JobExecutionOutput(
+                JobId: e.Id.ToString(),
+                Status: e.Status,
+                StartedAt: new DateTimeOffset(e.StartedAt, TimeSpan.Zero),
+                Duration: e.Duration,
+                Error: e.ErrorMessage
+            ))
             .ToList();
     }
 }

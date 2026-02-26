@@ -28,6 +28,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     public IAdminService AdminService { get; } = Substitute.For<IAdminService>();
     public IRoleManagementService RoleManagementService { get; } = Substitute.For<IRoleManagementService>();
     public IJobManagementService JobManagementService { get; } = Substitute.For<IJobManagementService>();
+    public IJobExecutionService JobExecutionService { get; } = Substitute.For<IJobExecutionService>();
     public IEmailService EmailService { get; } = Substitute.For<IEmailService>();
     public ICacheService CacheService { get; } = Substitute.For<ICacheService>();
     public ICaptchaService CaptchaService { get; } = Substitute.For<ICaptchaService>();
@@ -88,6 +89,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             services.RemoveAll<IJobManagementService>();
             services.AddSingleton(JobManagementService);
 
+            services.RemoveAll<IJobExecutionService>();
+            services.AddSingleton(JobExecutionService);
+
             services.RemoveAll<IEmailService>();
             services.AddSingleton(EmailService);
 
@@ -130,6 +134,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         AdminService.ClearSubstitute(ClearOptions.All);
         RoleManagementService.ClearSubstitute(ClearOptions.All);
         JobManagementService.ClearSubstitute(ClearOptions.All);
+        JobExecutionService.ClearSubstitute(ClearOptions.All);
         EmailService.ClearSubstitute(ClearOptions.All);
         CacheService.ClearSubstitute(ClearOptions.All);
         CaptchaService.ClearSubstitute(ClearOptions.All);

@@ -442,7 +442,7 @@ export interface paths {
 				path?: never;
 				cookie?: never;
 			};
-			/** @description The request containing a CAPTCHA token */
+			/** @description A cancellation token */
 			requestBody: {
 				content: {
 					'application/json': components['schemas']['TryDemoRequest'];
@@ -456,7 +456,7 @@ export interface paths {
 					};
 					content?: never;
 				};
-				/** @description If demo account creation or login fails */
+				/** @description If CAPTCHA validation, demo account creation, or login fails */
 				400: {
 					headers: {
 						[name: string]: unknown;
@@ -3179,6 +3179,136 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	'/api/v1/admin/jobs/{jobId}/executions': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets paginated execution history for a recurring job. */
+		get: {
+			parameters: {
+				query?: {
+					/** @description Optional status filter (e.g. "Succeeded", "Failed", "Running"). */
+					status?: string;
+					/** @description The page number to retrieve (1-based). */
+					pageNumber?: number;
+					/** @description The number of items per page (maximum 100). */
+					pageSize?: number;
+				};
+				header?: never;
+				path: {
+					/** @description The recurring job identifier */
+					jobId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the execution history */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ListExecutionsResponse'];
+					};
+				};
+				/** @description If the user is not authenticated */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user does not have the required permission */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/admin/jobs/executions/{executionId}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Gets detailed information about a single job execution, including structured log entries. */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The execution identifier */
+					executionId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Returns the execution detail */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['JobExecutionDetailResponse'];
+					};
+				};
+				/** @description If the user is not authenticated */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the user does not have the required permission */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description If the execution was not found */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -3472,11 +3602,6 @@ export interface components {
 			/** @description The target role: `"Admin"` to elevate or `"User"` to de-elevate. */
 			role: string;
 		};
-		/** @description Request to create a short-lived demo account. Requires a valid CAPTCHA token. */
-		TryDemoRequest: {
-			/** @description The Cloudflare Turnstile CAPTCHA token proving the caller is human. */
-			captchaToken: string;
-		};
 		/** @description Represents a request to initiate a password reset flow. */
 		ForgotPasswordRequest: {
 			/** @description The email address associated with the account. */
@@ -3494,6 +3619,57 @@ export interface components {
 		};
 		/** Format: binary */
 		IFormFile: string;
+		/** @description Detailed response for a single job execution, including structured log entries. */
+		JobExecutionDetailResponse: {
+			/**
+			 * Format: uuid
+			 * @description The execution identifier.
+			 */
+			id?: string;
+			/** @description The recurring job identifier. */
+			recurringJobId?: string;
+			/** @description The Hangfire background job identifier, if available. */
+			hangfireJobId?: null | string;
+			/** @description The execution status ("Running", "Succeeded", "Failed"). */
+			status?: string;
+			/**
+			 * Format: date-time
+			 * @description When the execution started (UTC).
+			 */
+			startedAt?: string;
+			/**
+			 * Format: date-time
+			 * @description When the execution completed (UTC), or null if still running.
+			 */
+			completedAt?: null | string;
+			/** @description How long the execution took, or null if still running. */
+			duration?: null | string;
+			/** @description The error message if the execution failed, or null on success. */
+			errorMessage?: null | string;
+			/** @description How the execution was triggered ("Schedule" or "Manual"). */
+			triggeredBy?: null | string;
+			/** @description Structured log entries recorded during this execution. */
+			logEntries?: components['schemas']['JobExecutionLogEntryResponse'][];
+		};
+		/** @description Represents a single structured log entry from a job execution. */
+		JobExecutionLogEntryResponse: {
+			/**
+			 * Format: uuid
+			 * @description The log entry identifier.
+			 */
+			id?: string;
+			/**
+			 * Format: date-time
+			 * @description When the entry was recorded (UTC).
+			 */
+			timestamp?: string;
+			/** @description The log level ("Info", "Warning", "Error"). */
+			level?: string;
+			/** @description The log message. */
+			message?: string;
+			/** @description Optional grouping category for this log entry. */
+			category?: null | string;
+		};
 		/** @description Represents a single job execution history entry. */
 		JobExecutionResponse: {
 			/** @description The background job identifier for this execution. */
@@ -3510,10 +3686,67 @@ export interface components {
 			/** @description The error message if the execution failed, or null on success. */
 			error?: null | string;
 		};
+		/** @description Summary of a single job execution for list views. */
+		JobExecutionSummaryResponse: {
+			/**
+			 * Format: uuid
+			 * @description The execution identifier.
+			 */
+			id?: string;
+			/** @description The recurring job identifier. */
+			recurringJobId?: string;
+			/** @description The execution status ("Running", "Succeeded", "Failed"). */
+			status?: string;
+			/**
+			 * Format: date-time
+			 * @description When the execution started (UTC).
+			 */
+			startedAt?: string;
+			/**
+			 * Format: date-time
+			 * @description When the execution completed (UTC), or null if still running.
+			 */
+			completedAt?: null | string;
+			/** @description How long the execution took, or null if still running. */
+			duration?: null | string;
+			/** @description The error message if the execution failed, or null on success. */
+			errorMessage?: null | string;
+			/** @description How the execution was triggered ("Schedule" or "Manual"). */
+			triggeredBy?: null | string;
+		};
 		/** @description Paginated response containing a list of audit events. */
 		ListAuditEventsResponse: {
 			/** @description The audit events for the current page. */
 			items?: components['schemas']['AuditEventResponse'][];
+			/**
+			 * Format: int32
+			 * @description The total number of items (across all pages).
+			 */
+			totalCount?: number;
+			/**
+			 * Format: int32
+			 * @description The current page number.
+			 */
+			pageNumber?: number;
+			/**
+			 * Format: int32
+			 * @description The number of items per page.
+			 */
+			pageSize?: number;
+			/**
+			 * Format: int32
+			 * @description The total number of pages.
+			 */
+			totalPages?: number;
+			/** @description Indicates if there is a previous page. */
+			hasPreviousPage?: boolean;
+			/** @description Indicates if there is a next page. */
+			hasNextPage?: boolean;
+		};
+		/** @description Paginated response containing a list of job execution summaries. */
+		ListExecutionsResponse: {
+			/** @description The execution summaries for the current page. */
+			items?: components['schemas']['JobExecutionSummaryResponse'][];
 			/**
 			 * Format: int32
 			 * @description The total number of items (across all pages).
@@ -3716,6 +3949,11 @@ export interface components {
 		SetPermissionsRequest: {
 			/** @description The full set of permission values to assign to the role. */
 			permissions: string[];
+		};
+		/** @description Request to create a short-lived demo account. Requires a valid CAPTCHA token. */
+		TryDemoRequest: {
+			/** @description The Cloudflare Turnstile CAPTCHA token proving the caller is human. */
+			captchaToken: string;
 		};
 		/** @description Request to update an existing CRM contact. */
 		UpdateContactRequest: {

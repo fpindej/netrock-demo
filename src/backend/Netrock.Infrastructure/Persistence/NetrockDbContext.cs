@@ -31,6 +31,16 @@ internal class NetrockDbContext(DbContextOptions<NetrockDbContext> options)
     public DbSet<PausedJob> PausedJobs { get; set; }
 
     /// <summary>
+    /// Gets or sets the job executions table for durable execution history.
+    /// </summary>
+    public DbSet<JobExecution> JobExecutions { get; set; }
+
+    /// <summary>
+    /// Gets or sets the job execution log entries table for structured per-execution logs.
+    /// </summary>
+    public DbSet<JobExecutionLogEntry> JobExecutionLogEntries { get; set; }
+
+    /// <summary>
     /// Gets or sets the audit events table for the append-only audit log.
     /// </summary>
     public DbSet<AuditEvent> AuditEvents { get; set; }

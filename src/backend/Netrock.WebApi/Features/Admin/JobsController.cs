@@ -15,7 +15,9 @@ namespace Netrock.WebApi.Features.Admin;
 /// </summary>
 [Route("api/v1/admin")]
 [Tags("Jobs")]
-public class JobsController(IJobManagementService jobManagementService) : ApiController
+public class JobsController(
+    IJobManagementService jobManagementService,
+    IJobExecutionService jobExecutionService) : ApiController
 {
     /// <summary>
     /// Gets all registered recurring jobs.
@@ -210,5 +212,55 @@ public class JobsController(IJobManagementService jobManagementService) : ApiCon
         }
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// Gets paginated execution history for a recurring job.
+    /// </summary>
+    /// <param name="jobId">The recurring job identifier</param>
+    /// <param name="request">Pagination and filter parameters</param>
+    /// <returns>A paginated list of execution summaries</returns>
+    /// <response code="200">Returns the execution history</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user does not have the required permission</response>
+    [HttpGet("jobs/{jobId:jobId}/executions")]
+    [RequirePermission(AppPermissions.Jobs.View)]
+    [ProducesResponseType(typeof(ListExecutionsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<ListExecutionsResponse>> ListExecutions(
+        string jobId, [FromQuery] ListExecutionsRequest request)
+    {
+        var result = await jobExecutionService.GetExecutionsAsync(
+            jobId, request.PageNumber, request.PageSize, request.Status);
+
+        return Ok(result.ToResponse());
+    }
+
+    /// <summary>
+    /// Gets detailed information about a single job execution, including structured log entries.
+    /// </summary>
+    /// <param name="executionId">The execution identifier</param>
+    /// <returns>The execution detail with log entries</returns>
+    /// <response code="200">Returns the execution detail</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user does not have the required permission</response>
+    /// <response code="404">If the execution was not found</response>
+    [HttpGet("jobs/executions/{executionId:guid}")]
+    [RequirePermission(AppPermissions.Jobs.View)]
+    [ProducesResponseType(typeof(JobExecutionDetailResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<JobExecutionDetailResponse>> GetExecutionDetail(Guid executionId)
+    {
+        var result = await jobExecutionService.GetExecutionDetailAsync(executionId);
+
+        if (!result.IsSuccess)
+        {
+            return ProblemFactory.Create(result.Error, result.ErrorType);
+        }
+
+        return Ok(result.Value.ToResponse());
     }
 }

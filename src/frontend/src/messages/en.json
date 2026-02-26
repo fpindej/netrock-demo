@@ -422,6 +422,26 @@
 	"admin_jobDetail_deleteSuccess": "Job deleted successfully.",
 	"admin_jobDetail_deleteError": "Failed to delete job.",
 
+	"admin_jobDetail_triggeredBy": "Triggered By",
+	"admin_jobDetail_triggeredBy_schedule": "Schedule",
+	"admin_jobDetail_triggeredBy_manual": "Manual",
+	"admin_jobDetail_completedAt": "Completed At",
+	"admin_jobDetail_errorMessage": "Error Message",
+	"admin_jobDetail_logEntries": "Log Entries",
+	"admin_jobDetail_noLogEntries": "No log entries recorded.",
+	"admin_jobDetail_logLevel_info": "Info",
+	"admin_jobDetail_logLevel_warning": "Warning",
+	"admin_jobDetail_logLevel_error": "Error",
+	"admin_jobDetail_filterByStatus": "Filter by status",
+	"admin_jobDetail_allStatuses": "All statuses",
+	"admin_jobDetail_executionDetail": "Execution Detail",
+	"admin_jobDetail_status_running": "Running",
+	"admin_jobDetail_totalRuns": "Total Runs",
+	"admin_jobDetail_successRate": "Success Rate",
+
+	"serverError_failedToLoadExecutions": "Failed to load execution history",
+	"serverError_failedToLoadExecutionDetail": "Failed to load execution detail",
+
 	"meta_adminJobDetail_title": "Job Detail",
 	"meta_adminJobDetail_description": "View and manage job details and execution history.",
 

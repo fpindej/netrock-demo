@@ -42,6 +42,6 @@
 			{/if}
 		</div>
 
-		<JobExecutionHistory executions={data.job.executionHistory ?? []} />
+		<JobExecutionHistory jobId={data.job.id ?? ''} />
 	{/if}
 </div>

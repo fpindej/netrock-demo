@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Netrock.Infrastructure.Features.Jobs.Models;
 using Netrock.Infrastructure.Features.Jobs.Options;
 using Netrock.Infrastructure.Features.Jobs.Services;
 using Netrock.Infrastructure.Persistence;
@@ -23,6 +25,13 @@ public static class ApplicationBuilderExtensions
     /// serializes job arguments as JSON — <see cref="IServiceProvider"/> is not serializable.
     /// </summary>
     private static IServiceProvider? _rootServiceProvider;
+
+    /// <summary>
+    /// Tracks job IDs that were manually triggered. Set in <c>TriggerJobAsync</c>,
+    /// consumed (and removed) in <see cref="ExecuteJobAsync"/> to differentiate
+    /// manual triggers from scheduled runs.
+    /// </summary>
+    internal static readonly ConcurrentDictionary<string, bool> ManualTriggers = new();
 
     /// <summary>
     /// Configures the Hangfire dashboard (development only) and registers all recurring jobs
@@ -129,8 +138,8 @@ public static class ApplicationBuilderExtensions
     }
 
     /// <summary>
-    /// Resolves a job definition from DI and executes it.
-    /// This indirection ensures each execution gets a fresh DI scope with proper lifetime management.
+    /// Resolves a job definition from DI and executes it, recording the execution
+    /// in the <c>hangfire.jobexecutions</c> table with structured log entries.
     /// <para>
     /// Only the <paramref name="jobId"/> string is passed through Hangfire's serialization —
     /// the service provider is accessed from the static field captured at startup.
@@ -157,20 +166,69 @@ public static class ApplicationBuilderExtensions
             return;
         }
 
-        logger.LogInformation("Executing job '{JobId}'", jobId);
+        var dbContext = scope.ServiceProvider.GetRequiredService<NetrockDbContext>();
+        var timeProvider = scope.ServiceProvider.GetRequiredService<TimeProvider>();
+        var executionContext = scope.ServiceProvider.GetRequiredService<JobExecutionContext>();
+
+        var isManual = ManualTriggers.TryRemove(jobId, out _);
+
+        var execution = new JobExecution
+        {
+            Id = Guid.NewGuid(),
+            RecurringJobId = jobId,
+            Status = "Running",
+            StartedAt = timeProvider.GetUtcNow().UtcDateTime,
+            TriggeredBy = isManual ? "Manual" : "Schedule"
+        };
+
+        dbContext.JobExecutions.Add(execution);
+        await dbContext.SaveChangesAsync();
+
+        executionContext.ExecutionId = execution.Id;
+
+        logger.LogInformation("Executing job '{JobId}' (execution {ExecutionId})", jobId, execution.Id);
         var stopwatch = Stopwatch.StartNew();
 
         try
         {
             await job.ExecuteAsync();
             stopwatch.Stop();
+
+            execution.Status = "Succeeded";
+            execution.CompletedAt = timeProvider.GetUtcNow().UtcDateTime;
+            execution.Duration = stopwatch.Elapsed;
+
             logger.LogInformation("Job '{JobId}' completed in {ElapsedMs}ms", jobId, stopwatch.ElapsedMilliseconds);
         }
         catch (Exception ex)
         {
             stopwatch.Stop();
+
+            execution.Status = "Failed";
+            execution.CompletedAt = timeProvider.GetUtcNow().UtcDateTime;
+            execution.Duration = stopwatch.Elapsed;
+            execution.ErrorMessage = ex.Message.Length > 4000 ? ex.Message[..4000] : ex.Message;
+
             logger.LogError(ex, "Job '{JobId}' failed after {ElapsedMs}ms", jobId, stopwatch.ElapsedMilliseconds);
+
+            await FlushExecutionAsync(dbContext, execution, executionContext);
             throw;
         }
+
+        await FlushExecutionAsync(dbContext, execution, executionContext);
+    }
+
+    /// <summary>
+    /// Persists the execution record and any collected log entries to the database.
+    /// </summary>
+    private static async Task FlushExecutionAsync(
+        NetrockDbContext dbContext, JobExecution execution, JobExecutionContext executionContext)
+    {
+        if (executionContext.Entries.Count > 0)
+        {
+            dbContext.JobExecutionLogEntries.AddRange(executionContext.Entries);
+        }
+
+        await dbContext.SaveChangesAsync();
     }
 }

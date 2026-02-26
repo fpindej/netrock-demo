@@ -15,3 +15,7 @@ export type ListAuditEventsResponse = components['schemas']['ListAuditEventsResp
 export type Job = components['schemas']['RecurringJobResponse'];
 export type JobDetail = components['schemas']['RecurringJobDetailResponse'];
 export type JobExecution = components['schemas']['JobExecutionResponse'];
+export type JobExecutionSummary = components['schemas']['JobExecutionSummaryResponse'];
+export type JobExecutionDetail = components['schemas']['JobExecutionDetailResponse'];
+export type JobExecutionLogEntry = components['schemas']['JobExecutionLogEntryResponse'];
+export type ListExecutionsResponse = components['schemas']['ListExecutionsResponse'];

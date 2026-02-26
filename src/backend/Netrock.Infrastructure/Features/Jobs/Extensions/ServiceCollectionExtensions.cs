@@ -80,6 +80,9 @@ public static class ServiceCollectionExtensions
             services.AddScoped<ExampleFireAndForgetJob>();
 
             services.AddScoped<IJobManagementService, JobManagementService>();
+            services.AddScoped<JobExecutionContext>();
+            services.AddScoped<IJobExecutionContext>(sp => sp.GetRequiredService<JobExecutionContext>());
+            services.AddScoped<IJobExecutionService, JobExecutionService>();
 
             return services;
         }

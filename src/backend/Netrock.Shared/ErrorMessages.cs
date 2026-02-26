@@ -125,6 +125,7 @@ public static class ErrorMessages
         public const string NotFound = "Job not found.";
         public const string TriggerFailed = "Failed to trigger job.";
         public const string RestoreFailed = "Failed to restore jobs.";
+        public const string ExecutionNotFound = "Job execution not found.";
     }
 
     /// <summary>

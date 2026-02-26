@@ -1,6 +1,7 @@
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Netrock.Application.Features.Jobs;
 using Netrock.Infrastructure.Persistence;
 
 namespace Netrock.Infrastructure.Features.Jobs.RecurringJobs;
@@ -12,6 +13,7 @@ namespace Netrock.Infrastructure.Features.Jobs.RecurringJobs;
 internal sealed class ExpiredRefreshTokenCleanupJob(
     NetrockDbContext dbContext,
     TimeProvider timeProvider,
+    IJobExecutionContext executionContext,
     ILogger<ExpiredRefreshTokenCleanupJob> logger) : IRecurringJobDefinition
 {
     /// <inheritdoc />
@@ -32,11 +34,13 @@ internal sealed class ExpiredRefreshTokenCleanupJob(
     public async Task ExecuteAsync()
     {
         var cutoff = timeProvider.GetUtcNow().UtcDateTime - ExpirationGracePeriod;
+        executionContext.LogInfo($"Cutoff date: {cutoff:O}", "Cleanup");
 
         var deletedCount = await dbContext.RefreshTokens
             .Where(t => t.ExpiredAt < cutoff || t.IsUsed || t.IsInvalidated)
             .ExecuteDeleteAsync();
 
+        executionContext.LogInfo($"Deleted {deletedCount} expired refresh tokens", "Cleanup");
         logger.LogInformation("Deleted {Count} expired refresh tokens", deletedCount);
     }
 }

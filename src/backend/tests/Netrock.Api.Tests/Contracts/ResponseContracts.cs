@@ -32,6 +32,18 @@ internal record RecurringJobDetailResponse(string Id, string Cron, DateTimeOffse
 internal record JobExecutionResponse(string JobId, string Status, DateTimeOffset? StartedAt,
     TimeSpan? Duration, string? Error);
 
+// Job Executions
+internal record JobExecutionSummaryResponse(Guid Id, string RecurringJobId, string Status,
+    DateTimeOffset StartedAt, DateTimeOffset? CompletedAt, TimeSpan? Duration,
+    string? ErrorMessage, string? TriggeredBy);
+internal record ListExecutionsResponse(List<JobExecutionSummaryResponse> Items, int TotalCount,
+    int PageNumber, int PageSize, int TotalPages, bool HasPreviousPage, bool HasNextPage);
+internal record JobExecutionDetailResponse(Guid Id, string RecurringJobId, string? HangfireJobId,
+    string Status, DateTimeOffset StartedAt, DateTimeOffset? CompletedAt, TimeSpan? Duration,
+    string? ErrorMessage, string? TriggeredBy, List<JobExecutionLogEntryResponse> LogEntries);
+internal record JobExecutionLogEntryResponse(Guid Id, DateTimeOffset Timestamp, string Level,
+    string Message, string? Category);
+
 // Audit
 internal record AuditEventContract(Guid Id, Guid? UserId, string Action, string? TargetEntityType,
     Guid? TargetEntityId, string? Metadata, DateTime CreatedAt);

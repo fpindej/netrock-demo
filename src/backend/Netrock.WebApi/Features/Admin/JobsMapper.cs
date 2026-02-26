@@ -48,4 +48,59 @@ internal static class JobsMapper
         Duration = output.Duration,
         Error = output.Error
     };
+
+    /// <summary>
+    /// Maps a <see cref="JobExecutionSummaryOutput"/> to a <see cref="JobExecutionSummaryResponse"/>.
+    /// </summary>
+    public static JobExecutionSummaryResponse ToResponse(this JobExecutionSummaryOutput output) => new()
+    {
+        Id = output.Id,
+        RecurringJobId = output.RecurringJobId,
+        Status = output.Status,
+        StartedAt = output.StartedAt,
+        CompletedAt = output.CompletedAt,
+        Duration = output.Duration,
+        ErrorMessage = output.ErrorMessage,
+        TriggeredBy = output.TriggeredBy
+    };
+
+    /// <summary>
+    /// Maps a <see cref="JobExecutionDetailOutput"/> to a <see cref="JobExecutionDetailResponse"/>.
+    /// </summary>
+    public static JobExecutionDetailResponse ToResponse(this JobExecutionDetailOutput output) => new()
+    {
+        Id = output.Id,
+        RecurringJobId = output.RecurringJobId,
+        HangfireJobId = output.HangfireJobId,
+        Status = output.Status,
+        StartedAt = output.StartedAt,
+        CompletedAt = output.CompletedAt,
+        Duration = output.Duration,
+        ErrorMessage = output.ErrorMessage,
+        TriggeredBy = output.TriggeredBy,
+        LogEntries = output.LogEntries.Select(l => l.ToResponse()).ToList()
+    };
+
+    /// <summary>
+    /// Maps a <see cref="JobExecutionLogEntryOutput"/> to a <see cref="JobExecutionLogEntryResponse"/>.
+    /// </summary>
+    public static JobExecutionLogEntryResponse ToResponse(this JobExecutionLogEntryOutput output) => new()
+    {
+        Id = output.Id,
+        Timestamp = output.Timestamp,
+        Level = output.Level,
+        Message = output.Message,
+        Category = output.Category
+    };
+
+    /// <summary>
+    /// Maps a <see cref="JobExecutionListOutput"/> to a <see cref="ListExecutionsResponse"/>.
+    /// </summary>
+    public static ListExecutionsResponse ToResponse(this JobExecutionListOutput output) => new()
+    {
+        Items = output.Executions.Select(e => e.ToResponse()).ToList(),
+        TotalCount = output.TotalCount,
+        PageNumber = output.PageNumber,
+        PageSize = output.PageSize
+    };
 }

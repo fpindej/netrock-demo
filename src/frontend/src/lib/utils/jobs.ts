@@ -1,6 +1,7 @@
 import * as m from '$lib/paraglide/messages';
 
 type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';
+type TimelineVariant = 'default' | 'success' | 'warning' | 'destructive';
 
 /**
  * Format a nullable date string for job-related display.
@@ -63,4 +64,44 @@ export function formatJobDuration(duration: string | null | undefined): string {
 	if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
 	if (minutes > 0) return `${minutes}m ${seconds}s`;
 	return `${seconds}s`;
+}
+
+/**
+ * Map a log entry level to a Timeline component variant.
+ */
+export function getLogLevelVariant(level: string | null | undefined): TimelineVariant {
+	switch (level) {
+		case 'Warning':
+			return 'warning';
+		case 'Error':
+			return 'destructive';
+		default:
+			return 'default';
+	}
+}
+
+/**
+ * Map a log entry level to an i18n label.
+ */
+export function getLogLevelLabel(level: string | null | undefined): string {
+	switch (level) {
+		case 'Warning':
+			return m.admin_jobDetail_logLevel_warning();
+		case 'Error':
+			return m.admin_jobDetail_logLevel_error();
+		default:
+			return m.admin_jobDetail_logLevel_info();
+	}
+}
+
+/**
+ * Map a triggered-by value to an i18n label.
+ */
+export function getTriggeredByLabel(triggeredBy: string | null | undefined): string {
+	switch (triggeredBy) {
+		case 'Manual':
+			return m.admin_jobDetail_triggeredBy_manual();
+		default:
+			return m.admin_jobDetail_triggeredBy_schedule();
+	}
 }

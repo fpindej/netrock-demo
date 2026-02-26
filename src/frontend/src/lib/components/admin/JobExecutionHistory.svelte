@@ -34,6 +34,8 @@
 	let selectedExecutionId = $state<string | null>(null);
 	let dialogOpen = $state(false);
 
+	let abortController: AbortController | null = null;
+
 	const pageSize = 10;
 
 	const statusOptions = [
@@ -44,6 +46,10 @@
 	];
 
 	async function loadExecutions(page: number): Promise<void> {
+		abortController?.abort();
+		abortController = new AbortController();
+		const { signal } = abortController;
+
 		loading = true;
 		error = false;
 
@@ -56,7 +62,8 @@
 						pageSize,
 						status: statusFilter || undefined
 					}
-				}
+				},
+				signal
 			});
 
 			if (data) {
@@ -68,7 +75,8 @@
 			} else {
 				error = true;
 			}
-		} catch {
+		} catch (e) {
+			if (e instanceof DOMException && e.name === 'AbortError') return;
 			error = true;
 		}
 
@@ -97,6 +105,8 @@
 			statusFilter = '';
 			loadExecutions(1);
 		});
+
+		return () => abortController?.abort();
 	});
 </script>
 

@@ -71,7 +71,6 @@ internal static class JobsMapper
     {
         Id = output.Id,
         RecurringJobId = output.RecurringJobId,
-        HangfireJobId = output.HangfireJobId,
         Status = output.Status,
         StartedAt = output.StartedAt,
         CompletedAt = output.CompletedAt,

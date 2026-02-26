@@ -5,7 +5,6 @@ namespace Netrock.Application.Features.Jobs.Dtos;
 /// </summary>
 /// <param name="Id">The execution identifier.</param>
 /// <param name="RecurringJobId">The recurring job identifier.</param>
-/// <param name="HangfireJobId">The Hangfire background job identifier, if available.</param>
 /// <param name="Status">The execution status ("Running", "Succeeded", "Failed").</param>
 /// <param name="StartedAt">When the execution started (UTC).</param>
 /// <param name="CompletedAt">When the execution completed (UTC), or null if still running.</param>
@@ -16,7 +15,6 @@ namespace Netrock.Application.Features.Jobs.Dtos;
 public record JobExecutionDetailOutput(
     Guid Id,
     string RecurringJobId,
-    string? HangfireJobId,
     string Status,
     DateTimeOffset StartedAt,
     DateTimeOffset? CompletedAt,

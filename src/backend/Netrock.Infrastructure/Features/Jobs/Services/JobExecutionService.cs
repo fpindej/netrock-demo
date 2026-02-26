@@ -71,7 +71,6 @@ internal sealed class JobExecutionService(NetrockDbContext dbContext) : IJobExec
         var detail = new JobExecutionDetailOutput(
             Id: execution.Id,
             RecurringJobId: execution.RecurringJobId,
-            HangfireJobId: execution.HangfireJobId,
             Status: execution.Status,
             StartedAt: new DateTimeOffset(execution.StartedAt, TimeSpan.Zero),
             CompletedAt: execution.CompletedAt.HasValue

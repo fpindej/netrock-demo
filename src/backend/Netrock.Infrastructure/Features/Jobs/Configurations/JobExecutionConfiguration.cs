@@ -20,9 +20,6 @@ internal class JobExecutionConfiguration : IEntityTypeConfiguration<JobExecution
             .IsRequired()
             .HasMaxLength(255);
 
-        builder.Property(x => x.HangfireJobId)
-            .HasMaxLength(255);
-
         builder.Property(x => x.Status)
             .IsRequired()
             .HasMaxLength(20);

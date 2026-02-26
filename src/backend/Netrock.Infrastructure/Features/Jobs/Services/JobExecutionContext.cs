@@ -1,6 +1,8 @@
 using Netrock.Application.Features.Jobs;
 using Netrock.Infrastructure.Features.Jobs.Models;
 
+using static Netrock.Application.Features.Jobs.JobExecutionLogLevel;
+
 namespace Netrock.Infrastructure.Features.Jobs.Services;
 
 /// <summary>
@@ -24,17 +26,17 @@ internal sealed class JobExecutionContext(TimeProvider timeProvider) : IJobExecu
 
     /// <inheritdoc />
     public void LogInfo(string message, string? category = null)
-        => AddEntry("Info", message, category);
+        => AddEntry(Info, message, category);
 
     /// <inheritdoc />
     public void LogWarning(string message, string? category = null)
-        => AddEntry("Warning", message, category);
+        => AddEntry(Warning, message, category);
 
     /// <inheritdoc />
     public void LogError(string message, Exception? ex = null, string? category = null)
     {
         var fullMessage = ex is not null ? $"{message}: {ex.Message}" : message;
-        AddEntry("Error", fullMessage, category);
+        AddEntry(Error, fullMessage, category);
     }
 
     private void AddEntry(string level, string message, string? category)

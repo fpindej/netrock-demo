@@ -261,7 +261,7 @@ public class JobsControllerTests : IClassFixture<CustomWebApplicationFactory>, I
         var executionId = Guid.NewGuid();
         _factory.JobExecutionService.GetExecutionDetailAsync(executionId, Arg.Any<CancellationToken>())
             .Returns(Result<JobExecutionDetailOutput>.Success(
-                new JobExecutionDetailOutput(executionId, "test-job", null, "Succeeded",
+                new JobExecutionDetailOutput(executionId, "test-job", "Succeeded",
                     DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, TimeSpan.FromSeconds(5), null, "Schedule", [])));
 
         var response = await _client.SendAsync(

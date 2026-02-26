@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Netrock.Application.Features.Jobs;
 using Netrock.Infrastructure.Features.Jobs.Models;
 using Netrock.Infrastructure.Features.Jobs.Options;
 using Netrock.Infrastructure.Features.Jobs.Services;
@@ -176,9 +177,9 @@ public static class ApplicationBuilderExtensions
         {
             Id = Guid.NewGuid(),
             RecurringJobId = jobId,
-            Status = "Running",
+            Status = JobExecutionStatus.Running,
             StartedAt = timeProvider.GetUtcNow().UtcDateTime,
-            TriggeredBy = isManual ? "Manual" : "Schedule"
+            TriggeredBy = isManual ? JobExecutionTrigger.Manual : JobExecutionTrigger.Schedule
         };
 
         dbContext.JobExecutions.Add(execution);
@@ -194,7 +195,7 @@ public static class ApplicationBuilderExtensions
             await job.ExecuteAsync();
             stopwatch.Stop();
 
-            execution.Status = "Succeeded";
+            execution.Status = JobExecutionStatus.Succeeded;
             execution.CompletedAt = timeProvider.GetUtcNow().UtcDateTime;
             execution.Duration = stopwatch.Elapsed;
 
@@ -204,7 +205,7 @@ public static class ApplicationBuilderExtensions
         {
             stopwatch.Stop();
 
-            execution.Status = "Failed";
+            execution.Status = JobExecutionStatus.Failed;
             execution.CompletedAt = timeProvider.GetUtcNow().UtcDateTime;
             execution.Duration = stopwatch.Elapsed;
             execution.ErrorMessage = ex.Message.Length > 4000 ? ex.Message[..4000] : ex.Message;

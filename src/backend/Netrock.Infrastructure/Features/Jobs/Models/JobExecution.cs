@@ -17,11 +17,6 @@ public class JobExecution
     public string RecurringJobId { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the Hangfire background job identifier, if available.
-    /// </summary>
-    public string? HangfireJobId { get; set; }
-
-    /// <summary>
     /// Gets or sets the execution status: "Running", "Succeeded", or "Failed".
     /// </summary>
     public string Status { get; set; } = string.Empty;

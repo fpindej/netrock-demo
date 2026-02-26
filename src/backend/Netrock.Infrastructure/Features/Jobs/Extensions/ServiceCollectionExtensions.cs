@@ -75,6 +75,10 @@ public static class ServiceCollectionExtensions
             services.AddScoped<IRecurringJobDefinition>(sp =>
                 sp.GetRequiredService<ExpiredDemoAccountCleanupJob>());
 
+            services.AddScoped<ExpiredJobExecutionCleanupJob>();
+            services.AddScoped<IRecurringJobDefinition>(sp =>
+                sp.GetRequiredService<ExpiredJobExecutionCleanupJob>());
+
             // Register fire-and-forget job classes — Hangfire resolves them from DI when executed.
             // Example: backgroundJobClient.Enqueue<ExampleFireAndForgetJob>(job => job.ExecuteAsync("hello"));
             services.AddScoped<ExampleFireAndForgetJob>();

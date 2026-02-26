@@ -28,14 +28,21 @@
 	let loading = $state(false);
 	let error = $state(false);
 
+	let abortController: AbortController | null = null;
+
 	async function loadDetail(id: string): Promise<void> {
+		abortController?.abort();
+		abortController = new AbortController();
+		const { signal } = abortController;
+
 		loading = true;
 		detail = null;
 		error = false;
 
 		try {
 			const { data } = await browserClient.GET('/api/v1/admin/jobs/executions/{executionId}', {
-				params: { path: { executionId: id } }
+				params: { path: { executionId: id } },
+				signal
 			});
 
 			if (data) {
@@ -43,7 +50,8 @@
 			} else {
 				error = true;
 			}
-		} catch {
+		} catch (e) {
+			if (e instanceof DOMException && e.name === 'AbortError') return;
 			error = true;
 		}
 
@@ -53,6 +61,9 @@
 	$effect(() => {
 		if (open && executionId) {
 			loadDetail(executionId);
+		} else {
+			abortController?.abort();
+			detail = null;
 		}
 	});
 </script>

@@ -18,11 +18,6 @@ public class JobExecutionDetailResponse
     public string RecurringJobId { [UsedImplicitly] get; [UsedImplicitly] init; } = string.Empty;
 
     /// <summary>
-    /// The Hangfire background job identifier, if available.
-    /// </summary>
-    public string? HangfireJobId { [UsedImplicitly] get; [UsedImplicitly] init; }
-
-    /// <summary>
     /// The execution status ("Running", "Succeeded", "Failed").
     /// </summary>
     public string Status { [UsedImplicitly] get; [UsedImplicitly] init; } = string.Empty;

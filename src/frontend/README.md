@@ -1,6 +1,6 @@
 # SvelteKit Frontend Template
 
-A production-ready SvelteKit template with Svelte 5, TypeScript, Tailwind CSS 4, and shadcn-svelte.
+SvelteKit frontend for NETrock - Svelte 5, TypeScript, Tailwind CSS 4, and shadcn-svelte.
 
 ## Tech Stack
 

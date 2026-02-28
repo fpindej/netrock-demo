@@ -2,9 +2,9 @@
 
 # NETrock
 
-**Full-stack .NET 10 + SvelteKit foundation. Auth, permissions, background jobs, admin panel — production-ready out of the box.**
+**Full-stack .NET 10 + SvelteKit foundation. Auth, permissions, background jobs, admin panel — wired up so you can skip the boilerplate.**
 
-Clean Architecture. Fully tested. Fully dockerized. API-first — use the included frontend or bring your own.
+Clean Architecture. 650+ tests. Dockerized. API-first — use the included frontend or bring your own.
 
 [![CI](https://github.com/fpindej/netrock/actions/workflows/ci.yml/badge.svg)](https://github.com/fpindej/netrock/actions/workflows/ci.yml)
 [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
@@ -26,7 +26,7 @@ Clean Architecture. Fully tested. Fully dockerized. API-first — use the includ
 
 Every project starts the same way: authentication, role management, rate limiting, validation, API documentation, Docker setup... You spend weeks on infrastructure before writing a single line of business logic.
 
-**NETrock skips all of that.** It ships a production-hardened .NET 10 API with a complete SvelteKit frontend — real security, real patterns, and real conventions that scale. Login works. Token rotation works. The permission system enforces role hierarchy. The admin panel manages users, roles, and background jobs. The Docker stack spins up with health checks. CI runs your tests.
+**NETrock skips all of that.** It ships a .NET 10 API with a SvelteKit frontend - auth that actually works, documented conventions, and the kind of infrastructure you'd build anyway. Login works. Token rotation works. The permission system enforces role hierarchy. The admin panel manages users, roles, and background jobs. The Docker stack spins up with health checks. CI runs your tests.
 
 **Fork it, init it, own it.** After initialization, there is no dependency on "the template." It's your code, your architecture, your product. Every decision is documented so you can understand it, change it, or throw it away.
 
@@ -58,7 +58,7 @@ Every project starts the same way: authentication, role management, rate limitin
 ### 1. Clone & Initialize
 
 ```bash
-git clone https://github.com/fpindej/netrock.git my-saas
+git clone https://github.com/fpindej/netrock.git my-project
 cd my-saas
 ```
 
@@ -122,7 +122,7 @@ Deep dives: **[Features](docs/features.md)** · **[Security](docs/security.md)**
 
 ## Localization
 
-Production-ready i18n with [Paraglide JS](https://inlang.com/m/gerre34r/library-inlang-paraglideJs) — type-safe keys, SSR-compatible, auto-detection via `Accept-Language`. Ships with English and Czech. Adding a language is a single JSON file.
+i18n with [Paraglide JS](https://inlang.com/m/gerre34r/library-inlang-paraglideJs) - type-safe keys, SSR-compatible, auto-detection via `Accept-Language`. Ships with English and Czech. Adding a language is a single JSON file.
 
 ---
 

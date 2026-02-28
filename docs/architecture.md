@@ -26,7 +26,7 @@ The backend follows Clean Architecture with **architecture tests** that enforce 
 
 ## Testing
 
-NETrock is thoroughly tested across 4 test projects, covering every layer of the backend:
+NETrock ships with 4 test projects covering the backend:
 
 | Project | What it covers |
 |---|---|

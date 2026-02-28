@@ -1,6 +1,6 @@
 # Contributing to NETrock
 
-Thanks for your interest in contributing! NETrock is a production-grade template, so we hold contributions to the same standard as the existing codebase.
+Thanks for your interest in contributing! NETrock is an opinionated template, so we hold contributions to the same standard as the existing codebase.
 
 > **Security issues?** Please report them privately — see [SECURITY.md](SECURITY.md).
 >

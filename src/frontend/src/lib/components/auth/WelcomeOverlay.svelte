@@ -15,7 +15,7 @@
 		ChevronLeft,
 		ChevronRight,
 		Star,
-		Code,
+		MessageCircle,
 		Linkedin
 	} from '@lucide/svelte';
 
@@ -322,13 +322,13 @@
 									GitHub
 								</a>
 								<a
-									href="https://github.com/fpindej/netrock"
+									href="https://discord.gg/5rHquRptSh"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
 								>
-									<Code class="h-3.5 w-3.5" />
-									Source
+									<MessageCircle class="h-3.5 w-3.5" />
+									Discord
 								</a>
 								<a
 									href="https://www.linkedin.com/in/filip-dorian-pindej/"

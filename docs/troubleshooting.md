@@ -579,7 +579,7 @@ They are functionally identical — `up.sh` is for Linux/macOS (Bash), `up.ps1` 
 If this guide didn't solve your problem:
 
 1. **Search [existing GitHub issues](https://github.com/fpindej/netrock/issues)** — someone may have hit the same problem
-2. **Ask in [Discord](https://discord.gg/5rHquRptSh)** — the community and maintainers are active
+2. **Ask in [Discord](https://discord.gg/4cmZqTC7cA)** — the community and maintainers are active
 3. **Open a [new issue](https://github.com/fpindej/netrock/issues/new)** — include:
    - Your OS and Docker version
    - The full error message or log output

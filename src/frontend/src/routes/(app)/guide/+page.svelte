@@ -134,7 +134,7 @@
 			title: m.guide_community_discord_title,
 			description: m.guide_community_discord_description,
 			button: m.guide_community_discord_button,
-			href: 'https://discord.gg/5rHquRptSh',
+			href: 'https://discord.gg/4cmZqTC7cA',
 			color: 'text-indigo-500',
 			bgColor: 'bg-indigo-500/10',
 			gradientFrom: 'from-indigo-500',

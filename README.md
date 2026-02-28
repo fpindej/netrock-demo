@@ -13,10 +13,10 @@ Clean Architecture. Fully tested. Fully dockerized. API-first — use the includ
 [![Redis](https://img.shields.io/badge/Redis-7-DC382D?logo=redis&logoColor=white)](https://redis.io/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Discord](https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white)](https://discord.gg/5rHquRptSh)
+[![Discord](https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white)](https://discord.gg/4cmZqTC7cA)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/fpindej/netrock)
 
-**[Live Demo](https://demo.netrock.dev)** · **[Documentation](#documentation)** · **[Quick Start](#quick-start)** · **[Discord](https://discord.gg/5rHquRptSh)**
+**[Live Demo](https://demo.netrock.dev)** · **[Documentation](#documentation)** · **[Quick Start](#quick-start)** · **[Discord](https://discord.gg/4cmZqTC7cA)**
 
 </div>
 
@@ -149,7 +149,7 @@ NETrock is free and open source under the [MIT License](LICENSE). If it saves yo
 
 <a href="https://buymeacoffee.com/fpindej" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50"></a>
 
-Star the repo on [GitHub](https://github.com/fpindej/netrock) · Join the [Discord](https://discord.gg/5rHquRptSh) · Need custom development, consulting, or training? [Get in touch](mailto:contact@mail.pindej.cz)
+Star the repo on [GitHub](https://github.com/fpindej/netrock) · Join the [Discord](https://discord.gg/4cmZqTC7cA) · Need custom development, consulting, or training? [Get in touch](mailto:contact@mail.pindej.cz)
 
 ---
 

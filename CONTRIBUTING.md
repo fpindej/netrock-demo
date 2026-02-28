@@ -118,7 +118,7 @@ These are non-negotiable. PRs that don't follow them will be requested to change
 ## Questions?
 
 - Open a [GitHub Discussion](https://github.com/fpindej/netrock/discussions)
-- Join the [Discord](https://discord.gg/5rHquRptSh)
+- Join the [Discord](https://discord.gg/4cmZqTC7cA)
 
 ## License
 

@@ -33,7 +33,7 @@ Security vulnerabilities include (but are not limited to):
 
 - General bugs (use [GitHub Issues](https://github.com/fpindej/netrock/issues))
 - Feature requests (use [GitHub Issues](https://github.com/fpindej/netrock/issues))
-- Questions about usage (use [Discord](https://discord.gg/5rHquRptSh) or [Discussions](https://github.com/fpindej/netrock/discussions))
+- Questions about usage (use [Discord](https://discord.gg/4cmZqTC7cA) or [Discussions](https://github.com/fpindej/netrock/discussions))
 
 ## Response Timeline
 

@@ -322,7 +322,7 @@
 									GitHub
 								</a>
 								<a
-									href="https://discord.gg/5rHquRptSh"
+									href="https://discord.gg/4cmZqTC7cA"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"

@@ -311,7 +311,7 @@
 							<span class="text-xs font-medium text-muted-foreground/70">
 								{m.welcome_cta_community()}
 							</span>
-							<div class="flex gap-3">
+							<div class="flex flex-wrap justify-center gap-3">
 								<a
 									href="https://github.com/fpindej/netrock"
 									target="_blank"

@@ -205,7 +205,7 @@
 			</p>
 		</div>
 
-		<div class="grid gap-4 sm:grid-cols-3">
+		<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
 			{#each communityCards as card, i (card.title())}
 				<div
 					class="group relative flex flex-col overflow-hidden rounded-xl border bg-card"

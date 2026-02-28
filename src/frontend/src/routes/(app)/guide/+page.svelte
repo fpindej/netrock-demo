@@ -17,6 +17,10 @@
 		ArrowRight,
 		Lightbulb,
 		PlayCircle,
+		Star,
+		Code,
+		Linkedin,
+		ExternalLink,
 		type IconProps
 	} from '@lucide/svelte';
 	import * as m from '$lib/paraglide/messages';
@@ -30,6 +34,18 @@
 		bgColor: string;
 		gradientFrom: string;
 		action?: { label: () => string; href: string; onclick?: () => void };
+	};
+
+	type CommunityCard = {
+		icon: Component<IconProps>;
+		title: () => string;
+		description: () => string;
+		button: () => string;
+		href: string;
+		color: string;
+		bgColor: string;
+		gradientFrom: string;
+		variant: 'default' | 'outline';
 	};
 
 	const featureCards: FeatureCard[] = [
@@ -98,6 +114,42 @@
 					goto(resolve('/admin/users'));
 				}
 			}
+		}
+	];
+
+	const communityCards: CommunityCard[] = [
+		{
+			icon: Star,
+			title: m.guide_community_star_title,
+			description: m.guide_community_star_description,
+			button: m.guide_community_star_button,
+			href: 'https://github.com/fpindej/netrock',
+			color: 'text-amber-500',
+			bgColor: 'bg-amber-500/10',
+			gradientFrom: 'from-amber-500',
+			variant: 'default'
+		},
+		{
+			icon: Code,
+			title: m.guide_community_source_title,
+			description: m.guide_community_source_description,
+			button: m.guide_community_source_button,
+			href: 'https://github.com/fpindej/netrock',
+			color: 'text-blue-500',
+			bgColor: 'bg-blue-500/10',
+			gradientFrom: 'from-blue-500',
+			variant: 'outline'
+		},
+		{
+			icon: Linkedin,
+			title: m.guide_community_linkedin_title,
+			description: m.guide_community_linkedin_description,
+			button: m.guide_community_linkedin_button,
+			href: 'https://www.linkedin.com/in/filip-dorian-pindej/',
+			color: 'text-sky-500',
+			bgColor: 'bg-sky-500/10',
+			gradientFrom: 'from-sky-500',
+			variant: 'outline'
 		}
 	];
 </script>
@@ -247,6 +299,57 @@
 					</Button>
 				</div>
 			</div>
+		</div>
+	</section>
+
+	<div class="h-px w-full bg-border"></div>
+
+	<!-- Community -->
+	<section>
+		<div class="mb-8 text-center" use:reveal>
+			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
+				{m.guide_community_title()}
+			</h2>
+			<p class="mt-2 text-sm text-muted-foreground sm:text-base">
+				{m.guide_community_description()}
+			</p>
+		</div>
+
+		<div class="grid gap-4 sm:grid-cols-3">
+			{#each communityCards as card, i (card.title())}
+				<div
+					class="group relative flex flex-col overflow-hidden rounded-xl border bg-card"
+					use:reveal={i * 80}
+				>
+					<div
+						class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r {card.gradientFrom} to-transparent"
+					></div>
+					<div class="flex flex-1 flex-col gap-3 p-5">
+						<div class="flex items-center gap-3">
+							<div
+								class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg {card.bgColor}"
+							>
+								<card.icon class="h-5 w-5 {card.color}" />
+							</div>
+							<h3 class="text-sm font-semibold">{card.title()}</h3>
+						</div>
+						<p class="text-sm text-muted-foreground">{card.description()}</p>
+						<div class="mt-auto pt-1">
+							<Button
+								variant={card.variant}
+								size="sm"
+								href={card.href}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="gap-1.5"
+							>
+								{card.button()}
+								<ExternalLink class="h-3.5 w-3.5" />
+							</Button>
+						</div>
+					</div>
+				</div>
+			{/each}
 		</div>
 	</section>
 </div>

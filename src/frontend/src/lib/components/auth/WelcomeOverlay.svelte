@@ -13,7 +13,10 @@
 		EyeOff,
 		Trash2,
 		ChevronLeft,
-		ChevronRight
+		ChevronRight,
+		Star,
+		Code,
+		Linkedin
 	} from '@lucide/svelte';
 
 	interface Props {
@@ -304,6 +307,40 @@
 						<p class="welcome-stagger-3 mt-4 text-xs text-muted-foreground">
 							{m.welcome_cta_note()}
 						</p>
+						<div class="welcome-stagger-3 mt-6 flex flex-col items-center gap-2">
+							<span class="text-xs font-medium text-muted-foreground/70">
+								{m.welcome_cta_community()}
+							</span>
+							<div class="flex gap-3">
+								<a
+									href="https://github.com/fpindej/netrock"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
+								>
+									<Star class="h-3.5 w-3.5" />
+									GitHub
+								</a>
+								<a
+									href="https://github.com/fpindej/netrock"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
+								>
+									<Code class="h-3.5 w-3.5" />
+									Source
+								</a>
+								<a
+									href="https://www.linkedin.com/in/filip-dorian-pindej/"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
+								>
+									<Linkedin class="h-3.5 w-3.5" />
+									LinkedIn
+								</a>
+							</div>
+						</div>
 					{/if}
 				</div>
 			{/key}

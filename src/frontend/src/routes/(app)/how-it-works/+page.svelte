@@ -301,7 +301,7 @@
 							{@render techItem('EF Core 10', 'PostgreSQL + migrations')}
 							{@render techItem('FluentValidation', 'Declarative input rules')}
 							{@render techItem('Hangfire', 'Background job engine')}
-							{@render techItem('Serilog', 'Structured logging → Seq')}
+							{@render techItem('OpenTelemetry', 'Metrics, traces & logs via OTLP')}
 							{@render techItem('SkiaSharp', 'Image processing')}
 							{@render techItem('xUnit', '4-tier test suite')}
 						</ul>
@@ -322,10 +322,9 @@
 					<Card.Content>
 						<ul class="space-y-2.5 text-sm">
 							{@render techItem('PostgreSQL', 'Primary relational DB')}
-							{@render techItem('Redis', 'Distributed cache + resilience')}
 							{@render techItem('MinIO', 'S3-compatible object store')}
-							{@render techItem('Seq', 'Log aggregation & search')}
-							{@render techItem('Docker Compose', 'Dev + production overlays')}
+							{@render techItem('.NET Aspire', 'Local orchestrator + OTEL dashboard')}
+							{@render techItem('Docker', 'Production deployment')}
 							{@render techItem('Resend', 'Email delivery service')}
 							{@render techItem('Turnstile', 'Bot protection')}
 						</ul>

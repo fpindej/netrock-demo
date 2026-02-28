@@ -39,7 +39,7 @@
 	let pointerStartY = $state(0);
 	let isDragging = $state(false);
 
-	const techPills = ['.NET 10', 'SvelteKit', 'TypeScript', 'PostgreSQL', 'Redis', 'Docker'];
+	const techPills = ['.NET 10', 'SvelteKit', 'TypeScript', 'PostgreSQL', 'Aspire', 'Docker'];
 
 	const pillars = [
 		{

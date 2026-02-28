@@ -897,9 +897,6 @@
 	"forYou_personas_learners_title": "Hobby Developers & Learners",
 	"forYou_personas_learners_pain": "You want to learn production patterns but don't know where to start or what 'good' looks like.",
 	"forYou_personas_learners_value": "Study real-world .NET + SvelteKit with documented code, tests, and conventions you can learn from.",
-	"forYou_personas_customers_title": "Potential Customers",
-	"forYou_personas_customers_pain": "You're evaluating whether this template can actually handle your specific use case.",
-	"forYou_personas_customers_value": "The API is the heart - swap the frontend, build a mobile app, or integrate with external systems.",
 
 	"forYou_diagram_title": "The API Is the Heart",
 	"forYou_diagram_description": "Your .NET backend serves as the central hub - any number of clients can connect and consume it.",

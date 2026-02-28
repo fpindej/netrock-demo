@@ -897,9 +897,6 @@
 	"forYou_personas_learners_title": "Hobby vývojáři a studenti",
 	"forYou_personas_learners_pain": "Chcete se naučit produkční vzory, ale nevíte, kde začít ani jak vypadá 'dobré' řešení.",
 	"forYou_personas_learners_value": "Studujte reálný .NET + SvelteKit s dokumentovaným kódem, testy a konvencemi, ze kterých se můžete učit.",
-	"forYou_personas_customers_title": "Potenciální zákazníci",
-	"forYou_personas_customers_pain": "Vyhodnocujete, zda tato šablona zvládne váš konkrétní případ použití.",
-	"forYou_personas_customers_value": "API je srdcem - vyměňte frontend, postavte mobilní aplikaci nebo integrujte s externími systémy.",
 
 	"forYou_diagram_title": "API je srdcem",
 	"forYou_diagram_description": "Váš .NET backend slouží jako centrální bod - libovolný počet klientů se může připojit a konzumovat ho.",

@@ -14,7 +14,6 @@
 		Users,
 		UserCircle,
 		GraduationCap,
-		Handshake,
 		Rocket,
 		Github,
 		ExternalLink,
@@ -173,15 +172,6 @@
 			color: 'text-amber-500',
 			bgColor: 'bg-amber-500/10',
 			gradientFrom: 'from-amber-500'
-		},
-		{
-			icon: Handshake,
-			title: m.forYou_personas_customers_title,
-			pain: m.forYou_personas_customers_pain,
-			value: m.forYou_personas_customers_value,
-			color: 'text-pink-500',
-			bgColor: 'bg-pink-500/10',
-			gradientFrom: 'from-pink-500'
 		}
 	];
 </script>
@@ -231,7 +221,7 @@
 		<div class="flex flex-wrap justify-center gap-4">
 			{#each personas as persona, i (persona.title())}
 				<div
-					class="relative flex flex-[1_1_100%] flex-col overflow-hidden rounded-xl border bg-card sm:max-w-[calc(50%-0.5rem)] sm:flex-[1_1_calc(50%-0.5rem)] xl:max-w-[calc(33.333%-0.667rem)] xl:flex-[1_1_calc(33.333%-0.667rem)]"
+					class="relative flex flex-[1_1_100%] flex-col overflow-hidden rounded-xl border bg-card sm:max-w-[calc(50%-0.5rem)] sm:flex-[1_1_calc(50%-0.5rem)]"
 					use:reveal={i * 80}
 				>
 					<div

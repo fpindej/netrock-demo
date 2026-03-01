@@ -34,13 +34,13 @@ Every project starts the same way: authentication, role management, rate limitin
 
 ## What You Get
 
-**Backend** — JWT auth with token rotation and reuse detection, permission-based authorization with role hierarchy, rate limiting, Redis caching with auto-invalidation, PostgreSQL with soft delete and audit trails, S3-compatible file storage (MinIO locally, any S3 provider in production), Hangfire background jobs, OpenAPI docs, health checks, Result pattern with ProblemDetails everywhere. [See full details →](docs/features.md#backend--net-10--c-13)
+**Backend** — JWT auth with token rotation and reuse detection, TOTP two-factor authentication, permission-based authorization with role hierarchy, rate limiting, Redis caching with auto-invalidation, PostgreSQL with soft delete and audit trails, S3-compatible file storage (MinIO locally, any S3 provider in production), Hangfire background jobs, OpenAPI docs, health checks, Result pattern with ProblemDetails everywhere. [See full details →](docs/features.md#backend--net-10--c-13)
 
 **Frontend** — Svelte 5 runes, type-safe API client generated from OpenAPI, automatic token refresh, Tailwind CSS 4 with shadcn-svelte, BFF proxy with CSRF protection, i18n, security headers, permission guards, dark mode, admin panel with user/role/job management. [See full details →](docs/features.md#frontend--sveltekit--svelte-5)
 
 **Infrastructure** — Single `./deploy/up.sh local` for 6 services (including MinIO for S3 storage), init script for project bootstrapping, build script with multi-registry support, GitHub Actions CI with smart path filtering, Dependabot. [See full details →](docs/features.md#infrastructure--devops)
 
-**Security** — Security-first design with HttpOnly JWT cookies, refresh token rotation with reuse detection, security stamp propagation, CSP with nonces, CORS startup guard, rate limiting, and input validation everywhere. [See full details →](docs/security.md)
+**Security** — Security-first design with HttpOnly JWT cookies, refresh token rotation with reuse detection, TOTP two-factor authentication with challenge tokens and recovery codes, security stamp propagation, CSP with nonces, CORS startup guard, rate limiting, and input validation everywhere. [See full details →](docs/security.md)
 
 ---
 

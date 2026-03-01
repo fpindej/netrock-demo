@@ -38,6 +38,8 @@ public static class ServiceCollectionExtensions
 
             services.AddScoped<ITokenProvider, JwtTokenProvider>();
             services.AddScoped<EmailTokenService>();
+            services.AddScoped<TwoFactorService>();
+            services.AddScoped<ITwoFactorService>(sp => sp.GetRequiredService<TwoFactorService>());
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             return services;

@@ -31,7 +31,7 @@ NETrock ships with 4 test projects covering the backend:
 | Project | What it covers |
 |---|---|
 | **Unit Tests** | Result pattern, error messages, phone normalization, base entity, roles, permissions |
-| **Component Tests** | Auth service (login, register, refresh, token rotation), admin service (hierarchy, role assignment, lock/delete), role management, user service |
+| **Component Tests** | Auth service (login, register, refresh, token rotation, 2FA setup/verify), admin service (hierarchy, role assignment, lock/delete), role management, user service |
 | **API Tests** | Full HTTP pipeline (status codes, auth gates, ProblemDetails shape), all validators, response contract testing, permission enforcement, rate limiting |
 | **Architecture Tests** | Layer dependency direction, naming conventions, access modifiers |
 

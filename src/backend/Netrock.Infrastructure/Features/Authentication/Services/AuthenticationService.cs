@@ -39,6 +39,7 @@ internal class AuthenticationService(
     EmailTokenService emailTokenService,
     IAuditService auditService,
     IDemoService demoService,
+    TwoFactorService twoFactorService,
     IOptions<AuthenticationOptions> authenticationOptions,
     IOptions<EmailOptions> emailOptions,
     ILogger<AuthenticationService> logger,
@@ -72,6 +73,18 @@ internal class AuthenticationService(
         {
             await auditService.LogAsync(AuditActions.LoginFailure, userId: user.Id, ct: cancellationToken);
             return Result<AuthenticationOutput>.Failure(ErrorMessages.Auth.LoginInvalidCredentials, ErrorType.Unauthorized);
+        }
+
+        // If 2FA is enabled, return a challenge token instead of authentication tokens
+        if (await userManager.GetTwoFactorEnabledAsync(user))
+        {
+            var challengeToken = await twoFactorService.CreateChallengeAsync(user.Id, rememberMe, cancellationToken);
+            return Result<AuthenticationOutput>.Success(new AuthenticationOutput(
+                AccessToken: string.Empty,
+                RefreshToken: string.Empty,
+                RequiresTwoFactor: true,
+                ChallengeToken: challengeToken
+            ));
         }
 
         var accessToken = await tokenProvider.GenerateAccessToken(user);

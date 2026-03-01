@@ -75,7 +75,8 @@ internal sealed class UserService(
             HasAvatar: user.HasAvatar,
             Roles: roles,
             Permissions: permissions,
-            IsEmailConfirmed: user.EmailConfirmed);
+            IsEmailConfirmed: user.EmailConfirmed,
+            IsTwoFactorEnabled: user.TwoFactorEnabled);
 
         // NOTE: UserOutput (including roles and permissions) is cached to improve performance.
         // Role or permission changes may take up to this duration to be reflected.
@@ -150,7 +151,8 @@ internal sealed class UserService(
             HasAvatar: user.HasAvatar,
             Roles: roles,
             Permissions: permissions,
-            IsEmailConfirmed: user.EmailConfirmed);
+            IsEmailConfirmed: user.EmailConfirmed,
+            IsTwoFactorEnabled: user.TwoFactorEnabled);
 
         await auditService.LogAsync(AuditActions.ProfileUpdate, userId: userId.Value, ct: cancellationToken);
 

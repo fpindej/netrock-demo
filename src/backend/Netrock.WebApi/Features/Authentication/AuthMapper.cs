@@ -31,7 +31,9 @@ internal static class AuthMapper
         new()
         {
             AccessToken = output.AccessToken,
-            RefreshToken = output.RefreshToken
+            RefreshToken = output.RefreshToken,
+            RequiresTwoFactor = output.RequiresTwoFactor,
+            ChallengeToken = output.ChallengeToken
         };
 
     /// <summary>

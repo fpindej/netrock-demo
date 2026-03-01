@@ -26,6 +26,11 @@ internal class NetrockDbContext(DbContextOptions<NetrockDbContext> options)
     public DbSet<EmailToken> EmailTokens { get; set; }
 
     /// <summary>
+    /// Gets or sets the two-factor challenges table for 2FA login verification.
+    /// </summary>
+    public DbSet<TwoFactorChallenge> TwoFactorChallenges { get; set; }
+
+    /// <summary>
     /// Gets or sets the paused jobs table for persisting pause state across restarts.
     /// </summary>
     public DbSet<PausedJob> PausedJobs { get; set; }

@@ -1,13 +1,13 @@
 namespace Netrock.Api.Tests.Contracts;
 
 // Auth
-internal record AuthTokensResponse(string AccessToken, string RefreshToken);
+internal record AuthTokensResponse(string AccessToken, string RefreshToken, bool RequiresTwoFactor = false, string? ChallengeToken = null);
 internal record RegisterUserResponse(Guid Id);
 
 // Users
 internal record UserMeResponse(Guid Id, string Username, string Email, string? FirstName, string? LastName,
     string? PhoneNumber, string? Bio, bool HasAvatar, List<string> Roles, List<string> Permissions,
-    bool EmailConfirmed);
+    bool EmailConfirmed, bool TwoFactorEnabled = false);
 
 // Admin - Users
 internal record AdminUserResponse(Guid Id, string Username, string Email, string? FirstName, string? LastName,

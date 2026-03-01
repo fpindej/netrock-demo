@@ -10,6 +10,7 @@ using Netrock.WebApi.Features.Authentication.Dtos.ForgotPassword;
 using Netrock.WebApi.Features.Authentication.Dtos.Login;
 using Netrock.WebApi.Features.Authentication.Dtos.Register;
 using Netrock.WebApi.Features.Authentication.Dtos.ResetPassword;
+using Netrock.WebApi.Features.Authentication.Dtos.TwoFactor;
 using Netrock.WebApi.Features.Authentication.Dtos.VerifyEmail;
 using Netrock.WebApi.Shared;
 
@@ -22,7 +23,7 @@ namespace Netrock.WebApi.Features.Authentication;
 [ApiController]
 [Route("api/[controller]")]
 [Tags("Auth")]
-public class AuthController(IAuthenticationService authenticationService, ICaptchaService captchaService) : ControllerBase
+public class AuthController(IAuthenticationService authenticationService, ITwoFactorService twoFactorService, ICaptchaService captchaService) : ControllerBase
 {
     /// <summary>
     /// Authenticates a user and returns JWT tokens.
@@ -273,5 +274,188 @@ public class AuthController(IAuthenticationService authenticationService, ICaptc
         }
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// Completes a two-factor login using a TOTP code from an authenticator app.
+    /// </summary>
+    /// <param name="request">The challenge token and TOTP code</param>
+    /// <param name="useCookies">When true, sets tokens in HttpOnly cookies for web clients. Defaults to false.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>Authentication tokens on success</returns>
+    /// <response code="200">Returns authentication tokens</response>
+    /// <response code="400">If the request is invalid</response>
+    /// <response code="401">If the challenge token or code is invalid</response>
+    [HttpPost("login/2fa")]
+    [EnableRateLimiting(RateLimitPolicies.Auth)]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    public async Task<ActionResult<AuthenticationResponse>> VerifyTwoFactor(
+        [FromBody] TwoFactorLoginRequest request,
+        [FromQuery] bool useCookies = false,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await twoFactorService.VerifyAsync(
+            request.ChallengeToken, request.Code, isRecoveryCode: false, useCookies, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return ProblemFactory.Create(result.Error, result.ErrorType);
+        }
+
+        return Ok(result.Value.ToResponse());
+    }
+
+    /// <summary>
+    /// Completes a two-factor login using a one-time recovery code.
+    /// </summary>
+    /// <param name="request">The challenge token and recovery code</param>
+    /// <param name="useCookies">When true, sets tokens in HttpOnly cookies for web clients. Defaults to false.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>Authentication tokens on success</returns>
+    /// <response code="200">Returns authentication tokens</response>
+    /// <response code="400">If the request is invalid</response>
+    /// <response code="401">If the challenge token or recovery code is invalid</response>
+    [HttpPost("login/2fa/recovery")]
+    [EnableRateLimiting(RateLimitPolicies.Auth)]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    public async Task<ActionResult<AuthenticationResponse>> VerifyTwoFactorRecovery(
+        [FromBody] TwoFactorRecoveryLoginRequest request,
+        [FromQuery] bool useCookies = false,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await twoFactorService.VerifyAsync(
+            request.ChallengeToken, request.RecoveryCode, isRecoveryCode: true, useCookies, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return ProblemFactory.Create(result.Error, result.ErrorType);
+        }
+
+        return Ok(result.Value.ToResponse());
+    }
+
+    /// <summary>
+    /// Generates an authenticator key and URI for setting up 2FA.
+    /// </summary>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>The shared key and authenticator URI for QR code generation</returns>
+    /// <response code="200">Returns setup information</response>
+    /// <response code="400">If 2FA is already enabled</response>
+    /// <response code="401">If the user is not authenticated</response>
+    [Authorize]
+    [HttpPost("2fa/setup")]
+    [EnableRateLimiting(RateLimitPolicies.Sensitive)]
+    [ProducesResponseType(typeof(TwoFactorSetupResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    public async Task<ActionResult<TwoFactorSetupResponse>> SetupTwoFactor(CancellationToken cancellationToken)
+    {
+        var result = await twoFactorService.SetupAsync(cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return ProblemFactory.Create(result.Error, result.ErrorType);
+        }
+
+        return Ok(new TwoFactorSetupResponse
+        {
+            SharedKey = result.Value.SharedKey,
+            AuthenticatorUri = result.Value.AuthenticatorUri
+        });
+    }
+
+    /// <summary>
+    /// Verifies a TOTP code to complete 2FA setup and returns recovery codes.
+    /// </summary>
+    /// <param name="request">The TOTP verification code</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>Recovery codes on success</returns>
+    /// <response code="200">Returns recovery codes</response>
+    /// <response code="400">If the code is invalid or 2FA is already enabled</response>
+    /// <response code="401">If the user is not authenticated</response>
+    [Authorize]
+    [HttpPost("2fa/verify-setup")]
+    [EnableRateLimiting(RateLimitPolicies.Sensitive)]
+    [ProducesResponseType(typeof(TwoFactorVerifySetupResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    public async Task<ActionResult<TwoFactorVerifySetupResponse>> VerifyTwoFactorSetup(
+        [FromBody] TwoFactorVerifySetupRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await twoFactorService.VerifySetupAsync(request.Code, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return ProblemFactory.Create(result.Error, result.ErrorType);
+        }
+
+        return Ok(new TwoFactorVerifySetupResponse { RecoveryCodes = result.Value });
+    }
+
+    /// <summary>
+    /// Disables two-factor authentication for the current user. Requires password confirmation.
+    /// </summary>
+    /// <param name="request">The user's password for confirmation</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <response code="204">2FA disabled successfully</response>
+    /// <response code="400">If the password is incorrect or 2FA is not enabled</response>
+    /// <response code="401">If the user is not authenticated</response>
+    [Authorize]
+    [HttpPost("2fa/disable")]
+    [EnableRateLimiting(RateLimitPolicies.Sensitive)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    public async Task<ActionResult> DisableTwoFactor(
+        [FromBody] TwoFactorDisableRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await twoFactorService.DisableAsync(request.Password, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return ProblemFactory.Create(result.Error, result.ErrorType);
+        }
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Regenerates two-factor recovery codes. Requires password confirmation.
+    /// </summary>
+    /// <param name="request">The user's password for confirmation</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <response code="200">Returns new recovery codes</response>
+    /// <response code="400">If the password is incorrect or 2FA is not enabled</response>
+    /// <response code="401">If the user is not authenticated</response>
+    [Authorize]
+    [HttpPost("2fa/recovery-codes")]
+    [EnableRateLimiting(RateLimitPolicies.Sensitive)]
+    [ProducesResponseType(typeof(TwoFactorVerifySetupResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    public async Task<ActionResult<TwoFactorVerifySetupResponse>> RegenerateRecoveryCodes(
+        [FromBody] TwoFactorRegenerateCodesRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await twoFactorService.RegenerateRecoveryCodesAsync(request.Password, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return ProblemFactory.Create(result.Error, result.ErrorType);
+        }
+
+        return Ok(new TwoFactorVerifySetupResponse { RecoveryCodes = result.Value });
     }
 }

@@ -7,7 +7,7 @@
 | Feature | Implementation |
 |---|---|
 | **Clean Architecture** | Domain → Application → Infrastructure → WebApi, with [architecture tests](../src/backend/tests/Netrock.Architecture.Tests) enforcing dependency rules |
-| **Authentication** | JWT in HttpOnly cookies, refresh token rotation with reuse detection, security stamp validation, remember-me persistent sessions |
+| **Authentication** | JWT in HttpOnly cookies, refresh token rotation with reuse detection, security stamp validation, remember-me persistent sessions, TOTP two-factor authentication with QR setup, recovery codes, and challenge tokens |
 | **Authorization** | Permission-based with custom roles — atomic permissions (`users.view`, `roles.manage`, …) assigned per role, enforced via `[RequirePermission]` attribute |
 | **Role Hierarchy** | SuperAdmin > Admin > User — privilege escalation prevention, self-protection rules, system role guards |
 | **Rate Limiting** | Global + per-endpoint policies (registration, auth, sensitive operations, admin mutations), configurable fixed-window with IP and user partitioning |
@@ -17,7 +17,7 @@
 | **API Documentation** | OpenAPI spec + Scalar UI, with custom transformers for enums, nullable types, numeric schemas, and camelCase query params |
 | **Error Handling** | Result pattern for business logic, `ProblemDetails` ([RFC 9457](https://www.rfc-editor.org/rfc/rfc9457)) everywhere, structured error messages |
 | **Logging** | Serilog → Seq with structured request logging and correlation |
-| **Account Management** | Registration with CAPTCHA, login/logout, remember me, email verification, password reset, profile updates, account deletion |
+| **Account Management** | Registration with CAPTCHA, login/logout, remember me, email verification, password reset, profile updates, account deletion, 2FA setup and recovery |
 | **Admin Panel API** | User CRUD with search and pagination, custom role management with permission editor, role assignment with hierarchy enforcement |
 | **Background Jobs** | Hangfire with PostgreSQL persistence — recurring jobs via `IRecurringJobDefinition`, fire-and-forget, admin UI with trigger/pause/resume/restore, persistent pause state |
 | **Email** | Pluggable email service (NoOp for dev — swap in your SMTP/SendGrid/etc.), Fluid (Liquid) template engine with base layout, templated emails for verification, password reset, admin-initiated reset, and invitation |
@@ -44,6 +44,7 @@
 | **Error Handling** | Unified mutation error handler — rate limiting with cooldown timers, field-level validation with shake animations, generic errors with toast |
 | **Admin UI** | User table with search/pagination, role card grid, permission checkbox editor, job dashboard with execution history |
 | **Avatar Upload** | Drag-and-drop file upload with client-side validation, preview, SkiaSharp server-side compression to WebP, S3 storage |
+| **Two-Factor Authentication** | TOTP setup with QR code, verification step in login flow, recovery codes, enable/disable in settings |
 | **Login UX** | API health indicator, form draft persistence (registration), animated success transition, CAPTCHA integration |
 
 ## Infrastructure & DevOps

@@ -76,6 +76,18 @@ public class AuthenticationServiceTests : IDisposable
         var emailTokenService = new EmailTokenService(_dbContext, _timeProvider, authOptions);
         _auditService = Substitute.For<IAuditService>();
 
+        var twoFactorService = new TwoFactorService(
+            _userManager,
+            _tokenProvider,
+            _timeProvider,
+            _cookieService,
+            _userContext,
+            _cacheService,
+            _auditService,
+            authOptions,
+            Substitute.For<ILogger<TwoFactorService>>(),
+            _dbContext);
+
         _sut = new AuthenticationService(
             _userManager,
             _signInManager,
@@ -88,6 +100,7 @@ public class AuthenticationServiceTests : IDisposable
             emailTokenService,
             _auditService,
             Substitute.For<IDemoService>(),
+            twoFactorService,
             authOptions,
             emailOptions,
             Substitute.For<ILogger<AuthenticationService>>(),

@@ -36,6 +36,13 @@ public static class ErrorMessages
         public const string EmailAlreadyVerified = "Email address is already verified.";
         public const string PasswordSameAsCurrent = "New password must be different from your current password.";
         public const string CaptchaInvalid = "CAPTCHA verification failed. Please try again.";
+        public const string TwoFactorRequired = "Two-factor authentication is required.";
+        public const string TwoFactorAlreadyEnabled = "Two-factor authentication is already enabled.";
+        public const string TwoFactorNotEnabled = "Two-factor authentication is not enabled on this account.";
+        public const string TwoFactorSetupNotStarted = "Two-factor authentication setup has not been started.";
+        public const string TwoFactorCodeInvalid = "Invalid verification code.";
+        public const string TwoFactorChallengeInvalid = "Invalid or expired challenge token.";
+        public const string TwoFactorChallengeMaxAttempts = "Maximum verification attempts exceeded. Please log in again.";
     }
 
     /// <summary>

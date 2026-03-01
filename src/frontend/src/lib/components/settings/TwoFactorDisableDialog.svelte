@@ -21,12 +21,12 @@
 	const fieldShakes = createFieldShakes();
 	const cooldown = createCooldown();
 
-	function handleOpenChange(isOpen: boolean) {
-		if (isOpen) {
+	$effect(() => {
+		if (open) {
 			password = '';
 			generalError = '';
 		}
-	}
+	});
 
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
@@ -60,7 +60,7 @@
 	}
 </script>
 
-<Dialog.Root bind:open onOpenChange={handleOpenChange}>
+<Dialog.Root bind:open>
 	<Dialog.Content class="sm:max-w-md">
 		<Dialog.Header>
 			<Dialog.Title>{m.settings_2fa_disable_title()}</Dialog.Title>

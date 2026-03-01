@@ -26,8 +26,8 @@
 	let codeCopied = $state(false);
 	const cooldown = createCooldown();
 
-	async function handleOpenChange(isOpen: boolean) {
-		if (isOpen) {
+	$effect(() => {
+		if (open) {
 			step = 'setup';
 			sharedKey = '';
 			authenticatorUri = '';
@@ -35,9 +35,9 @@
 			verifyCode = '';
 			recoveryCodes = [];
 			codeCopied = false;
-			await startSetup();
+			startSetup();
 		}
-	}
+	});
 
 	async function startSetup() {
 		isLoading = true;
@@ -111,8 +111,12 @@
 	}
 </script>
 
-<Dialog.Root bind:open onOpenChange={handleOpenChange}>
-	<Dialog.Content class="sm:max-w-md" interactOutsideBehavior="ignore" showCloseButton={false}>
+<Dialog.Root bind:open>
+	<Dialog.Content
+		class="max-h-[85vh] overflow-y-auto sm:max-w-md"
+		interactOutsideBehavior="ignore"
+		showCloseButton={false}
+	>
 		<Dialog.Header>
 			<Dialog.Title>
 				{step === 'recovery' ? m.settings_2fa_recovery_title() : m.settings_2fa_setup_title()}

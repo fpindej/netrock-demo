@@ -8,6 +8,7 @@
  */
 
 import type { User } from '$lib/types';
+import { SystemRoles } from './roles';
 
 export const Permissions = {
 	Users: {
@@ -28,7 +29,7 @@ export const Permissions = {
 
 /** Returns true if the user is a SuperAdmin (implicit all permissions). */
 export function isSuperAdmin(user: User | null | undefined): boolean {
-	return user?.roles?.includes('SuperAdmin') ?? false;
+	return user?.roles?.includes(SystemRoles.SuperAdmin) ?? false;
 }
 
 /** Returns true if the user has a specific permission based on their real JWT claims. */

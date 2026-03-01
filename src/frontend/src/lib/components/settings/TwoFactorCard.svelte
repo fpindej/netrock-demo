@@ -57,13 +57,17 @@
 					</p>
 				{/if}
 			</div>
-			<div class="flex shrink-0 gap-2">
+			<div class="flex flex-col gap-2 sm:flex-row sm:justify-end">
 				{#if isEnabled}
-					<Button variant="destructive" onclick={() => (disableDialogOpen = true)}>
+					<Button
+						variant="destructive"
+						class="w-full sm:w-auto"
+						onclick={() => (disableDialogOpen = true)}
+					>
 						{m.settings_2fa_disable()}
 					</Button>
 				{:else}
-					<Button onclick={() => (setupDialogOpen = true)}>
+					<Button class="w-full sm:w-auto" onclick={() => (setupDialogOpen = true)}>
 						{m.settings_2fa_enable()}
 					</Button>
 				{/if}

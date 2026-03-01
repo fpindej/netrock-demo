@@ -33,6 +33,7 @@
 	"common_theme": "Theme",
 	"common_close": "Close",
 	"common_cancel": "Cancel",
+	"common_done": "Done",
 	"common_delete": "Delete",
 	"common_backToLogin": "Back to login",
 	"common_dangerZone": "Danger Zone",

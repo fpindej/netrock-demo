@@ -136,6 +136,15 @@
 				side: isMobile ? 'bottom' : 'left',
 				align: 'start'
 			},
+			// Settings - 2FA
+			{
+				page: resolve('/settings'),
+				element: '[data-tour="settings-2fa"]',
+				title: m.tour_2fa_title(),
+				description: m.tour_2fa_description(),
+				side: isMobile ? 'bottom' : 'left',
+				align: 'start'
+			},
 			// Role Switcher
 			{
 				element: '[data-tour="role-switcher"]',

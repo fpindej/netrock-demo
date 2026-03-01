@@ -343,506 +343,6 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	'/api/v1/demo/elevate': {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Sets the demo role for the current user. Accepts `"Admin"` or `"User"`.
-		 *     SuperAdmin is always rejected.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			/** @description A cancellation token */
-			requestBody: {
-				content: {
-					'application/json': components['schemas']['ElevateRequest'];
-				};
-			};
-			responses: {
-				/** @description Role changed successfully */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description If the role is invalid or the operation fails */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the user is not authenticated */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the user was not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the rate limit is exceeded */
-				429: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	'/api/v1/demo/try': {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Creates a short-lived demo account and logs the user in via cookies.
-		 *     The account expires after 24 hours and is cleaned up on logout or by a background job.
-		 *     Requires a valid CAPTCHA token to prevent automated abuse.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			/** @description The request containing a CAPTCHA token */
-			requestBody: {
-				content: {
-					'application/json': components['schemas']['TryDemoRequest'];
-				};
-			};
-			responses: {
-				/** @description Demo account created and logged in successfully */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description If demo account creation or login fails */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the rate limit is exceeded */
-				429: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	'/api/v1/contacts': {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/** Gets a paginated list of the current user's contacts with optional search and filtering. */
-		get: {
-			parameters: {
-				query?: {
-					/** @description Optional search term to filter by name, email, or company. */
-					search?: string;
-					/** @description Optional pipeline status filter. */
-					status?: components['schemas']['ContactStatus'];
-					/** @description Optional acquisition source filter. */
-					source?: components['schemas']['ContactSource'];
-					/** @description The page number to retrieve (1-based). */
-					pageNumber?: number;
-					/** @description The number of items per page (maximum 100). */
-					pageSize?: number;
-				};
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Returns the paginated contact list */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ContactListResponse'];
-					};
-				};
-				/** @description If the pagination parameters are invalid */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the user is not authenticated */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		put?: never;
-		/** Creates a new contact for the current user. */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			/** @description A cancellation token */
-			requestBody: {
-				content: {
-					'application/json': components['schemas']['CreateContactRequest'];
-				};
-			};
-			responses: {
-				/** @description Contact created successfully */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ContactResponse'];
-					};
-				};
-				/** @description If the request validation fails */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the user is not authenticated */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	'/api/v1/contacts/{id}': {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/** Gets a single contact by ID. */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description The contact ID */
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Returns the contact */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ContactResponse'];
-					};
-				};
-				/** @description If the user is not authenticated */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the contact was not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		/** Updates an existing contact owned by the current user. */
-		put: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description The contact ID */
-					id: string;
-				};
-				cookie?: never;
-			};
-			/** @description A cancellation token */
-			requestBody: {
-				content: {
-					'application/json': components['schemas']['UpdateContactRequest'];
-				};
-			};
-			responses: {
-				/** @description Contact updated successfully */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ContactResponse'];
-					};
-				};
-				/** @description If the request validation fails */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the user is not authenticated */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the contact was not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		post?: never;
-		/** Soft-deletes a contact owned by the current user. */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description The contact ID */
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Contact deleted successfully */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description If the user is not authenticated */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the contact was not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	'/api/v1/contacts/generate': {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/** Generates a batch of realistic sample contacts using Bogus for demo purposes. */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			/** @description A cancellation token */
-			requestBody: {
-				content: {
-					'application/json': components['schemas']['GenerateContactsRequest'];
-				};
-			};
-			responses: {
-				/** @description Sample contacts generated successfully */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description If the count is invalid */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-				/** @description If the user is not authenticated */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	'/api/v1/contacts/stats': {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/** Gets aggregate pipeline statistics for the current user's contacts. */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Returns the contact statistics */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ContactStatsResponse'];
-					};
-				};
-				/** @description If the user is not authenticated */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						'application/json': components['schemas']['ProblemDetails'];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
 	'/api/auth/login': {
 		parameters: {
 			query?: never;
@@ -853,27 +353,25 @@ export interface paths {
 		get?: never;
 		put?: never;
 		/**
-		 * Authenticates a user and returns JWT tokens.
+		 * Authenticates a user and returns JWT tokens, or a 2FA challenge if two-factor is enabled.
 		 *     Tokens are always returned in the response body. When useCookies is true, tokens are also set as HttpOnly cookies.
 		 */
 		post: {
 			parameters: {
 				query?: {
-					/** @description When true, sets tokens in HttpOnly cookies for web clients. Defaults to false (stateless). */
 					useCookies?: boolean;
 				};
 				header?: never;
 				path?: never;
 				cookie?: never;
 			};
-			/** @description The login credentials */
 			requestBody: {
 				content: {
 					'application/json': components['schemas']['LoginRequest'];
 				};
 			};
 			responses: {
-				/** @description Returns authentication tokens (optionally also set in HttpOnly cookies) */
+				/** @description OK */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -882,7 +380,7 @@ export interface paths {
 						'application/json': components['schemas']['AuthenticationResponse'];
 					};
 				};
-				/** @description If the credentials are improperly formatted */
+				/** @description Bad Request */
 				400: {
 					headers: {
 						[name: string]: unknown;
@@ -891,7 +389,7 @@ export interface paths {
 						'application/json': components['schemas']['ProblemDetails'];
 					};
 				};
-				/** @description If the credentials are invalid */
+				/** @description Unauthorized */
 				401: {
 					headers: {
 						[name: string]: unknown;
@@ -1379,6 +877,406 @@ export interface paths {
 					};
 				};
 				/** @description If the user is not authenticated */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Too Many Requests */
+				429: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/auth/login/2fa': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Completes a two-factor login using a TOTP code from an authenticator app. */
+		post: {
+			parameters: {
+				query?: {
+					useCookies?: boolean;
+				};
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['TwoFactorLoginRequest'];
+				};
+			};
+			responses: {
+				/** @description OK */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['AuthenticationResponse'];
+					};
+				};
+				/** @description Bad Request */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Unauthorized */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Too Many Requests */
+				429: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/auth/login/2fa/recovery': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Completes a two-factor login using a one-time recovery code. */
+		post: {
+			parameters: {
+				query?: {
+					useCookies?: boolean;
+				};
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['TwoFactorRecoveryLoginRequest'];
+				};
+			};
+			responses: {
+				/** @description OK */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['AuthenticationResponse'];
+					};
+				};
+				/** @description Bad Request */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Unauthorized */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Too Many Requests */
+				429: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/auth/2fa/setup': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Generates an authenticator key and URI for setting up 2FA. */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description OK */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['TwoFactorSetupResponse'];
+					};
+				};
+				/** @description Bad Request */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Unauthorized */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Too Many Requests */
+				429: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/auth/2fa/verify-setup': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Verifies a TOTP code to complete 2FA setup and returns recovery codes. */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['TwoFactorVerifySetupRequest'];
+				};
+			};
+			responses: {
+				/** @description OK */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['TwoFactorVerifySetupResponse'];
+					};
+				};
+				/** @description Bad Request */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Unauthorized */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Too Many Requests */
+				429: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/auth/2fa/disable': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Disables two-factor authentication for the current user. Requires password confirmation. */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['TwoFactorDisableRequest'];
+				};
+			};
+			responses: {
+				/** @description No Content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/** @description Bad Request */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Unauthorized */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Too Many Requests */
+				429: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/auth/2fa/recovery-codes': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Regenerates two-factor recovery codes. Requires password confirmation. */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody: {
+				content: {
+					'application/json': components['schemas']['TwoFactorRegenerateCodesRequest'];
+				};
+			};
+			responses: {
+				/** @description OK */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['TwoFactorVerifySetupResponse'];
+					};
+				};
+				/** @description Bad Request */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						'application/json': components['schemas']['ProblemDetails'];
+					};
+				};
+				/** @description Unauthorized */
 				401: {
 					headers: {
 						[name: string]: unknown;
@@ -3243,6 +3141,8 @@ export interface components {
 			accessFailedCount?: number;
 			/** @description Whether the user is currently locked out. */
 			isLockedOut?: boolean;
+			/** @description Whether the user has two-factor authentication enabled. */
+			twoFactorEnabled?: boolean;
 		};
 		/** @description Request to assign a role to a user. */
 		AssignRoleRequest: {
@@ -3286,13 +3186,25 @@ export interface components {
 			/**
 			 * @description The JWT access token for Bearer authentication.
 			 *     Include this in the Authorization header as "Bearer {accessToken}" for subsequent API requests.
+			 *     Empty when bool AuthenticationResponse.RequiresTwoFactor is true.
 			 */
 			accessToken?: string;
 			/**
 			 * @description The refresh token for obtaining new access tokens.
 			 *     Use this with the /api/auth/refresh endpoint when the access token expires.
+			 *     Empty when bool AuthenticationResponse.RequiresTwoFactor is true.
 			 */
 			refreshToken?: string;
+			/**
+			 * @description Whether two-factor authentication is required to complete the login.
+			 *     When true, use the string? AuthenticationResponse.ChallengeToken with POST /api/auth/login/2fa.
+			 */
+			requiresTwoFactor?: boolean;
+			/**
+			 * @description The opaque challenge token for completing the 2FA login step.
+			 *     Null when bool AuthenticationResponse.RequiresTwoFactor is false.
+			 */
+			challengeToken?: null | string;
 		};
 		/** @description Represents a request to change the current user's password. */
 		ChangePasswordRequest: {
@@ -3300,151 +3212,6 @@ export interface components {
 			currentPassword: string;
 			/** @description The new password to set for the account. */
 			newPassword: string;
-		};
-		/** @description Paginated response containing a list of contact records. */
-		ContactListResponse: {
-			/** @description The contacts for the current page. */
-			items?: components['schemas']['ContactResponse'][];
-			/**
-			 * Format: int32
-			 * @description The total number of items (across all pages).
-			 */
-			totalCount?: number;
-			/**
-			 * Format: int32
-			 * @description The current page number.
-			 */
-			pageNumber?: number;
-			/**
-			 * Format: int32
-			 * @description The number of items per page.
-			 */
-			pageSize?: number;
-			/**
-			 * Format: int32
-			 * @description The total number of pages.
-			 */
-			totalPages?: number;
-			/** @description Indicates if there is a previous page. */
-			hasPreviousPage?: boolean;
-			/** @description Indicates if there is a next page. */
-			hasNextPage?: boolean;
-		};
-		/** @description Represents a contact's details in API responses. */
-		ContactResponse: {
-			/**
-			 * Format: uuid
-			 * @description The unique identifier of the contact.
-			 */
-			id?: string;
-			/** @description The contact's first name. */
-			firstName?: string;
-			/** @description The contact's last name. */
-			lastName?: string;
-			/** @description The contact's email address. */
-			email?: string;
-			/** @description The company the contact is associated with. */
-			company?: null | string;
-			/** @description The pipeline status of the contact. */
-			status?: string;
-			/** @description The acquisition source of the contact. */
-			source?: string;
-			/**
-			 * Format: double
-			 * @description The estimated monetary value of the contact.
-			 */
-			value?: number;
-			/** @description Free-text notes about the contact. */
-			notes?: null | string;
-			/** @description The contact's phone number. */
-			phone?: null | string;
-			/**
-			 * Format: uuid
-			 * @description The identifier of the user who owns this contact.
-			 */
-			ownerId?: string;
-			/**
-			 * Format: date-time
-			 * @description The date and time when the contact was created.
-			 */
-			createdAt?: string;
-			/**
-			 * Format: date-time
-			 * @description The date and time when the contact was last updated.
-			 */
-			updatedAt?: null | string;
-		};
-		/** @enum {string} */
-		ContactSource: 'Web' | 'Email' | 'Phone' | 'SocialMedia' | 'Referral' | 'Other';
-		/** @description Represents aggregate pipeline statistics for the current user's contacts. */
-		ContactStatsResponse: {
-			/**
-			 * Format: int32
-			 * @description The total number of contacts.
-			 */
-			totalContacts?: number;
-			/**
-			 * Format: double
-			 * @description The total monetary value across all contacts.
-			 */
-			totalValue?: number;
-			/**
-			 * Format: int32
-			 * @description The number of contacts with Lead status.
-			 */
-			leadCount?: number;
-			/**
-			 * Format: int32
-			 * @description The number of contacts with Prospect status.
-			 */
-			prospectCount?: number;
-			/**
-			 * Format: int32
-			 * @description The number of contacts with Customer status.
-			 */
-			customerCount?: number;
-			/**
-			 * Format: int32
-			 * @description The number of contacts with Churning status.
-			 */
-			churningCount?: number;
-			/**
-			 * Format: double
-			 * @description The average monetary value per contact.
-			 */
-			averageValue?: number;
-			/** @description A dictionary of source names to their respective contact counts. */
-			sourceBreakdown?: {
-				[key: string]: number;
-			};
-			/** @description The most recent contacts, ordered by creation date descending. */
-			recentContacts?: components['schemas']['ContactResponse'][];
-		};
-		/** @enum {string} */
-		ContactStatus: 'Lead' | 'Prospect' | 'Customer' | 'Churning';
-		/** @description Request to create a new CRM contact. */
-		CreateContactRequest: {
-			/** @description The contact's first name. */
-			firstName: string;
-			/** @description The contact's last name. */
-			lastName: string;
-			/** @description The contact's email address. */
-			email: string;
-			/** @description The company the contact is associated with. */
-			company?: null | string;
-			/** @description The pipeline status of the contact. */
-			status: components['schemas']['ContactStatus'];
-			/** @description The acquisition source of the contact. */
-			source: components['schemas']['ContactSource'];
-			/**
-			 * Format: double
-			 * @description The estimated monetary value of the contact.
-			 */
-			value?: number;
-			/** @description Free-text notes about the contact. */
-			notes?: null | string;
-			/** @description The contact's phone number. */
-			phone?: null | string;
 		};
 		/** @description Request to create a new custom role. */
 		CreateRoleRequest: {
@@ -3467,30 +3234,12 @@ export interface components {
 			/** @description The user's current password for confirmation. */
 			password: string;
 		};
-		/** @description Request to set the demo role for the current user. */
-		ElevateRequest: {
-			/** @description The target role: `"Admin"` to elevate or `"User"` to de-elevate. */
-			role: string;
-		};
-		/** @description Request to create a short-lived demo account. Requires a valid CAPTCHA token. */
-		TryDemoRequest: {
-			/** @description The Cloudflare Turnstile CAPTCHA token proving the caller is human. */
-			captchaToken: string;
-		};
 		/** @description Represents a request to initiate a password reset flow. */
 		ForgotPasswordRequest: {
 			/** @description The email address associated with the account. */
 			email: string;
 			/** @description The CAPTCHA verification token from Cloudflare Turnstile. */
 			captchaToken: string;
-		};
-		/** @description Request to generate sample contacts with Bogus. */
-		GenerateContactsRequest: {
-			/**
-			 * Format: int32
-			 * @description The number of sample contacts to generate (1–100).
-			 */
-			count?: number;
 		};
 		/** Format: binary */
 		IFormFile: string;
@@ -3717,29 +3466,46 @@ export interface components {
 			/** @description The full set of permission values to assign to the role. */
 			permissions: string[];
 		};
-		/** @description Request to update an existing CRM contact. */
-		UpdateContactRequest: {
-			/** @description The contact's first name. */
-			firstName: string;
-			/** @description The contact's last name. */
-			lastName: string;
-			/** @description The contact's email address. */
-			email: string;
-			/** @description The company the contact is associated with. */
-			company?: null | string;
-			/** @description The pipeline status of the contact. */
-			status: components['schemas']['ContactStatus'];
-			/** @description The acquisition source of the contact. */
-			source: components['schemas']['ContactSource'];
-			/**
-			 * Format: double
-			 * @description The estimated monetary value of the contact.
-			 */
-			value?: number;
-			/** @description Free-text notes about the contact. */
-			notes?: null | string;
-			/** @description The contact's phone number. */
-			phone?: null | string;
+		/** @description Request to disable two-factor authentication for the current user. */
+		TwoFactorDisableRequest: {
+			/** @description The user's current password for confirmation. */
+			password: string;
+		};
+		/** @description Request to complete a two-factor login with a TOTP code. */
+		TwoFactorLoginRequest: {
+			/** @description The opaque challenge token received from the initial login response. */
+			challengeToken: string;
+			/** @description The 6-digit TOTP code from the authenticator app. */
+			code: string;
+		};
+		/** @description Request to complete a two-factor login with a recovery code. */
+		TwoFactorRecoveryLoginRequest: {
+			/** @description The opaque challenge token received from the initial login response. */
+			challengeToken: string;
+			/** @description The one-time recovery code. */
+			recoveryCode: string;
+		};
+		/** @description Request to regenerate two-factor recovery codes. */
+		TwoFactorRegenerateCodesRequest: {
+			/** @description The user's current password for confirmation. */
+			password: string;
+		};
+		/** @description Response containing the shared key and authenticator URI for 2FA setup. */
+		TwoFactorSetupResponse: {
+			/** @description The base32-encoded shared secret for manual entry into an authenticator app. */
+			sharedKey?: string;
+			/** @description The otpauth:// URI for QR code scanning by authenticator apps. */
+			authenticatorUri?: string;
+		};
+		/** @description Request to verify a TOTP code and complete 2FA setup. */
+		TwoFactorVerifySetupRequest: {
+			/** @description The 6-digit TOTP code from the authenticator app. */
+			code: string;
+		};
+		/** @description Response containing recovery codes after enabling 2FA or regenerating codes. */
+		TwoFactorVerifySetupResponse: {
+			/** @description The one-time recovery codes. Each code can only be used once. Store them securely. */
+			recoveryCodes?: string[];
 		};
 		/** @description Request to update an existing role's name and/or description. */
 		UpdateRoleRequest: {
@@ -3786,6 +3552,8 @@ export interface components {
 			permissions?: string[];
 			/** @description Whether the user's email address has been confirmed. */
 			emailConfirmed?: boolean;
+			/** @description Whether the user has two-factor authentication enabled. */
+			twoFactorEnabled?: boolean;
 		};
 		/** @description Represents a request to verify an email address using an opaque email token. */
 		VerifyEmailRequest: {

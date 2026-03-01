@@ -14,7 +14,7 @@
 	import * as m from '$lib/paraglide/messages';
 	import { fly, scale } from 'svelte/transition';
 	import { Check, Loader2, Play, PlayCircle, Rocket, ShieldCheck, Sparkles } from '@lucide/svelte';
-	import { LoginBackground, RegisterDialog } from '$lib/components/auth';
+	import { LoginBackground, RegisterDialog, TwoFactorStep } from '$lib/components/auth';
 	import { toast } from '$lib/components/ui/sonner';
 
 	interface Props {
@@ -39,6 +39,7 @@
 	let isLoading = $state(false);
 	let isSuccess = $state(false);
 	let isRedirecting = $state(false);
+	let twoFactorToken = $state('');
 	const shake = createShake();
 	const cooldown = createCooldown();
 
@@ -60,11 +61,20 @@
 		isLoading = true;
 
 		try {
-			const { response, error: apiError } = await browserClient.POST('/api/auth/login', {
+			const {
+				response,
+				data,
+				error: apiError
+			} = await browserClient.POST('/api/auth/login', {
 				body: { username: email, password, rememberMe }
 			});
 
 			if (response.ok) {
+				if (data?.requiresTwoFactor && data.challengeToken) {
+					twoFactorToken = data.challengeToken;
+					isLoading = false;
+					return;
+				}
 				isSuccess = true;
 				await delay(1500);
 				isRedirecting = true;
@@ -164,7 +174,14 @@
 		</a>
 	</div>
 
-	{#if !isSuccess}
+	{#if twoFactorToken}
+		<TwoFactorStep
+			challengeToken={twoFactorToken}
+			onBack={() => {
+				twoFactorToken = '';
+			}}
+		/>
+	{:else if !isSuccess}
 		<div
 			class="sm:mx-auto sm:w-full sm:max-w-md"
 			in:fly={{ y: 20, duration: 600, delay: 100 }}

@@ -30,7 +30,7 @@
     <PackageVersion Include="Hangfire.Core" Version="1.8.23" />
     <PackageVersion Include="Hangfire.PostgreSql" Version="1.21.1" />
     <PackageVersion Include="Serilog.Sinks.Seq" Version="9.0.0" />
-    <PackageVersion Include="AWSSDK.S3" Version="3.7.510.9" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.23.4" />
     <PackageVersion Include="SkiaSharp" Version="3.119.2" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.2" />
     <PackageVersion Include="Bogus" Version="35.6.1" />
